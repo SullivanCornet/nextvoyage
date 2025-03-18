@@ -190,6 +190,7 @@ export const placesAPI = {
   
   // Récupérer un lieu par son slug
   getBySlug: async (slug, citySlug) => {
+    // Nous devons modifier notre approche
     return await fetchAPI(`/places/${slug}?city_slug=${citySlug}`);
   },
   
@@ -215,8 +216,16 @@ export const placesAPI = {
   },
   
   // Supprimer un lieu
-  delete: async (id) => {
-    return await fetchAPI(`/places/${id}`, {
+  delete: async (placeId, citySlug) => {
+    // Vérifier si placeId est un objet ou un ID simple
+    const slug = typeof placeId === 'object' && placeId.slug ? placeId.slug : placeId;
+    
+    // Si citySlug est fourni, l'ajouter aux paramètres de requête
+    const endpoint = citySlug 
+      ? `/places/${slug}?city_slug=${citySlug}` 
+      : `/places/${slug}`;
+      
+    return await fetchAPI(endpoint, {
       method: 'DELETE',
     });
   },

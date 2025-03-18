@@ -7,6 +7,7 @@ export async function GET(request, { params }) {
     const { slug } = params;
     const { searchParams } = new URL(request.url);
     const cityId = searchParams.get('city_id');
+    const citySlug = searchParams.get('city_slug');
     
     console.log(`API: Récupération du lieu avec le slug: ${slug}`);
     
@@ -17,6 +18,23 @@ export async function GET(request, { params }) {
       // Récupérer le lieu par son slug et l'ID de la ville
       placeQuery = 'SELECT * FROM places WHERE slug = ? AND city_id = ?';
       queryValues = [slug, cityId];
+    } else if (citySlug) {
+      // Récupérer d'abord l'ID de la ville à partir de son slug
+      const cityQuery = 'SELECT id FROM cities WHERE slug = ?';
+      const cities = await executeQuery({ query: cityQuery, values: [citySlug] });
+      
+      if (cities.length === 0) {
+        return NextResponse.json(
+          { error: 'Ville non trouvée' },
+          { status: 404 }
+        );
+      }
+      
+      const cityIdFromSlug = cities[0].id;
+      
+      // Puis récupérer le lieu par son slug et l'ID de la ville
+      placeQuery = 'SELECT * FROM places WHERE slug = ? AND city_id = ?';
+      queryValues = [slug, cityIdFromSlug];
     } else {
       // Récupérer le lieu par son slug uniquement
       placeQuery = 'SELECT * FROM places WHERE slug = ?';
@@ -122,14 +140,31 @@ export async function DELETE(request, { params }) {
     const { slug } = params;
     const { searchParams } = new URL(request.url);
     const cityId = searchParams.get('city_id');
+    const citySlug = searchParams.get('city_slug');
     
-    // Vérifier que le lieu existe
     let placeQuery;
     let queryValues;
     
     if (cityId) {
       placeQuery = 'SELECT id FROM places WHERE slug = ? AND city_id = ?';
       queryValues = [slug, cityId];
+    } else if (citySlug) {
+      // Récupérer d'abord l'ID de la ville à partir de son slug
+      const cityQuery = 'SELECT id FROM cities WHERE slug = ?';
+      const cities = await executeQuery({ query: cityQuery, values: [citySlug] });
+      
+      if (cities.length === 0) {
+        return NextResponse.json(
+          { error: 'Ville non trouvée' },
+          { status: 404 }
+        );
+      }
+      
+      const cityIdFromSlug = cities[0].id;
+      
+      // Puis récupérer le lieu par son slug et l'ID de la ville
+      placeQuery = 'SELECT id FROM places WHERE slug = ? AND city_id = ?';
+      queryValues = [slug, cityIdFromSlug];
     } else {
       placeQuery = 'SELECT id FROM places WHERE slug = ?';
       queryValues = [slug];

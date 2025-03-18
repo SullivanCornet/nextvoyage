@@ -7,8 +7,10 @@ const dbConfig = {
   password: process.env.DB_PASSWORD || 'nextvoyageplususr',
   database: process.env.DB_NAME || 'nextvoyageplus',
   waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
+  connectionLimit: 20,
+  queueLimit: 0,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 10000
 };
 
 // Création d'un pool de connexions
@@ -44,7 +46,7 @@ export async function executeQuery(queryOrConfig, valuesParam) {
     console.log('DB: Exécution de la requête SQL:', query);
     console.log('DB: Avec les valeurs:', values);
     
-    // Obtenir une connexion du pool
+    // Utiliser directement pool.execute au lieu d'obtenir une connexion explicitement
     const [results] = await pool.execute(query, values);
     return results;
   } catch (error) {

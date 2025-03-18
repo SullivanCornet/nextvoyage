@@ -51,7 +51,7 @@ export default function ShopDetail() {
     }
     
     try {
-      await placesAPI.remove(shopData.id);
+      await placesAPI.delete(shopSlug, citySlug);
       router.push(`/countries/${slug}/cities/${citySlug}/commerces`);
     } catch (error) {
       console.error('Erreur lors de la suppression:', error);

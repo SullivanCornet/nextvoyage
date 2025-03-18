@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 18 mars 2025 à 03:57
+-- Généré le : mar. 18 mars 2025 à 22:04
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -76,10 +76,9 @@ CREATE TABLE `cities` (
 --
 
 INSERT INTO `cities` (`id`, `country_id`, `country_code`, `name`, `slug`, `description`, `image_path`, `created_by`, `status`, `created_at`, `updated_at`) VALUES
-(4, 1, 'FR', 'Paris', 'paris', 'Ville des parigots', NULL, NULL, 'published', '2025-03-17 21:01:37', '2025-03-17 22:01:37'),
-(8, 5, 'JP', 'Tokyo', 'tokyo', 'la ville jap la plus connu', '/uploads/cities/1742266029221_f8f865dd.jpg', NULL, 'published', '2025-03-18 01:47:09', '2025-03-18 02:47:09'),
-(9, 5, 'JP', 'Osaka', 'osaka', '2eme ville jap', '/uploads/cities/1742266057481_f8a7d0fc.jpg', NULL, 'published', '2025-03-18 01:47:37', '2025-03-18 02:47:37'),
-(10, 5, 'JP', 'sakai', 'sakai', 'eme ville jap', '/uploads/cities/1742266083443_a4348212.jpg', NULL, 'published', '2025-03-18 01:48:03', '2025-03-18 02:48:03');
+(11, 6, 'DZ', 'Alger', 'alger', 'Alger La Blanche', '/uploads/cities/1742273814389_8b737be2.jpg', NULL, 'published', '2025-03-18 03:56:57', '2025-03-18 04:56:57'),
+(12, 7, 'JP', 'Tokyo', 'tokyo', 'La plus connue du japon', '/uploads/cities/1742273960875_0a4cbdc3.jpg', NULL, 'published', '2025-03-18 03:59:21', '2025-03-18 04:59:21'),
+(13, 11, 'EG', 'Le Caire ', 'le-caire', 'L’immense capitale égyptienne, Le Caire, est traversée par le fleuve du Nil. Le cœur de la ville abrite la place Tahrir et le musée égyptien du Caire, un trésor d’antiquités avec ses momies royales et le trésor du pharaon Toutânkhamon. Non loin du musée se trouve Gizeh avec ses légendaires pyramides et la statue du Sphinx, dont la construction date du XXVIe siècle av. J.-C. Dans le quartier boisé de Zamalek sur l\'île de Gezira, on peut admirer une vue panoramique de la ville depuis la tour du Caire, qui s’élève à 187 m d’altitude', '/uploads/cities/1742326552655_c8dbfa26.jpg', NULL, 'published', '2025-03-18 18:35:55', '2025-03-18 19:35:55');
 
 -- --------------------------------------------------------
 
@@ -92,6 +91,7 @@ CREATE TABLE `city_accommodations` (
   `city_id` int(11) NOT NULL,
   `accommodation_type` varchar(100) NOT NULL,
   `name` varchar(100) NOT NULL,
+  `slug` varchar(100) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `address` text DEFAULT NULL,
   `price_range` varchar(100) DEFAULT NULL,
@@ -105,6 +105,13 @@ CREATE TABLE `city_accommodations` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Déchargement des données de la table `city_accommodations`
+--
+
+INSERT INTO `city_accommodations` (`id`, `city_id`, `accommodation_type`, `name`, `slug`, `description`, `address`, `price_range`, `comfort_level`, `phone`, `website`, `image_path`, `created_by`, `status`, `created_at`, `updated_at`) VALUES
+(2, 11, 'maison', 'eaeeaze', NULL, 'eazeaeazeazeazeaeaeaeaze', 'azeazeaea', 'superieur', NULL, NULL, NULL, '/uploads/accommodations/1742275255608_48648d6a.png', NULL, 'published', '2025-03-18 05:20:56', '2025-03-18 05:20:56');
+
 -- --------------------------------------------------------
 
 --
@@ -116,6 +123,7 @@ CREATE TABLE `city_transports` (
   `city_id` int(11) NOT NULL,
   `transport_type` varchar(100) NOT NULL,
   `name` varchar(100) NOT NULL,
+  `slug` varchar(100) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `price_info` text DEFAULT NULL,
   `schedule` text DEFAULT NULL,
@@ -126,6 +134,14 @@ CREATE TABLE `city_transports` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Déchargement des données de la table `city_transports`
+--
+
+INSERT INTO `city_transports` (`id`, `city_id`, `transport_type`, `name`, `slug`, `description`, `price_info`, `schedule`, `tips`, `image_path`, `created_by`, `status`, `created_at`, `updated_at`) VALUES
+(2, 11, 'taxi', 'dqsdq', NULL, 'qdqqdqdqsdqdqsdqsd', 'dqdqdqdq', NULL, NULL, '/uploads/transports/1742275386985_ec04ff07.jpg', NULL, 'published', '2025-03-18 05:23:07', '2025-03-18 05:23:07'),
+(3, 11, 'taxi', 'mahmoud', NULL, 'mahmoud l\'oncle de aziz\nwhatsapp : 065525282828', 'pas cher', NULL, NULL, NULL, NULL, 'published', '2025-03-18 20:31:54', '2025-03-18 20:31:54');
 
 -- --------------------------------------------------------
 
@@ -174,8 +190,10 @@ CREATE TABLE `countries` (
 --
 
 INSERT INTO `countries` (`id`, `name`, `slug`, `country_code`, `description`, `language`, `population`, `area`, `capital`, `currency`, `currency_code`, `image_path`, `flag_image`, `created_by`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'France', 'france', 'FR', 'La France est un pays d\'Europe occidentale.', 'Français', NULL, NULL, 'Paris', 'Euro', 'EUR', NULL, NULL, NULL, 'published', '2025-03-16 23:25:17', '2025-03-16 23:25:17'),
-(5, 'Japon', 'japon', 'JP', 'le pays du soleil levant', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'published', '2025-03-18 01:46:40', '2025-03-18 02:46:40');
+(6, 'Algeria', 'algeria', 'DZ', 'Algeria est un pays situé en Africa, plus précisément en Northern Africa.', 'Arabic', '44700000', '2381741', 'Algiers', 'Algerian dinar', 'DZD', 'https://flagcdn.com/dz.svg', 'https://flagcdn.com/dz.svg', NULL, 'published', '2025-03-18 03:51:53', '2025-03-18 04:51:53'),
+(7, 'Japan', 'japan', 'JP', 'Japan est un pays situé en Asia, plus précisément en Eastern Asia.', 'Japanese', '125836021', '377930', 'Tokyo', 'Japanese yen', 'JPY', 'https://flagcdn.com/jp.svg', 'https://flagcdn.com/jp.svg', NULL, 'published', '2025-03-18 03:58:25', '2025-03-18 04:58:25'),
+(8, 'United States', 'united-states', 'US', 'United States est un pays situé en Americas, plus précisément en North America.', 'English', '329484123', '9372610', 'Washington, D.C.', 'United States dollar', 'USD', 'https://flagcdn.com/us.svg', 'https://flagcdn.com/us.svg', NULL, 'published', '2025-03-18 04:33:22', '2025-03-18 05:33:22'),
+(11, 'Egypt', 'egypt', 'EG', 'Egypt est un pays situé en Africa, plus précisément en Northern Africa.', 'Arabic', '102334403', '1002450', 'Cairo', 'Egyptian pound', 'EGP', 'https://flagcdn.com/eg.svg', 'https://flagcdn.com/eg.svg', NULL, 'published', '2025-03-18 18:32:48', '2025-03-18 19:32:48');
 
 -- --------------------------------------------------------
 
@@ -220,16 +238,8 @@ CREATE TABLE `places` (
 --
 
 INSERT INTO `places` (`id`, `city_id`, `category_id`, `name`, `slug`, `description`, `practical_info`, `location`, `image_path`, `created_by`, `status`, `created_at`, `updated_at`) VALUES
-(1, 4, 1, 'ronde des pains', 'ronde-des-pains', 'boulangerie de francais', NULL, NULL, NULL, NULL, 'published', '2025-03-17 21:27:37', '2025-03-17 22:27:37'),
-(2, 4, 3, 'Tour eiffel', 'tour-eiffel', 'du metal beaucoup de metal', NULL, NULL, NULL, NULL, 'published', '2025-03-17 21:29:05', '2025-03-17 22:29:05'),
-(3, 4, 2, 'mangeur de grenouilles', 'mangeur-de-grenouilles', 'mangeur de grenouilles', NULL, NULL, NULL, NULL, 'published', '2025-03-17 21:56:29', '2025-03-17 22:56:29'),
-(4, 4, 2, 'eaeaeaeaeaz', 'eaeaeaeaeaz', 'azeaeazeazeazeaeazea', NULL, NULL, NULL, NULL, 'published', '2025-03-17 22:25:33', '2025-03-17 23:25:33'),
-(5, 4, 2, 'qdsqqqqq', 'qdsqqqqq', 'qdqsdqsqdqsdqdqsdqdqdqs', NULL, 'qdqdqdqdqsdqd', NULL, NULL, 'published', '2025-03-17 23:28:02', '2025-03-18 00:28:02'),
-(6, 4, 3, 'qdsqdqsdqdqd', 'qdsqdqsdqdqd', 'dqdqdqdqddddddddddddddd', NULL, 'ddddddd', '/uploads/places/img_1742261227237_e0482dc5.jpg', NULL, 'published', '2025-03-18 00:27:07', '2025-03-18 01:27:07'),
-(7, 4, 1, 'qdqdqdqdqdqdqdq', 'qdqdqdqdqdqdqdq', 'dddddddddddddddddddddddddddddddddddddddd', NULL, 'dddddddddddddddd', '/uploads/places/img_1742261302416_936e7d82.png', NULL, 'published', '2025-03-18 00:28:22', '2025-03-18 01:28:22'),
-(10, 8, 3, 'Mont Fuji', 'mont-fuji', 'grosse montagne emblematique', NULL, 'mont fuji c\'est gros tu peux pas le louper', '/uploads/places/img_1742266150322_0ec3d5a3.jpg', NULL, 'published', '2025-03-18 01:49:10', '2025-03-18 02:49:10'),
-(11, 8, 2, 'des sushis', 'des-sushis', 'sushissushissushissushissushissushissushissushissushis', NULL, 'rue des sushi', '/uploads/places/img_1742266216008_febdd9bc.jpg', NULL, 'published', '2025-03-18 01:50:16', '2025-03-18 02:50:16'),
-(12, 8, 1, 'akihabara', 'akihabara', 'plein de commerces', NULL, 'akihabara', '/uploads/places/img_1742266355112_d981db7a.jpg', NULL, 'published', '2025-03-18 01:52:35', '2025-03-18 02:52:35');
+(15, 11, 1, 'commerce 2 alger', 'commerce-2-alger', 'commerce 2 alger', NULL, 'commerce 2 alger', '/uploads/shops/1742274780373_411be912.jpg', NULL, 'published', '2025-03-18 04:13:03', '2025-03-18 05:13:03'),
+(17, 13, 3, 'Les Pyramides de Gizeh', 'les-pyramides-de-gizeh', 'Les pyramides de Gizeh, aussi appelées complexe pyramidal de Gizeh, sont l\'ensemble des pyramides égyptiennes situées dans la nécropole de Gizeh sur le plateau de Gizeh, proche de la métropole du Caire. Elles sont les seules des Sept Merveilles du monde à avoir survécu jusqu\'à nos jours', NULL, ' Al Haram, Giza Governorate 3512201, Égypte', '/uploads/places/img_1742326730492_a51af6da.jpg', NULL, 'published', '2025-03-18 18:38:50', '2025-03-18 19:38:50');
 
 -- --------------------------------------------------------
 
@@ -427,19 +437,19 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT pour la table `cities`
 --
 ALTER TABLE `cities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT pour la table `city_accommodations`
 --
 ALTER TABLE `city_accommodations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `city_transports`
 --
 ALTER TABLE `city_transports`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `comments`
@@ -451,7 +461,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT pour la table `countries`
 --
 ALTER TABLE `countries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT pour la table `images`
@@ -463,7 +473,7 @@ ALTER TABLE `images`
 -- AUTO_INCREMENT pour la table `places`
 --
 ALTER TABLE `places`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT pour la table `place_categories`
