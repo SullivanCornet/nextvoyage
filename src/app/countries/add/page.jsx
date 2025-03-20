@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import AuthCheck from '@/app/components/AuthCheck';
 
 export default function AddCountry() {
   const router = useRouter();
@@ -193,337 +194,339 @@ export default function AddCountry() {
   };
   
   return (
-    <div className="add-country-container">
-      <div className="page-header">
-        <h1>Ajouter un pays</h1>
-        <Link href="/countries" className="back-button">
-          Retour à la liste des pays
-        </Link>
-      </div>
-      
-      {successMessage && (
-        <div className="success-message">
-          {successMessage}
+    <AuthCheck>
+      <div className="add-country-container">
+        <div className="page-header">
+          <h1>Ajouter un pays</h1>
+          <Link href="/countries" className="back-button">
+            Retour à la liste des pays
+          </Link>
         </div>
-      )}
-      
-      <div className="form-container">
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="country">Sélectionnez un pays *</label>
-            <select
-              id="country"
-              value={selectedCountry}
-              onChange={(e) => {
-                setSelectedCountry(e.target.value);
-                setCountryData(null);
-              }}
-              className={errors.country ? 'error' : ''}
-              disabled={isLoadingCountries || isSubmitting}
-            >
-              <option value="">-- Choisir un pays --</option>
-              {isLoadingCountries ? (
-                <option value="" disabled>Chargement des pays...</option>
-              ) : (
-                countries.map((country) => (
-                  <option key={country.code} value={country.code}>
-                    {country.name}
-                  </option>
-                ))
-              )}
-            </select>
-            {errors.country && <div className="error-message">{errors.country}</div>}
-            {errors.api && <div className="error-message">{errors.api}</div>}
+        
+        {successMessage && (
+          <div className="success-message">
+            {successMessage}
           </div>
-          
-          <div className="form-actions">
-            <button 
-              type="button" 
-              className="preview-button"
-              onClick={handlePreview}
-              disabled={isLoadingCountries || isSubmitting || !selectedCountry}
-            >
-              Aperçu
-            </button>
-            
-            <button 
-              type="submit" 
-              className="submit-button"
-              disabled={isLoadingCountries || isSubmitting || !selectedCountry}
-            >
-              {isSubmitting ? 'Ajout en cours...' : 'Ajouter le pays'}
-            </button>
-          </div>
-          
-          {errors.submit && (
-            <div className="error-message submit-error">
-              {errors.submit}
-            </div>
-          )}
-        </form>
-      </div>
-      
-      {countryData && (
-        <div className="country-preview">
-          <h2>Aperçu du pays</h2>
-          
-          <div className="preview-content">
-            <div className="preview-flag">
-              <img 
-                src={countryData.flags.svg} 
-                alt={`Drapeau de ${countryData.name.translations?.fra?.common || countryData.name.common}`}
-              />
+        )}
+        
+        <div className="form-container">
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="country">Sélectionnez un pays *</label>
+              <select
+                id="country"
+                value={selectedCountry}
+                onChange={(e) => {
+                  setSelectedCountry(e.target.value);
+                  setCountryData(null);
+                }}
+                className={errors.country ? 'error' : ''}
+                disabled={isLoadingCountries || isSubmitting}
+              >
+                <option value="">-- Choisir un pays --</option>
+                {isLoadingCountries ? (
+                  <option value="" disabled>Chargement des pays...</option>
+                ) : (
+                  countries.map((country) => (
+                    <option key={country.code} value={country.code}>
+                      {country.name}
+                    </option>
+                  ))
+                )}
+              </select>
+              {errors.country && <div className="error-message">{errors.country}</div>}
+              {errors.api && <div className="error-message">{errors.api}</div>}
             </div>
             
-            <div className="preview-info">
-              <h3>{countryData.name.translations?.fra?.common || countryData.name.common}</h3>
+            <div className="form-actions">
+              <button 
+                type="button" 
+                className="preview-button"
+                onClick={handlePreview}
+                disabled={isLoadingCountries || isSubmitting || !selectedCountry}
+              >
+                Aperçu
+              </button>
               
-              <div className="preview-meta">
-                {countryData.capital && (
-                  <div className="meta-item">
-                    <strong>Capitale:</strong> {countryData.capital[0]}
-                  </div>
-                )}
+              <button 
+                type="submit" 
+                className="submit-button"
+                disabled={isLoadingCountries || isSubmitting || !selectedCountry}
+              >
+                {isSubmitting ? 'Ajout en cours...' : 'Ajouter le pays'}
+              </button>
+            </div>
+            
+            {errors.submit && (
+              <div className="error-message submit-error">
+                {errors.submit}
+              </div>
+            )}
+          </form>
+        </div>
+        
+        {countryData && (
+          <div className="country-preview">
+            <h2>Aperçu du pays</h2>
+            
+            <div className="preview-content">
+              <div className="preview-flag">
+                <img 
+                  src={countryData.flags.svg} 
+                  alt={`Drapeau de ${countryData.name.translations?.fra?.common || countryData.name.common}`}
+                />
+              </div>
+              
+              <div className="preview-info">
+                <h3>{countryData.name.translations?.fra?.common || countryData.name.common}</h3>
                 
-                {countryData.population && (
+                <div className="preview-meta">
+                  {countryData.capital && (
+                    <div className="meta-item">
+                      <strong>Capitale:</strong> {countryData.capital[0]}
+                    </div>
+                  )}
+                  
+                  {countryData.population && (
+                    <div className="meta-item">
+                      <strong>Population:</strong> {countryData.population.toLocaleString()} habitants
+                    </div>
+                  )}
+                  
+                  {countryData.area && (
+                    <div className="meta-item">
+                      <strong>Superficie:</strong> {countryData.area.toLocaleString()} km²
+                    </div>
+                  )}
+                  
+                  {countryData.languages && (
+                    <div className="meta-item">
+                      <strong>Langue(s):</strong> {formatLanguages(countryData.languages)}
+                    </div>
+                  )}
+                  
+                  {countryData.currencies && (
+                    <div className="meta-item">
+                      <strong>Devise:</strong> {Object.values(countryData.currencies).map(c => 
+                        `${c.name} (${c.symbol || '-'})`
+                      ).join(', ')}
+                    </div>
+                  )}
+                  
                   <div className="meta-item">
-                    <strong>Population:</strong> {countryData.population.toLocaleString()} habitants
+                    <strong>Région:</strong> {countryData.region}{countryData.subregion ? `, ${countryData.subregion}` : ''}
                   </div>
-                )}
-                
-                {countryData.area && (
-                  <div className="meta-item">
-                    <strong>Superficie:</strong> {countryData.area.toLocaleString()} km²
-                  </div>
-                )}
-                
-                {countryData.languages && (
-                  <div className="meta-item">
-                    <strong>Langue(s):</strong> {formatLanguages(countryData.languages)}
-                  </div>
-                )}
-                
-                {countryData.currencies && (
-                  <div className="meta-item">
-                    <strong>Devise:</strong> {Object.values(countryData.currencies).map(c => 
-                      `${c.name} (${c.symbol || '-'})`
-                    ).join(', ')}
-                  </div>
-                )}
-                
-                <div className="meta-item">
-                  <strong>Région:</strong> {countryData.region}{countryData.subregion ? `, ${countryData.subregion}` : ''}
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
-      
-      <style jsx>{`
-        .add-country-container {
-          max-width: 800px;
-          margin: 0 auto;
-          padding: 20px;
-          font-family: Arial, sans-serif;
-        }
+        )}
         
-        .page-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 30px;
-          padding-bottom: 15px;
-          border-bottom: 1px solid #e0e0e0;
-        }
-        
-        h1 {
-          color: #2c3e50;
-          font-size: 1.8rem;
-          margin: 0;
-        }
-        
-        .back-button {
-          display: inline-block;
-          background-color: #7f8c8d;
-          color: white;
-          padding: 8px 16px;
-          border-radius: 5px;
-          text-decoration: none;
-          font-weight: bold;
-          transition: background-color 0.3s ease;
-        }
-        
-        .back-button:hover {
-          background-color: #6c7a7d;
-        }
-        
-        .success-message {
-          background-color: #2ecc71;
-          color: white;
-          padding: 15px;
-          border-radius: 5px;
-          margin-bottom: 20px;
-          text-align: center;
-          font-weight: bold;
-        }
-        
-        .form-container {
-          background-color: #f9f9f9;
-          padding: 30px;
-          border-radius: 10px;
-          margin-bottom: 30px;
-        }
-        
-        .form-group {
-          margin-bottom: 20px;
-        }
-        
-        label {
-          display: block;
-          margin-bottom: 8px;
-          font-weight: bold;
-          color: #2c3e50;
-        }
-        
-        select {
-          width: 100%;
-          padding: 10px;
-          border: 1px solid #ddd;
-          border-radius: 5px;
-          font-size: 1rem;
-          transition: border-color 0.3s ease;
-        }
-        
-        select:focus {
-          border-color: #3498db;
-          outline: none;
-        }
-        
-        select.error {
-          border-color: #e74c3c;
-        }
-        
-        .error-message {
-          color: #e74c3c;
-          margin-top: 5px;
-          font-size: 0.9rem;
-        }
-        
-        .submit-error {
-          background-color: #fce4e4;
-          border: 1px solid #e74c3c;
-          padding: 10px;
-          border-radius: 5px;
-          margin-top: 15px;
-        }
-        
-        .form-actions {
-          display: flex;
-          justify-content: space-between;
-          gap: 15px;
-        }
-        
-        .preview-button {
-          flex: 1;
-          padding: 10px;
-          background-color: #95a5a6;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          font-weight: bold;
-          transition: background-color 0.3s ease;
-        }
-        
-        .preview-button:hover:not(:disabled) {
-          background-color: #7f8c8d;
-        }
-        
-        .submit-button {
-          flex: 2;
-          padding: 10px;
-          background-color: #3498db;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          font-weight: bold;
-          transition: background-color 0.3s ease;
-        }
-        
-        .submit-button:hover:not(:disabled) {
-          background-color: #2980b9;
-        }
-        
-        .preview-button:disabled,
-        .submit-button:disabled {
-          background-color: #bdc3c7;
-          cursor: not-allowed;
-        }
-        
-        .country-preview {
-          background-color: #fff;
-          border-radius: 10px;
-          padding: 20px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .country-preview h2 {
-          color: #2c3e50;
-          margin-top: 0;
-          margin-bottom: 20px;
-          padding-bottom: 10px;
-          border-bottom: 1px solid #eee;
-        }
-        
-        .preview-content {
-          display: flex;
-          flex-direction: column;
-          gap: 20px;
-        }
-        
-        @media (min-width: 768px) {
+        <style jsx>{`
+          .add-country-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+          }
+          
+          .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+          }
+          
+          h1 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin: 0;
+          }
+          
+          .back-button {
+            display: inline-block;
+            background-color: #7f8c8d;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+          }
+          
+          .back-button:hover {
+            background-color: #6c7a7d;
+          }
+          
+          .success-message {
+            background-color: #2ecc71;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+          }
+          
+          .form-container {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+          }
+          
+          .form-group {
+            margin-bottom: 20px;
+          }
+          
+          label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+          }
+          
+          select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+          }
+          
+          select:focus {
+            border-color: #3498db;
+            outline: none;
+          }
+          
+          select.error {
+            border-color: #e74c3c;
+          }
+          
+          .error-message {
+            color: #e74c3c;
+            margin-top: 5px;
+            font-size: 0.9rem;
+          }
+          
+          .submit-error {
+            background-color: #fce4e4;
+            border: 1px solid #e74c3c;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+          }
+          
+          .form-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+          }
+          
+          .preview-button {
+            flex: 1;
+            padding: 10px;
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+          }
+          
+          .preview-button:hover:not(:disabled) {
+            background-color: #7f8c8d;
+          }
+          
+          .submit-button {
+            flex: 2;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+          }
+          
+          .submit-button:hover:not(:disabled) {
+            background-color: #2980b9;
+          }
+          
+          .preview-button:disabled,
+          .submit-button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+          }
+          
+          .country-preview {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          }
+          
+          .country-preview h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+          }
+          
           .preview-content {
-            flex-direction: row;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
           }
           
-          .preview-flag {
-            width: 30%;
+          @media (min-width: 768px) {
+            .preview-content {
+              flex-direction: row;
+            }
+            
+            .preview-flag {
+              width: 30%;
+            }
+            
+            .preview-info {
+              width: 70%;
+            }
           }
           
-          .preview-info {
-            width: 70%;
+          .preview-flag img {
+            width: 100%;
+            border: 1px solid #eee;
+            border-radius: 5px;
           }
-        }
-        
-        .preview-flag img {
-          width: 100%;
-          border: 1px solid #eee;
-          border-radius: 5px;
-        }
-        
-        .preview-info h3 {
-          color: #2c3e50;
-          margin-top: 0;
-          margin-bottom: 15px;
-          font-size: 1.5rem;
-        }
-        
-        .preview-meta {
-          display: grid;
-          gap: 10px;
-        }
-        
-        .meta-item {
-          font-size: 1rem;
-          color: #34495e;
-        }
-        
-        .meta-item strong {
-          color: #2c3e50;
-        }
-      `}</style>
-    </div>
+          
+          .preview-info h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+          }
+          
+          .preview-meta {
+            display: grid;
+            gap: 10px;
+          }
+          
+          .meta-item {
+            font-size: 1rem;
+            color: #34495e;
+          }
+          
+          .meta-item strong {
+            color: #2c3e50;
+          }
+        `}</style>
+      </div>
+    </AuthCheck>
   );
 } 

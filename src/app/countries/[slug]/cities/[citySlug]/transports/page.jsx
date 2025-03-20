@@ -6,9 +6,11 @@ import Link from 'next/link';
 import { FaPlus, FaBus, FaMapMarkerAlt, FaRoute } from 'react-icons/fa';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import NoDataMessage from '@/components/NoDataMessage';
+import { useAuth } from '@/app/contexts/AuthContext';
 
 export default function TransportsList() {
   const { slug, citySlug } = useParams();
+  const { isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(true);
   const [city, setCity] = useState(null);
   const [transports, setTransports] = useState([]);
@@ -65,10 +67,12 @@ export default function TransportsList() {
     <div className="transports-container">
       <div className="page-header">
         <h1 className="page-title">Transports à {city?.name || citySlug}</h1>
-        <Link href={`/countries/${slug}/cities/${citySlug}/transports/ajouter`} className="add-button">
-          <FaPlus className="add-icon" />
-          <span>Ajouter un transport</span>
-        </Link>
+        {isAuthenticated && (
+          <Link href={`/countries/${slug}/cities/${citySlug}/transports/ajouter`} className="add-button">
+            <FaPlus className="add-icon" />
+            <span>Ajouter un transport</span>
+          </Link>
+        )}
       </div>
 
       {transports.length > 0 ? (
@@ -108,7 +112,7 @@ export default function TransportsList() {
       ) : (
         <NoDataMessage 
           message="Aucun transport n'a été ajouté pour cette ville." 
-          actionLink={`/countries/${slug}/cities/${citySlug}/transports/ajouter`}
+          actionLink={isAuthenticated ? `/countries/${slug}/cities/${citySlug}/transports/ajouter` : null}
           actionText="Ajouter un transport"
         />
       )}

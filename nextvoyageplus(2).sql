@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 18 mars 2025 à 22:04
+-- Généré le : jeu. 20 mars 2025 à 22:31
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -66,7 +66,7 @@ CREATE TABLE `cities` (
   `description` text DEFAULT NULL,
   `image_path` varchar(255) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
-  `status` enum('draft','published','archived') DEFAULT 'published',
+  `status` enum('draft','pending','published','rejected') DEFAULT 'pending',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -78,7 +78,10 @@ CREATE TABLE `cities` (
 INSERT INTO `cities` (`id`, `country_id`, `country_code`, `name`, `slug`, `description`, `image_path`, `created_by`, `status`, `created_at`, `updated_at`) VALUES
 (11, 6, 'DZ', 'Alger', 'alger', 'Alger La Blanche', '/uploads/cities/1742273814389_8b737be2.jpg', NULL, 'published', '2025-03-18 03:56:57', '2025-03-18 04:56:57'),
 (12, 7, 'JP', 'Tokyo', 'tokyo', 'La plus connue du japon', '/uploads/cities/1742273960875_0a4cbdc3.jpg', NULL, 'published', '2025-03-18 03:59:21', '2025-03-18 04:59:21'),
-(13, 11, 'EG', 'Le Caire ', 'le-caire', 'L’immense capitale égyptienne, Le Caire, est traversée par le fleuve du Nil. Le cœur de la ville abrite la place Tahrir et le musée égyptien du Caire, un trésor d’antiquités avec ses momies royales et le trésor du pharaon Toutânkhamon. Non loin du musée se trouve Gizeh avec ses légendaires pyramides et la statue du Sphinx, dont la construction date du XXVIe siècle av. J.-C. Dans le quartier boisé de Zamalek sur l\'île de Gezira, on peut admirer une vue panoramique de la ville depuis la tour du Caire, qui s’élève à 187 m d’altitude', '/uploads/cities/1742326552655_c8dbfa26.jpg', NULL, 'published', '2025-03-18 18:35:55', '2025-03-18 19:35:55');
+(13, 11, 'EG', 'Le Caire ', 'le-caire', 'L’immense capitale égyptienne, Le Caire, est traversée par le fleuve du Nil. Le cœur de la ville abrite la place Tahrir et le musée égyptien du Caire, un trésor d’antiquités avec ses momies royales et le trésor du pharaon Toutânkhamon. Non loin du musée se trouve Gizeh avec ses légendaires pyramides et la statue du Sphinx, dont la construction date du XXVIe siècle av. J.-C. Dans le quartier boisé de Zamalek sur l\'île de Gezira, on peut admirer une vue panoramique de la ville depuis la tour du Caire, qui s’élève à 187 m d’altitude', '/uploads/cities/1742326552655_c8dbfa26.jpg', NULL, 'published', '2025-03-18 18:35:55', '2025-03-18 19:35:55'),
+(14, 6, 'DZ', 'Tizi ouzou', 'tizi-ouzou', 'ville en kabylie', '/uploads/cities/1742428302978_84d6d8e5.jpg', NULL, 'published', '2025-03-19 22:51:43', '2025-03-19 23:51:43'),
+(15, 7, 'JP', 'cffff', 'cffff', 'fffffffffffffffffffffffffffffffffffffffffffffffff', NULL, NULL, 'published', '2025-03-20 20:19:13', '2025-03-20 21:19:13'),
+(16, 7, 'JP', 'dqdqdqsqsdqdqd', 'dqdqdqsqsdqdqd', 'qsddddqsdqdqdqsd', NULL, NULL, 'published', '2025-03-20 20:27:37', '2025-03-20 21:27:37');
 
 -- --------------------------------------------------------
 
@@ -100,7 +103,7 @@ CREATE TABLE `city_accommodations` (
   `website` varchar(255) DEFAULT NULL,
   `image_path` varchar(255) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
-  `status` enum('draft','published','archived') DEFAULT 'published',
+  `status` enum('draft','pending','published','rejected') DEFAULT 'pending',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -110,7 +113,7 @@ CREATE TABLE `city_accommodations` (
 --
 
 INSERT INTO `city_accommodations` (`id`, `city_id`, `accommodation_type`, `name`, `slug`, `description`, `address`, `price_range`, `comfort_level`, `phone`, `website`, `image_path`, `created_by`, `status`, `created_at`, `updated_at`) VALUES
-(2, 11, 'maison', 'eaeeaze', NULL, 'eazeaeazeazeazeaeaeaeaze', 'azeazeaea', 'superieur', NULL, NULL, NULL, '/uploads/accommodations/1742275255608_48648d6a.png', NULL, 'published', '2025-03-18 05:20:56', '2025-03-18 05:20:56');
+(3, 11, 'maison', 'maison avec jardin et piscine', NULL, 'fsfsdfsfsfsfsdfsdfsfs', 'sdfsfsjjj', 'superieur', 4, NULL, NULL, '/uploads/accommodations/1742359992886_e0bba39a.png', NULL, 'published', '2025-03-18 21:28:44', '2025-03-20 19:22:10');
 
 -- --------------------------------------------------------
 
@@ -130,7 +133,7 @@ CREATE TABLE `city_transports` (
   `tips` text DEFAULT NULL,
   `image_path` varchar(255) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
-  `status` enum('draft','published','archived') DEFAULT 'published',
+  `status` enum('draft','pending','published','rejected') DEFAULT 'pending',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -140,8 +143,7 @@ CREATE TABLE `city_transports` (
 --
 
 INSERT INTO `city_transports` (`id`, `city_id`, `transport_type`, `name`, `slug`, `description`, `price_info`, `schedule`, `tips`, `image_path`, `created_by`, `status`, `created_at`, `updated_at`) VALUES
-(2, 11, 'taxi', 'dqsdq', NULL, 'qdqqdqdqsdqdqsdqsd', 'dqdqdqdq', NULL, NULL, '/uploads/transports/1742275386985_ec04ff07.jpg', NULL, 'published', '2025-03-18 05:23:07', '2025-03-18 05:23:07'),
-(3, 11, 'taxi', 'mahmoud', NULL, 'mahmoud l\'oncle de aziz\nwhatsapp : 065525282828', 'pas cher', NULL, NULL, NULL, NULL, 'published', '2025-03-18 20:31:54', '2025-03-18 20:31:54');
+(2, 11, 'taxi', 'Mahmoud taxi', NULL, 'mahmoud tres sympa, tu l\'appelles il vient te chercher et t\'amenes ou tu veux:\n012.045.897.998', 'pas cher', 'a voir avec lui', 'appelle le la veille au plus tard pour les longs déplacements', '/uploads/transports/1742334637640_e8205d09.jpg', NULL, 'published', '2025-03-18 05:23:07', '2025-03-20 19:20:34');
 
 -- --------------------------------------------------------
 
@@ -193,7 +195,8 @@ INSERT INTO `countries` (`id`, `name`, `slug`, `country_code`, `description`, `l
 (6, 'Algeria', 'algeria', 'DZ', 'Algeria est un pays situé en Africa, plus précisément en Northern Africa.', 'Arabic', '44700000', '2381741', 'Algiers', 'Algerian dinar', 'DZD', 'https://flagcdn.com/dz.svg', 'https://flagcdn.com/dz.svg', NULL, 'published', '2025-03-18 03:51:53', '2025-03-18 04:51:53'),
 (7, 'Japan', 'japan', 'JP', 'Japan est un pays situé en Asia, plus précisément en Eastern Asia.', 'Japanese', '125836021', '377930', 'Tokyo', 'Japanese yen', 'JPY', 'https://flagcdn.com/jp.svg', 'https://flagcdn.com/jp.svg', NULL, 'published', '2025-03-18 03:58:25', '2025-03-18 04:58:25'),
 (8, 'United States', 'united-states', 'US', 'United States est un pays situé en Americas, plus précisément en North America.', 'English', '329484123', '9372610', 'Washington, D.C.', 'United States dollar', 'USD', 'https://flagcdn.com/us.svg', 'https://flagcdn.com/us.svg', NULL, 'published', '2025-03-18 04:33:22', '2025-03-18 05:33:22'),
-(11, 'Egypt', 'egypt', 'EG', 'Egypt est un pays situé en Africa, plus précisément en Northern Africa.', 'Arabic', '102334403', '1002450', 'Cairo', 'Egyptian pound', 'EGP', 'https://flagcdn.com/eg.svg', 'https://flagcdn.com/eg.svg', NULL, 'published', '2025-03-18 18:32:48', '2025-03-18 19:32:48');
+(11, 'Egypt', 'egypt', 'EG', 'Egypt est un pays situé en Africa, plus précisément en Northern Africa.', 'Arabic', '102334403', '1002450', 'Cairo', 'Egyptian pound', 'EGP', 'https://flagcdn.com/eg.svg', 'https://flagcdn.com/eg.svg', NULL, 'published', '2025-03-18 18:32:48', '2025-03-18 19:32:48'),
+(15, 'Andorra', 'andorra', 'AD', 'Andorra est un pays situé en Europe, plus précisément en Southern Europe.', 'Catalan', '77265', '468', 'Andorra la Vella', 'Euro', 'EUR', 'https://flagcdn.com/ad.svg', 'https://flagcdn.com/ad.svg', NULL, 'published', '2025-03-20 20:28:15', '2025-03-20 21:28:15');
 
 -- --------------------------------------------------------
 
@@ -228,7 +231,7 @@ CREATE TABLE `places` (
   `location` varchar(255) DEFAULT NULL,
   `image_path` varchar(255) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
-  `status` enum('draft','published','archived') DEFAULT 'published',
+  `status` enum('draft','pending','published','rejected') DEFAULT 'pending',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -238,8 +241,10 @@ CREATE TABLE `places` (
 --
 
 INSERT INTO `places` (`id`, `city_id`, `category_id`, `name`, `slug`, `description`, `practical_info`, `location`, `image_path`, `created_by`, `status`, `created_at`, `updated_at`) VALUES
-(15, 11, 1, 'commerce 2 alger', 'commerce-2-alger', 'commerce 2 alger', NULL, 'commerce 2 alger', '/uploads/shops/1742274780373_411be912.jpg', NULL, 'published', '2025-03-18 04:13:03', '2025-03-18 05:13:03'),
-(17, 13, 3, 'Les Pyramides de Gizeh', 'les-pyramides-de-gizeh', 'Les pyramides de Gizeh, aussi appelées complexe pyramidal de Gizeh, sont l\'ensemble des pyramides égyptiennes situées dans la nécropole de Gizeh sur le plateau de Gizeh, proche de la métropole du Caire. Elles sont les seules des Sept Merveilles du monde à avoir survécu jusqu\'à nos jours', NULL, ' Al Haram, Giza Governorate 3512201, Égypte', '/uploads/places/img_1742326730492_a51af6da.jpg', NULL, 'published', '2025-03-18 18:38:50', '2025-03-18 19:38:50');
+(15, 11, 1, 'marché  de la casbah d\' Alger', 'march-de-la-casbah-d-alger', 'marché  de la casbah d\' Alger marché  de la casbah\nmarché  de la casbah d\' Alger marché  de la casbah d\' Algermarché  de la casbah d\' Alger marché  de la casbah d\' Algermarché  de la casbah d\' Alger marché  de la casbah d\' Algermarché  de la casbah d\' Alger marché  de la casbah d\' Algermarché  de la casbah d\' Alger marché  de la casbah d\' Algermarché  de la casbah d\' Alger marché  de la casbah d\' Algermarché  de la casbah d\' Alger marché  de la casbah d\' Algermarché  de la casbah d\' Alger marché  de la casbah d\' Algermarché  de la casbah d\' Alger marché  de la casbah d\' Algermarché  de la casbah d\' Alger marché  de la casbah d\' Algermarché  de la casbah d\' Alger marché  de la casbah d\' Algermarché  de la casbah d\' Alger marché  de la casbah d\' Alger', NULL, 'marché  de la casbah d\' Alger', '/uploads/shops/1742274780373_411be912.jpg', NULL, 'published', '2025-03-18 04:13:03', '2025-03-19 23:36:46'),
+(17, 13, 3, 'Les Pyramides de Gizeh', 'les-pyramides-de-gizeh', 'Les pyramides de Gizeh, aussi appelées complexe pyramidal de Gizeh, sont l\'ensemble des pyramides égyptiennes situées dans la nécropole de Gizeh sur le plateau de Gizeh, proche de la métropole du Caire. Elles sont les seules des Sept Merveilles du monde à avoir survécu jusqu\'à nos jours', NULL, ' Al Haram, Giza Governorate 3512201, Égypte', '/uploads/places/img_1742326730492_a51af6da.jpg', NULL, 'published', '2025-03-18 18:38:50', '2025-03-18 19:38:50'),
+(19, 11, 2, 'Chez aziz', 'chez-aziz', 'restaurant à algerrestaurant à algerrestaurant à algerrestaurant à alger', NULL, 'hdkqjdk', '/uploads/places/place_19_1742430958776_88cda7d8.jpg', NULL, 'published', '2025-03-19 05:59:59', '2025-03-20 19:23:36'),
+(20, 11, 3, 'la casbahf', 'la-casbahf', 'la casbah d\'alger\r\nla casbah d\'algerla casbah d\'alger', NULL, 'la casbah d\'alger', '/uploads/places/img_1742431083712_ac64fce0.jpg', NULL, 'published', '2025-03-19 23:38:03', '2025-03-20 00:08:47');
 
 -- --------------------------------------------------------
 
@@ -315,6 +320,7 @@ CREATE TABLE `users` (
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
   `role` enum('user','moderator','admin') DEFAULT 'user',
+  `status` enum('reported','banned') DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -323,9 +329,10 @@ CREATE TABLE `users` (
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `created_at`, `updated_at`) VALUES
-(1, 'poulou', 'poulouvoyage@gmail.com', '$2a$10$5cseqIX1gv.Fxtkz/heIAOfLwEN.DMl1gS/j4XeGpr/1glmzMZGuK', 'admin', '2025-03-16 22:10:30', '2025-03-16 23:33:07'),
-(2, 'papapoulou', 'papapoulouvoyage@gmail.com', '$2a$10$4Q8V6hh1SLnoDXKnfFrqZOI287NJKLWlAWXBsANP/BoyrinN1Kacq', 'user', '2025-03-17 00:07:44', '2025-03-17 00:07:44');
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'poulou', 'poulouvoyage@gmail.com', '$2a$10$5cseqIX1gv.Fxtkz/heIAOfLwEN.DMl1gS/j4XeGpr/1glmzMZGuK', 'admin', NULL, '2025-03-16 22:10:30', '2025-03-16 23:33:07'),
+(2, 'papapoulou', 'papapoulouvoyage@gmail.com', '$2a$10$4Q8V6hh1SLnoDXKnfFrqZOI287NJKLWlAWXBsANP/BoyrinN1Kacq', 'user', NULL, '2025-03-17 00:07:44', '2025-03-17 00:07:44'),
+(3, 'ptitepatate', 'ptitepatate@gmail.com', '$2b$10$MDFccNuJcpCkOT0XTC.gieOn1skp8ZYL4bw956logkOTdU.NHfc/.', 'user', NULL, '2025-03-20 03:23:57', '2025-03-20 03:23:57');
 
 --
 -- Index pour les tables déchargées
@@ -437,13 +444,13 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT pour la table `cities`
 --
 ALTER TABLE `cities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT pour la table `city_accommodations`
 --
 ALTER TABLE `city_accommodations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `city_transports`
@@ -461,7 +468,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT pour la table `countries`
 --
 ALTER TABLE `countries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT pour la table `images`
@@ -473,7 +480,7 @@ ALTER TABLE `images`
 -- AUTO_INCREMENT pour la table `places`
 --
 ALTER TABLE `places`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT pour la table `place_categories`
@@ -497,7 +504,7 @@ ALTER TABLE `submissions`
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Contraintes pour les tables déchargées

@@ -5,10 +5,12 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FaBus, FaArrowLeft, FaMapMarkerAlt, FaRoute, FaClock, FaMoneyBillWave, FaLightbulb, FaTrash, FaEdit } from 'react-icons/fa';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import { useAuth } from '@/app/contexts/AuthContext';
 
 export default function TransportDetail() {
   const router = useRouter();
   const { slug, citySlug, transportSlug } = useParams();
+  const { isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(true);
   const [transport, setTransport] = useState(null);
   const [city, setCity] = useState(null);
@@ -119,21 +121,23 @@ export default function TransportDetail() {
           <h1 className="page-title">
             <FaBus className="header-icon" /> {transport.name}
           </h1>
-          <div className="action-buttons">
-            <Link 
-              href={`/countries/${slug}/cities/${citySlug}/transports/${transportSlug}/modifier`}
-              className="edit-button"
-            >
-              <FaEdit className="edit-icon" /> Modifier
-            </Link>
-            <button 
-              className="delete-button" 
-              onClick={handleDeleteClick}
-              disabled={isDeleting}
-            >
-              <FaTrash className="delete-icon" /> Supprimer
-            </button>
-          </div>
+          {isAuthenticated && (
+            <div className="action-buttons">
+              <Link 
+                href={`/countries/${slug}/cities/${citySlug}/transports/${transportSlug}/modifier`}
+                className="edit-button"
+              >
+                <FaEdit className="edit-icon" /> Modifier
+              </Link>
+              <button 
+                className="delete-button" 
+                onClick={handleDeleteClick}
+                disabled={isDeleting}
+              >
+                <FaTrash className="delete-icon" /> Supprimer
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

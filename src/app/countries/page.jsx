@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/app/contexts/AuthContext';
 
 export default function CountriesList() {
   const [countries, setCountries] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { isAuthenticated } = useAuth();
 
   // Récupérer la liste des pays
   useEffect(() => {
@@ -72,15 +74,19 @@ export default function CountriesList() {
     <div className="countries-container">
       <div className="page-header">
         <h1>Pays</h1>
-        <Link href="/countries/add" className="add-button">
-          Ajouter un pays
-        </Link>
+        {isAuthenticated && (
+          <Link href="/countries/add" className="add-button">
+            Ajouter un pays
+          </Link>
+        )}
       </div>
 
       {countries.length === 0 ? (
         <div className="empty-message">
           <p>Aucun pays n'a été ajouté pour le moment.</p>
-          <p>Cliquez sur "Ajouter un pays" pour commencer.</p>
+          {isAuthenticated && (
+            <p>Cliquez sur "Ajouter un pays" pour commencer.</p>
+          )}
         </div>
       ) : (
         <div className="countries-grid">
@@ -155,8 +161,7 @@ export default function CountriesList() {
         }
         
         .countries-grid {
-        padding: 20px;
-       
+          padding: 20px;
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
           gap: 20px;
@@ -185,7 +190,6 @@ export default function CountriesList() {
         }
         
         .country-image img {
-          
           width: 100%;
           height: 100%;
           object-fit: cover;
@@ -205,7 +209,6 @@ export default function CountriesList() {
         
         .country-info {
           padding: 5px;
-        
         }
         
         .country-info h2 {

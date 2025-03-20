@@ -3,10 +3,12 @@
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { useAuth } from '@/app/contexts/AuthContext';
 
 export default function RestaurantsList() {
   const params = useParams();
   const { slug, citySlug } = params;
+  const { isAuthenticated } = useAuth();
   
   const [isLoading, setIsLoading] = useState(true);
   const [cityData, setCityData] = useState(null);
@@ -130,9 +132,11 @@ export default function RestaurantsList() {
           <Link href={`/countries/${slug}/cities/${citySlug}`} className="back-button">
             Retour à la ville
           </Link>
-          <Link href={`/countries/${slug}/cities/${citySlug}/restaurants/ajouter`} className="add-button">
-            + Ajouter un restaurant
-          </Link>
+          {isAuthenticated && (
+            <Link href={`/countries/${slug}/cities/${citySlug}/restaurants/ajouter`} className="add-button">
+              + Ajouter un restaurant
+            </Link>
+          )}
         </div>
       </div>
       
@@ -164,9 +168,11 @@ export default function RestaurantsList() {
             <div className="empty-icon">🍽️</div>
             <h2>Pas de restaurants</h2>
             <p>Aucun restaurant n'a été ajouté pour {cityName} pour le moment.</p>
-            <Link href={`/countries/${slug}/cities/${citySlug}/restaurants/ajouter`} className="add-restaurant-button">
-              Ajouter un restaurant
-            </Link>
+            {isAuthenticated && (
+              <Link href={`/countries/${slug}/cities/${citySlug}/restaurants/ajouter`} className="add-restaurant-button">
+                Ajouter un restaurant
+              </Link>
+            )}
           </div>
         </div>
       )}

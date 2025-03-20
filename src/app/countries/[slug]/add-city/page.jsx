@@ -3,6 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import AuthCheck from '@/app/components/AuthCheck';
 
 export default function AddCity() {
   const params = useParams();
@@ -207,290 +208,293 @@ export default function AddCity() {
     }
   };
   
+  // Wrapper du contenu dans AuthCheck
   return (
-    <div className="add-city-container">
-      <div className="page-header">
-        <h1>Ajouter une ville en {countryName}</h1>
-        <Link href={`/countries/${slug}`} className="back-button">
-          Retour au pays
-        </Link>
-      </div>
-      
-      {successMessage && (
-        <div className="success-message">
-          {successMessage}
+    <AuthCheck>
+      <div className="add-city-container">
+        <div className="page-header">
+          <h1>Ajouter une ville en {countryName}</h1>
+          <Link href={`/countries/${slug}`} className="back-button">
+            Retour au pays
+          </Link>
         </div>
-      )}
-      
-      {errors.country && (
-        <div className="error-message global-error">
-          {errors.country}
-        </div>
-      )}
-      
-      <div className="form-container">
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="cityName">Nom de la ville *</label>
-            <input
-              type="text"
-              id="cityName"
-              value={cityName}
-              onChange={(e) => setCityName(e.target.value)}
-              placeholder="Ex: Paris, New York, Tokyo..."
-              className={errors.cityName ? 'error' : ''}
-            />
-            {errors.cityName && <div className="error-message">{errors.cityName}</div>}
+        
+        {successMessage && (
+          <div className="success-message">
+            {successMessage}
           </div>
-          
-          <div className="form-group">
-            <label htmlFor="description">Description *</label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Décrivez brièvement cette ville..."
-              rows="4"
-              className={errors.description ? 'error' : ''}
-            ></textarea>
-            {errors.description && <div className="error-message">{errors.description}</div>}
+        )}
+        
+        {errors.country && (
+          <div className="error-message global-error">
+            {errors.country}
           </div>
-          
-          <div className="form-group">
-            <label htmlFor="image">Image de bannière (optionnelle)</label>
-            <div className="file-input-container">
+        )}
+        
+        <div className="form-container">
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="cityName">Nom de la ville *</label>
               <input
-                type="file"
-                id="image"
-                accept="image/*"
-                onChange={handleImageChange}
+                type="text"
+                id="cityName"
+                value={cityName}
+                onChange={(e) => setCityName(e.target.value)}
+                placeholder="Ex: Paris, New York, Tokyo..."
+                className={errors.cityName ? 'error' : ''}
               />
-              <div className="file-input-button">Choisir une image</div>
+              {errors.cityName && <div className="error-message">{errors.cityName}</div>}
             </div>
-            <div className="file-input-help">Format recommandé: 1200x300 pixels, JPG ou PNG</div>
-          </div>
-          
-          {imagePreview && (
-            <div className="image-preview-container">
-              <h3>Aperçu de l'image</h3>
-              <div className="image-preview">
-                <img src={imagePreview} alt="Aperçu" />
+            
+            <div className="form-group">
+              <label htmlFor="description">Description *</label>
+              <textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Décrivez brièvement cette ville..."
+                rows="4"
+                className={errors.description ? 'error' : ''}
+              ></textarea>
+              {errors.description && <div className="error-message">{errors.description}</div>}
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="image">Image de bannière (optionnelle)</label>
+              <div className="file-input-container">
+                <input
+                  type="file"
+                  id="image"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+                <div className="file-input-button">Choisir une image</div>
               </div>
+              <div className="file-input-help">Format recommandé: 1200x300 pixels, JPG ou PNG</div>
             </div>
-          )}
-          
-          {errors.submit && (
-            <div className="error-message submit-error">
-              {errors.submit}
+            
+            {imagePreview && (
+              <div className="image-preview-container">
+                <h3>Aperçu de l'image</h3>
+                <div className="image-preview">
+                  <img src={imagePreview} alt="Aperçu" />
+                </div>
+              </div>
+            )}
+            
+            {errors.submit && (
+              <div className="error-message submit-error">
+                {errors.submit}
+              </div>
+            )}
+            
+            <div className="form-actions">
+              <button 
+                type="submit" 
+                className="submit-button"
+                disabled={isSubmitting || !countryId}
+              >
+                {isSubmitting ? 'Ajout en cours...' : 'Ajouter la ville'}
+              </button>
             </div>
-          )}
+          </form>
+        </div>
+        
+        <style jsx>{`
+          .add-city-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+          }
           
-          <div className="form-actions">
-            <button 
-              type="submit" 
-              className="submit-button"
-              disabled={isSubmitting || !countryId}
-            >
-              {isSubmitting ? 'Ajout en cours...' : 'Ajouter la ville'}
-            </button>
-          </div>
-        </form>
+          .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+          }
+          
+          h1 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin: 0;
+          }
+          
+          .back-button {
+            display: inline-block;
+            background-color: #7f8c8d;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+          }
+          
+          .back-button:hover {
+            background-color: #6c7a7d;
+          }
+          
+          .success-message {
+            background-color: #2ecc71;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+          }
+          
+          .global-error {
+            background-color: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+          }
+          
+          .form-container {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 10px;
+          }
+          
+          .form-group {
+            margin-bottom: 20px;
+          }
+          
+          label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+          }
+          
+          input[type="text"],
+          textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+          }
+          
+          input[type="text"]:focus,
+          textarea:focus {
+            border-color: #3498db;
+            outline: none;
+          }
+          
+          input[type="text"].error,
+          textarea.error {
+            border-color: #e74c3c;
+          }
+          
+          .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 5px;
+          }
+          
+          .submit-error {
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+          }
+          
+          .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+          }
+          
+          input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+          }
+          
+          .file-input-button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+          }
+          
+          .file-input-button:hover {
+            background-color: #2980b9;
+          }
+          
+          .file-input-help {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+          }
+          
+          .image-preview-container {
+            margin-bottom: 20px;
+          }
+          
+          .image-preview-container h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+          }
+          
+          .image-preview {
+            width: 100%;
+            height: 200px;
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #eee;
+          }
+          
+          .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+          
+          .form-actions {
+            margin-top: 30px;
+            text-align: center;
+          }
+          
+          .submit-button {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+          }
+          
+          .submit-button:hover {
+            background-color: #27ae60;
+          }
+          
+          .submit-button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+          }
+        `}</style>
       </div>
-      
-      <style jsx>{`
-        .add-city-container {
-          max-width: 800px;
-          margin: 0 auto;
-          padding: 20px;
-          font-family: Arial, sans-serif;
-        }
-        
-        .page-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 30px;
-          padding-bottom: 15px;
-          border-bottom: 1px solid #e0e0e0;
-        }
-        
-        h1 {
-          color: #2c3e50;
-          font-size: 1.8rem;
-          margin: 0;
-        }
-        
-        .back-button {
-          display: inline-block;
-          background-color: #7f8c8d;
-          color: white;
-          padding: 8px 16px;
-          border-radius: 5px;
-          text-decoration: none;
-          font-weight: bold;
-          transition: background-color 0.3s ease;
-        }
-        
-        .back-button:hover {
-          background-color: #6c7a7d;
-        }
-        
-        .success-message {
-          background-color: #2ecc71;
-          color: white;
-          padding: 15px;
-          border-radius: 5px;
-          margin-bottom: 20px;
-          text-align: center;
-          font-weight: bold;
-        }
-        
-        .global-error {
-          background-color: #e74c3c;
-          color: white;
-          padding: 15px;
-          border-radius: 5px;
-          margin-bottom: 20px;
-          text-align: center;
-          font-weight: bold;
-        }
-        
-        .form-container {
-          background-color: #f9f9f9;
-          padding: 30px;
-          border-radius: 10px;
-        }
-        
-        .form-group {
-          margin-bottom: 20px;
-        }
-        
-        label {
-          display: block;
-          margin-bottom: 8px;
-          font-weight: bold;
-          color: #2c3e50;
-        }
-        
-        input[type="text"],
-        textarea {
-          width: 100%;
-          padding: 10px;
-          border: 1px solid #ddd;
-          border-radius: 5px;
-          font-size: 1rem;
-          transition: border-color 0.3s ease;
-        }
-        
-        input[type="text"]:focus,
-        textarea:focus {
-          border-color: #3498db;
-          outline: none;
-        }
-        
-        input[type="text"].error,
-        textarea.error {
-          border-color: #e74c3c;
-        }
-        
-        .error-message {
-          color: #e74c3c;
-          font-size: 0.9rem;
-          margin-top: 5px;
-        }
-        
-        .submit-error {
-          margin-bottom: 15px;
-          text-align: center;
-          font-weight: bold;
-        }
-        
-        .file-input-container {
-          position: relative;
-          overflow: hidden;
-          display: inline-block;
-        }
-        
-        input[type="file"] {
-          position: absolute;
-          left: 0;
-          top: 0;
-          opacity: 0;
-          width: 100%;
-          height: 100%;
-          cursor: pointer;
-        }
-        
-        .file-input-button {
-          background-color: #3498db;
-          color: white;
-          padding: 10px 15px;
-          border-radius: 5px;
-          cursor: pointer;
-          display: inline-block;
-          transition: background-color 0.3s ease;
-        }
-        
-        .file-input-button:hover {
-          background-color: #2980b9;
-        }
-        
-        .file-input-help {
-          font-size: 0.8rem;
-          color: #7f8c8d;
-          margin-top: 5px;
-        }
-        
-        .image-preview-container {
-          margin-bottom: 20px;
-        }
-        
-        .image-preview-container h3 {
-          font-size: 1.2rem;
-          margin-bottom: 10px;
-          color: #2c3e50;
-        }
-        
-        .image-preview {
-          width: 100%;
-          height: 200px;
-          border-radius: 5px;
-          overflow: hidden;
-          background-color: #eee;
-        }
-        
-        .image-preview img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-        
-        .form-actions {
-          margin-top: 30px;
-          text-align: center;
-        }
-        
-        .submit-button {
-          background-color: #2ecc71;
-          color: white;
-          border: none;
-          padding: 12px 24px;
-          border-radius: 5px;
-          font-size: 1.1rem;
-          font-weight: bold;
-          cursor: pointer;
-          transition: background-color 0.3s ease;
-        }
-        
-        .submit-button:hover {
-          background-color: #27ae60;
-        }
-        
-        .submit-button:disabled {
-          background-color: #95a5a6;
-          cursor: not-allowed;
-        }
-      `}</style>
-    </div>
+    </AuthCheck>
   );
 } 

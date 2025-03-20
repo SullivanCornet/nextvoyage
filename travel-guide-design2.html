@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cornetdevoyage</title>
+  <style>
+    /* Variables de couleurs et polices - Version Sombre */
+    :root {
+      --primary: #2196F3;
+      --primary-dark: #1976D2;
+      --secondary: #FF9800;
+      --dark: #121212;
+      --dark-light: #1E1E1E;
+      --card-bg: #2D2D2D;
+      --text: #E0E0E0;
+      --text-light: #9E9E9E;
+      --text-dark: #FFFFFF;
+      --white: #FFFFFF;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+      --hover-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
+    
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: var(--text);
+      background-color: var(--dark);
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .wireframe {
+      margin-bottom: 60px;
+      background: var(--dark-light);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    
+    /* Remove headers completely */
+    .header {
+      display: none;
+    }
+    
+    .content {
+      padding: 0;
+    }
+    
+    .page-content {
+      padding-top: 80px;
+    }
+    
+    /* Navigation */
+    .nav {
+      padding: 15px 30px;
+      background: var(--dark-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+    
+    .logo {
+      font-weight: bold;
+      font-size: 24px;
+      color: var(--primary);
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 30px;
+    }
+    
+    .nav-links div {
+      font-weight: 500;
+      cursor: pointer;
+      position: relative;
+      padding: 5px 0;
+      color: var(--text);
+    }
+    
+    .nav-links div:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      bottom: 0;
+      left: 0;
+      transition: width 0.3s ease;
+    }
+    
+    .nav-links div:hover:after {
+      width: 100%;
+    }
+    
+    /* Hero section */
+    .full-image {
+      height: 100vh;
+      background-image: url('/api/placeholder/1200/800');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    
+    /* Cards */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin: 30px 0;
+    }
+    
+    .card {
+      border-radius: 10px;
+      height: 220px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      background-color: var(--card-bg);
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--hover-shadow);
+    }
+    
+    .card-image {
+      height: 100%;
+      width: 100%;
+      background-image: url('/api/placeholder/400/300');
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.5s ease;
+    }
+    
+    .card:hover .card-image {
+      transform: scale(1.05);
+    }
+    
+    .card-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 15px;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+      color: var(--white);
+    }
+    
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    /* Banner */
+    .banner {
+      height: 250px;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/api/placeholder/1200/250');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 30px;
+      border-radius: 10px;
+      overflow: hidden;
+      color: var(--white);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Info Boxes */
+    .info-box {
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 25px;
+      background: var(--card-bg);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .info-box:hover {
+      box-shadow: var(--card-shadow);
+    }
+    
+    .info-box h3 {
+      color: var(--primary);
+      margin-top: 0;
+      font-size: 20px;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 8px;
+      display: inline-block;
+    }
+    
+    /* Breadcrumb - Hidden as requested */
+    .breadcrumb {
+      display: none;
+    }
+    
+    /* Titles */
+    h1 {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text-dark);
+    }
+    
+    h2 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text-dark);
+    }
+    
+    .section-title {
+      margin-top: 50px;
+      padding-bottom: 15px;
+      position: relative;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+    
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background-color: var(--primary);
+    }
+    
+    /* Buttons */
+    .button {
+      display: inline-block;
+      padding: 10px 24px;
+      background: var(--primary);
+      color: var(--white);
+      text-align: center;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 8px rgba(33, 150, 243, 0.3);
+    }
+    
+    .button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 12px rgba(33, 150, 243, 0.4);
+    }
+    
+    .button-circle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      background: var(--primary);
+      color: var(--white);
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 24px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(33, 150, 243, 0.4);
+      margin: 30px auto;
+    }
+    
+    .button-circle:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(33, 150, 243, 0.5);
+    }
+    
+    /* Tabs */
+    .tabs {
+      display: flex;
+      margin-bottom: 30px;
+    }
+    
+    .tab {
+      padding: 12px 24px;
+      background: var(--card-bg);
+      margin-right: 10px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-light);
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    
+    .tab.active {
+      background: var(--primary);
+      color: var(--white);
+      box-shadow: 0 3px 8px rgba(33, 150, 243, 0.4);
+    }
+    
+    /* Map */
+    .map-container {
+      display: flex;
+      justify-content: space-between;
+      margin: 30px 0;
+      align-items: flex-start;
+    }
+    
+    .map-info {
+      width: 55%;
+    }
+    
+    .map {
+      width: 40%;
+      height: 300px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      background-image: url('/api/placeholder/400/300');
+      background-size: cover;
+      background-position: center;
+    }
+    
+    /* Gallery */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin: 30px 0;
+    }
+    
+    .gallery-item {
+      height: 150px;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      background-color: var(--card-bg);
+      box-shadow: var(--shadow);
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+    
+    /* Comments */
+    .comments {
+      border-radius: 10px;
+      padding: 25px;
+      margin-top: 30px;
+      background: var(--card-bg);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .comment {
+      padding: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 15px;
+    }
+    
+    .comment-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .comment-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-right: 15px;
+    }
+    
+    .comment-author {
+      font-weight: 600;
+      color: var(--text);
+    }
+    
+    .comment-date {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-left: 10px;
+    }
+    
+    .comment-text {
+      margin-bottom: 5px;
+      color: var(--text);
+    }
+    
+    .add-comment {
+      margin-top: 20px;
+    }
+    
+    .add-comment-button {
+      display: inline-block;
+      padding: 8px 20px;
+      background: var(--primary);
+      color: var(--white);
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    
+    /* Footer - Version minimaliste */
+    .footer {
+      padding: 20px 0;
+      background: var(--dark-light);
+      color: var(--text-light);
+      text-align: center;
+    }
+    
+    .footer-bottom {
+      font-size: 14px;
+    }
+    
+    /* Extras */
+    .currency-box {
+      background: var(--card-bg);
+      border-radius: 10px;
+      box-shadow: var(--card-shadow);
+      padding: 20px;
+      margin-bottom: 25px;
+      border-left: 4px solid var(--secondary);
+    }
+    
+    .currency-box h3 {
+      color: var(--secondary);
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .currency-box h3:before {
+      content: "€";
+      display: inline-block;
+      background: var(--secondary);
+      color: white;
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      line-height: 30px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    
+    .currency-rate {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .currency-rate:last-child {
+      border-bottom: none;
+    }
+    
+    .currency-flag {
+      width: 24px;
+      height: 16px;
+      display: inline-block;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    
+    .page-indicator {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: var(--primary);
+      color: var(--white);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <!-- PAGE D'ACCUEIL -->
+  <div class="wireframe">
+    <div class="content">
+      <div class="full-image">
+        <div class="page-indicator">Page 1</div>
+        <div class="nav">
+          <div class="logo">Cornet de Voyage</div>
+          <div class="nav-links">
+            <div>Guides</div>
+           
+            <div>Connexion</div>
+            <div>Inscription</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer">
+        <div class="footer-bottom">
+          © 2025 Cornet de Voyage
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE GUIDES (LISTE DES PAYS) -->
+  <div class="wireframe">
+    <div class="content">
+      <div class="nav">
+        <div class="logo">Voyageur</div>
+        <div class="nav-links">
+          <div>Guides</div>
+        
+          <div>Connexion</div>
+          <div>Inscription</div>
+        </div>
+      </div>
+      
+      <div class="container" style="padding-top: 100px; padding-bottom: 40px; max-width: 100%;">
+        <div class="page-indicator">Page 2</div>
+        
+        <div class="grid" style="grid-template-columns: repeat(4, 1fr);">
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Égypte</div>
+              <div>8 villes • 75 lieux</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Espagne</div>
+              <div>9 villes • 78 lieux</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Italie</div>
+              <div>11 villes • 96 lieux</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Allemagne</div>
+              <div>8 villes • 64 lieux</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Portugal</div>
+              <div>5 villes • 42 lieux</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Royaume-Uni</div>
+              <div>7 villes • 58 lieux</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Maroc</div>
+              <div>6 villes • 48 lieux</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Turquie</div>
+              <div>7 villes • 62 lieux</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="button-circle">+</div>
+      </div>
+      
+      <div class="footer">
+        <div class="footer-bottom">
+          © 2025 Voyageur
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE DÉTAIL PAYS -->
+  <div class="wireframe">
+    <div class="content">
+      <div class="nav">
+        <div class="logo">Voyageur</div>
+        <div class="nav-links">
+          <div>Guides</div>
+          <div>Blog</div>
+          <div>Connexion</div>
+          <div>Inscription</div>
+        </div>
+      </div>
+      
+      <div class="container page-content">
+        <div class="page-indicator">Page 3</div>
+        
+        <div class="banner">
+          <h1>Égypte</h1>
+        </div>
+        
+        <div class="info-box">
+          <h3>Informations</h3>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+            <div>
+              <div style="font-weight: 600;">Langue</div>
+              <div>Arabe égyptien</div>
+            </div>
+            <div>
+              <div style="font-weight: 600;">Population</div>
+              <div>104 millions</div>
+            </div>
+            <div>
+              <div style="font-weight: 600;">Superficie</div>
+              <div>1 001 450 km²</div>
+            </div>
+            <div>
+              <div style="font-weight: 600;">Capitale</div>
+              <div>Le Caire</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="currency-box">
+          <h3>Monnaie: Livre égyptienne (EGP)</h3>
+          <div style="margin-top: 15px;">
+            <div class="currency-rate">
+              <div><span class="currency-flag" style="background: #ddd;"></span>1€ = 42.56 EGP</div>
+              <div>Livre égyptienne</div>
+            </div>
+            <div class="currency-rate">
+              <div><span class="currency-flag" style="background: #ddd;"></span>1 EGP = 0.023 €</div>
+              <div>Euro</div>
+            </div>
+            <div class="currency-rate">
+              <div><span class="currency-flag" style="background: #ddd;"></span>1 USD = 38.05 EGP</div>
+              <div>Dollar américain</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="info-box">
+          <h3>Description</h3>
+          <p>L'Égypte, berceau de l'une des plus anciennes civilisations du monde, fascine par son patrimoine historique exceptionnel. Des pyramides de Gizeh à la vallée des Rois, en passant par les temples d'Abou Simbel, le pays offre un voyage dans le temps à travers ses monuments millénaires.</p>
+          
+          <p>Mais l'Égypte ne se résume pas à son passé pharaonique. Le pays possède également des stations balnéaires réputées sur les rives de la mer Rouge, des paysages désertiques à couper le souffle, et une culture contemporaine riche et vibrante dans ses grandes villes comme Le Caire et Alexandrie.</p>
+        </div>
+        
+        <div class="grid" style="grid-template-columns: repeat(4, 1fr);">
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Le Caire</div>
+              <div>28 lieux à découvrir</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Louxor</div>
+              <div>18 lieux à découvrir</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Assouan</div>
+              <div>14 lieux à découvrir</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Alexandrie</div>
+              <div>16 lieux à découvrir</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Hurghada</div>
+              <div>12 lieux à découvrir</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Charm el-Cheikh</div>
+              <div>15 lieux à découvrir</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Gizeh</div>
+              <div>8 lieux à découvrir</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Dahab</div>
+              <div>9 lieux à découvrir</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="button-circle">+</div>
+      </div>
+      
+     
+      
+      <div class="footer">
+        <div class="footer-bottom">
+          © 2025 Cornet de Voyage
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE DÉTAIL VILLE -->
+  <div class="wireframe">
+    <div class="content">
+      <div class="nav">
+        <div class="logo">Voyageur</div>
+        <div class="nav-links">
+          <div>Guides</div>
+          
+          <div>Connexion</div>
+          <div>Inscription</div>
+        </div>
+      </div>
+      
+      <div class="container page-content">
+        <div class="page-indicator">Page 4</div>
+        
+        <div class="banner">
+          <h1>Le Caire</h1>
+        </div>
+        
+        <div class="tabs">
+          <div class="tab active">Logement</div>
+          <div class="tab">Transport</div>
+        </div>
+        
+        <div class="info-box">
+          <h3>Description</h3>
+          <p>Le Caire, capitale de l'Égypte et plus grande ville du monde arabe, est une métropole vibrante où l'ancien et le moderne se rencontrent. Avec ses 20 millions d'habitants, cette mégalopole au bord du Nil est le cœur culturel, politique et économique du pays et offre une expérience urbaine unique.</p>
+          
+          <p>La ville abrite certains des trésors les plus précieux de l'Égypte ancienne, notamment le Musée égyptien qui contient la collection la plus complète d'antiquités égyptiennes au monde, dont le trésor de Toutânkhamon. À proximité se trouvent les célèbres pyramides de Gizeh et le Sphinx, témoins majestueux de l'une des plus grandes civilisations de l'histoire.</p>
+        </div>
+        
+        <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Sites historiques</div>
+              <div>12 lieux à visiter</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Restaurants</div>
+              <div>28 adresses</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Marchés & Bazars</div>
+              <div>8 lieux de shopping</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="comments">
+          <h3>Commentaires</h3>
+          <div class="comment">
+            <div class="comment-header">
+              <div class="comment-avatar">JD</div>
+              <div class="comment-author">Jean Dupont</div>
+              <div class="comment-date">Il y a 5 jours</div>
+            </div>
+            <div class="comment-text">Le musée égyptien est absolument incroyable, prévoyez au moins une demi-journée pour le visiter !</div>
+          </div>
+          <div class="comment">
+            <div class="comment-header">
+              <div class="comment-avatar">LB</div>
+              <div class="comment-author">Laura Bennett</div>
+              <div class="comment-date">Il y a 2 semaines</div>
+            </div>
+            <div class="comment-text">J'ai adoré me perdre dans le Khan el-Khalili, mais attention aux vendeurs insistants.</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer">
+        <div class="footer-bottom">
+          © 2025 Cornet de Voyage
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE CATÉGORIE DE LIEUX -->
+  <div class="wireframe">
+    <div class="content">
+      <div class="nav">
+        <div class="logo">Voyageur</div>
+        <div class="nav-links">
+          <div>Guides</div>
+         
+          <div>Connexion</div>
+          <div>Inscription</div>
+        </div>
+      </div>
+      
+      <div class="container page-content">
+        <div class="page-indicator">Page 5</div>
+        
+        <div class="banner">
+          <h1>Sites historiques au Caire</h1>
+        </div>
+        
+        <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Pyramides de Gizeh</div>
+              <div>Incontournable</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Musée Égyptien</div>
+              <div>Collections majeures</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Citadelle de Saladin</div>
+              <div>Vue panoramique</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Khan el-Khalili</div>
+              <div>Bazar historique</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Mosquée Mohammed Ali</div>
+              <div>Architecture ottomane</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Vieux Caire</div>
+              <div>Quartier copte</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Saqqarah</div>
+              <div>Pyramide à degrés</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Al-Azhar Park</div>
+              <div>Oasis urbaine</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-image" style="background-image: url('/api/placeholder/400/300')"></div>
+            <div class="card-content">
+              <div class="card-title">Mosquée Ibn Tulun</div>
+              <div>La plus ancienne</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="button-circle">+</div>
+      </div>
+      
+      <div class="footer">
+        <div class="footer-bottom">
+          © 2025 Cornet de Voyage
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- PAGE DÉTAIL LIEU -->
+  <div class="wireframe">
+    <div class="content">
+      <div class="nav">
+        <div class="logo">Cornet de Voyage</div>
+        <div class="nav-links">
+          <div>Guides</div>
+      
+          <div>Connexion</div>
+          <div>Inscription</div>
+        </div>
+      </div>
+      
+      <div class="container page-content">
+        <div class="page-indicator">Page 6</div>
+        
+        <div class="banner">
+          <h1>Pyramides de Gizeh</h1>
+        </div>
+        
+        <div class="map-container">
+          <div class="map-info">
+            <div class="info-box">
+              <h3>Description</h3>
+              <p>Les pyramides de Gizeh, situées à environ 20 km du centre du Caire, sont le dernier vestige des sept merveilles du monde antique. Ce complexe funéraire comprend les pyramides de Khéops, Khéphren et Mykérinos, construites comme tombeaux pour les pharaons de la IVe dynastie (environ 2550 à 2490 av. J.-C.).</p>
+              
+              <p>La Grande Pyramide de Khéops, la plus impressionnante du site, était à l'origine haute de 146,5 mètres et composée de plus de 2,3 millions de blocs de pierre, certains pesant jusqu'à 15 tonnes. Le complexe abrite également le célèbre Grand Sphinx, statue à corps de lion et à tête humaine, qui veille sur le site depuis plus de 4 500 ans.</p>
+              
+              <h4>Informations pratiques</h4>
+              <ul style="list-style-type: none; padding-left: 0;">
+                <li><strong>Horaires:</strong> Tous les jours de 8h à 17h (oct-mars) et 7h à 19h (avr-sept)</li>
+                <li><strong>Tarifs:</strong> 240 EGP (~5,60€) pour l'entrée générale | Entrée dans la Grande Pyramide: 400 EGP (~9,40€)</li>
+                <li><strong>Durée de visite recommandée:</strong> 3-4 heures</li>
+                <li><strong>Conseils:</strong> Venez tôt le matin pour éviter la chaleur et les foules. Apportez chapeau, eau et crème solaire.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="map">Carte Google Maps</div>
+        </div>
+        
+        <h3>Galerie photos</h3>
+        <div class="gallery">
+          <div class="gallery-item"><img src="/api/placeholder/400/300" alt="Pyramides de Gizeh" /></div>
+          <div class="gallery-item"><img src="/api/placeholder/400/300" alt="Grande Pyramide" /></div>
+          <div class="gallery-item"><img src="/api/placeholder/400/300" alt="Sphinx" /></div>
+          <div class="gallery-item"><img src="/api/placeholder/400/300" alt="Intérieur de pyramide" /></div>
+          <div class="gallery-item"><img src="/api/placeholder/400/300" alt="Pyramides au coucher du soleil" /></div>
+          <div class="gallery-item"><img src="/api/placeholder/400/300" alt="Vue panoramique" /></div>
+          <div class="gallery-item"><img src="/api/placeholder/400/300" alt="Détails des sculptures" /></div>
+          <div class="gallery-item"><img src="/api/placeholder/400/300" alt="Chambre funéraire" /></div>
+        </div>
+        
+       
+      </div>
+      
+      <div class="footer">
+        <div class="footer-bottom">
+          © 2025 Cornet de Voyage
+        </div>
+      </div>
+    </div>
+  </div>
+             
+  
+ 

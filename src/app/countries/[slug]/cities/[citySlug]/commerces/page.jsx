@@ -4,10 +4,12 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { citiesAPI, placesAPI } from '@/services/api';
+import { useAuth } from '@/app/contexts/AuthContext';
 
 export default function ShopsList() {
   const params = useParams();
   const { slug, citySlug } = params;
+  const { isAuthenticated } = useAuth();
   
   const [shops, setShops] = useState([]);
   const [cityData, setCityData] = useState(null);
@@ -115,9 +117,11 @@ export default function ShopsList() {
           <Link href={`/countries/${slug}/cities/${citySlug}`} className="back-button">
             Retour à la ville
           </Link>
-          <Link href={`/countries/${slug}/cities/${citySlug}/commerces/ajouter`} className="add-button">
-            + Ajouter un commerce
-          </Link>
+          {isAuthenticated && (
+            <Link href={`/countries/${slug}/cities/${citySlug}/commerces/ajouter`} className="add-button">
+              + Ajouter un commerce
+            </Link>
+          )}
         </div>
       </div>
       
@@ -125,7 +129,7 @@ export default function ShopsList() {
         {shops.length === 0 ? (
           <div className="no-shops">
             <p>Aucun commerce n'a encore été ajouté pour cette ville.</p>
-            <p>Soyez le premier à en ajouter un !</p>
+            {isAuthenticated && <p>Soyez le premier à en ajouter un !</p>}
           </div>
         ) : (
           shops.map((shop) => (

@@ -3,10 +3,12 @@
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { useAuth } from '@/app/contexts/AuthContext';
 
 export default function CityDetail() {
   const params = useParams();
   const { slug, citySlug } = params;
+  const { isAuthenticated } = useAuth();
   
   const [isLoading, setIsLoading] = useState(true);
   const [city, setCity] = useState(null);

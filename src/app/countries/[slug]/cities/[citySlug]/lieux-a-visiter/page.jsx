@@ -3,10 +3,12 @@
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { useAuth } from '@/app/contexts/AuthContext';
 
 export default function PlacesToVisit() {
   const params = useParams();
   const { slug, citySlug } = params;
+  const { isAuthenticated } = useAuth();
   
   const [isLoading, setIsLoading] = useState(true);
   const [cityData, setCityData] = useState(null);
@@ -130,9 +132,11 @@ export default function PlacesToVisit() {
           <Link href={`/countries/${slug}/cities/${citySlug}`} className="back-button">
             Retour à la ville
           </Link>
-          <Link href={`/countries/${slug}/cities/${citySlug}/lieux-a-visiter/ajouter`} className="add-button">
-            + Ajouter un lieu à visiter
-          </Link>
+          {isAuthenticated && (
+            <Link href={`/countries/${slug}/cities/${citySlug}/lieux-a-visiter/ajouter`} className="add-button">
+              + Ajouter un lieu à visiter
+            </Link>
+          )}
         </div>
       </div>
       
@@ -149,7 +153,7 @@ export default function PlacesToVisit() {
                 </div>
                 <div className="place-info">
                   <h3 className="place-name">{place.name}</h3>
-                  <p className="place-address">{place.address}</p>
+                  <p className="place-address">{place.location || "Adresse non disponible"}</p>
                   <p className="place-description">{place.description.length > 100 
                     ? `${place.description.substring(0, 100)}...` 
                     : place.description}</p>
@@ -164,9 +168,11 @@ export default function PlacesToVisit() {
             <div className="empty-icon">🔍</div>
             <h2>Pas de lieux à visiter</h2>
             <p>Aucun lieu à visiter n'a été ajouté pour {cityName} pour le moment.</p>
-            <Link href={`/countries/${slug}/cities/${citySlug}/lieux-a-visiter/ajouter`} className="add-place-button">
-              Ajouter un lieu à visiter
-            </Link>
+            {isAuthenticated && (
+              <Link href={`/countries/${slug}/cities/${citySlug}/lieux-a-visiter/ajouter`} className="add-place-button">
+                Ajouter un lieu à visiter
+              </Link>
+            )}
           </div>
         </div>
       )}

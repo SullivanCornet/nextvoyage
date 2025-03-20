@@ -6,9 +6,11 @@ import Link from 'next/link';
 import { FaPlus, FaBed, FaMapMarkerAlt } from 'react-icons/fa';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import NoDataMessage from '@/components/NoDataMessage';
+import { useAuth } from '@/app/contexts/AuthContext';
 
 export default function LogementsList() {
   const { slug, citySlug } = useParams();
+  const { isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(true);
   const [city, setCity] = useState(null);
   const [logements, setLogements] = useState([]);
@@ -65,10 +67,12 @@ export default function LogementsList() {
     <div className="logements-container">
       <div className="page-header">
         <h1 className="page-title">Logements à {city?.name || citySlug}</h1>
-        <Link href={`/countries/${slug}/cities/${citySlug}/logements/ajouter`} className="add-button">
-          <FaPlus className="add-icon" />
-          <span>Ajouter un logement</span>
-        </Link>
+        {isAuthenticated && (
+          <Link href={`/countries/${slug}/cities/${citySlug}/logements/ajouter`} className="add-button">
+            <FaPlus className="add-icon" />
+            <span>Ajouter un logement</span>
+          </Link>
+        )}
       </div>
 
       {logements.length > 0 ? (
@@ -108,7 +112,7 @@ export default function LogementsList() {
       ) : (
         <NoDataMessage 
           message="Aucun logement n'a été ajouté pour cette ville." 
-          actionLink={`/countries/${slug}/cities/${citySlug}/logements/ajouter`}
+          actionLink={isAuthenticated ? `/countries/${slug}/cities/${citySlug}/logements/ajouter` : null}
           actionText="Ajouter un logement"
         />
       )}

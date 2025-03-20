@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import CityCard from '@/components/CityCard';
+import { useAuth } from '@/app/contexts/AuthContext';
 
 export default function CountryDetails() {
   const params = useParams();
   const router = useRouter();
   const { slug } = params;
+  const { isAuthenticated } = useAuth();
   
   const [country, setCountry] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -162,9 +164,11 @@ export default function CountryDetails() {
           <Link href="/countries" className="back-button">
             Retour à la liste des pays
           </Link>
-          <button onClick={handleDeleteCountry} className="delete-button">
-            Supprimer de la liste
-          </button>
+          {isAuthenticated && (
+            <button onClick={handleDeleteCountry} className="delete-button">
+              Supprimer de la liste
+            </button>
+          )}
         </div>
       </div>
       
@@ -211,9 +215,11 @@ export default function CountryDetails() {
       <div className="cities-section">
         <div className="cities-header">
           <h2>Villes</h2>
-          <Link href={`/countries/${slug}/add-city`} className="add-city-button">
-            Ajouter une ville
-          </Link>
+          {isAuthenticated && (
+            <Link href={`/countries/${slug}/add-city`} className="add-city-button">
+              Ajouter une ville
+            </Link>
+          )}
         </div>
         
         <div className="cities-grid">
@@ -230,7 +236,9 @@ export default function CountryDetails() {
           ) : (
             <div className="no-cities">
               <p>Aucune ville n'a été ajoutée pour ce pays.</p>
-              <p>Cliquez sur "Ajouter une ville" pour commencer.</p>
+              {isAuthenticated && (
+                <p>Cliquez sur "Ajouter une ville" pour commencer.</p>
+              )}
             </div>
           )}
         </div>

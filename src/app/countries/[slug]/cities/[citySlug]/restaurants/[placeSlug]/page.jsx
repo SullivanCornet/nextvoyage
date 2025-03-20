@@ -3,11 +3,13 @@
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { useAuth } from '@/app/contexts/AuthContext';
 
 export default function RestaurantDetail() {
   const params = useParams();
   const { slug, citySlug, placeSlug } = params;
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
   
   const [isLoading, setIsLoading] = useState(true);
   const [restaurant, setRestaurant] = useState(null);
@@ -159,14 +161,16 @@ export default function RestaurantDetail() {
           <Link href={`/countries/${slug}/cities/${citySlug}/restaurants`} className="back-button">
             Retour aux restaurants
           </Link>
-          <div className="action-buttons">
-            <Link href={`/countries/${slug}/cities/${citySlug}/restaurants/${placeSlug}/modifier`} className="edit-button">
-              Modifier
-            </Link>
-            <button onClick={handleDelete} className="delete-button">
-              Supprimer
-            </button>
-          </div>
+          {isAuthenticated && (
+            <div className="action-buttons">
+              <Link href={`/countries/${slug}/cities/${citySlug}/restaurants/${placeSlug}/modifier`} className="edit-button">
+                Modifier
+              </Link>
+              <button onClick={handleDelete} className="delete-button">
+                Supprimer
+              </button>
+            </div>
+          )}
         </div>
       </div>
       
