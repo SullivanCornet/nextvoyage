@@ -86,32 +86,49 @@ export async function GET(request, { params }) {
 // PUT /api/places/[slug]
 export async function PUT(request, { params }) {
   try {
+    // Le slug dans l'URL peut être un ID ou un slug réel
     const { slug } = params;
     const data = await request.json();
     
-    // Vérifier que le lieu existe
-    const cityId = data.city_id;
-    let placeQuery;
-    let queryValues;
+    console.log(`API: Mise à jour du lieu ${slug}`, {
+      donnéesReçues: Object.keys(data)
+    });
     
-    if (cityId) {
-      placeQuery = 'SELECT id FROM places WHERE slug = ? AND city_id = ?';
-      queryValues = [slug, cityId];
+    // Déterminer si le slug est un ID ou un slug réel
+    const isNumeric = /^\d+$/.test(slug);
+    
+    let placeId;
+    if (isNumeric) {
+      // Si c'est un nombre, on l'utilise directement comme ID
+      placeId = parseInt(slug);
     } else {
-      placeQuery = 'SELECT id FROM places WHERE slug = ?';
-      queryValues = [slug];
+      // Sinon, on cherche l'ID correspondant au slug
+      const cityId = data.city_id;
+      let placeQuery;
+      let queryValues;
+      
+      if (cityId) {
+        placeQuery = 'SELECT id FROM places WHERE slug = ? AND city_id = ?';
+        queryValues = [slug, cityId];
+      } else {
+        placeQuery = 'SELECT id FROM places WHERE slug = ?';
+        queryValues = [slug];
+      }
+      
+      const places = await executeQuery({ query: placeQuery, values: queryValues });
+      
+      if (places.length === 0) {
+        return NextResponse.json(
+          { error: 'Lieu non trouvé' },
+          { status: 404 }
+        );
+      }
+      
+      placeId = places[0].id;
     }
     
-    const places = await executeQuery({ query: placeQuery, values: queryValues });
-    
-    if (places.length === 0) {
-      return NextResponse.json(
-        { error: 'Lieu non trouvé' },
-        { status: 404 }
-      );
-    }
-    
-    const placeId = places[0].id;
+    // Utiliser l'ID du lieu pour la mise à jour
+    console.log(`API: ID du lieu à mettre à jour: ${placeId}`);
     
     // Ne pas mettre à jour le champ created_at
     if (data.created_at) {
@@ -128,7 +145,7 @@ export async function PUT(request, { params }) {
   } catch (error) {
     console.error(`API: Erreur lors de la mise à jour du lieu:`, error);
     return NextResponse.json(
-      { error: 'Erreur lors de la mise à jour du lieu' },
+      { error: `Erreur lors de la mise à jour du lieu: ${error.message}` },
       { status: 500 }
     );
   }

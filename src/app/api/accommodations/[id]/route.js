@@ -47,7 +47,7 @@ export async function PUT(request, { params }) {
       name: data.name,
       description: data.description || null,
       accommodation_type: data.accommodation_type || null,
-      address: data.address || data.location || null,
+      address: data.address || null,
       price_range: data.price_range || null,
       comfort_level: data.comfort_level || accommodation.comfort_level || 3,
       phone: data.phone || null,

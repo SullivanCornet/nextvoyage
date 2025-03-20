@@ -133,9 +133,10 @@ export default function AddPlaceToVisit() {
         formData.append('city_id', cityData.id);
         formData.append('category_id', placeCategory.id);
         formData.append('description', description);
-        formData.append('address', address);
+        formData.append('location', address);
         formData.append('image', imageFile);
         
+        console.log('Envoi du formulaire avec image avec les champs:', Array.from(formData.keys()));
         await placesAPI.createWithImage(formData);
       } else {
         // Sinon, utiliser JSON
@@ -145,9 +146,10 @@ export default function AddPlaceToVisit() {
           city_id: cityData.id,
           category_id: placeCategory.id,
           description: description,
-          address: address
+          location: address
         };
         
+        console.log('Envoi des données sans image:', placeData);
         await placesAPI.create(placeData);
       }
       

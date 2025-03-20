@@ -32,6 +32,16 @@ export default function PlaceDetail() {
         const placeData = await placeResponse.json();
         setPlace(placeData);
         
+        // Vérifier les propriétés du lieu pour le débogage
+        console.log('Propriétés du lieu récupéré:', {
+          id: placeData.id,
+          name: placeData.name,
+          location: placeData.location, // Vérifier si 'location' est présent et a une valeur
+          address: placeData.address, // Vérifier si 'address' existe (ne devrait pas être utilisé)
+          hasLocation: typeof placeData.location !== 'undefined',
+          locationEmpty: placeData.location === null || placeData.location === ''
+        });
+        
         setIsLoading(false);
       } catch (error) {
         console.error('Erreur:', error);
@@ -175,7 +185,7 @@ export default function PlaceDetail() {
             <h2>Informations pratiques</h2>
             <div className="info-item">
               <div className="info-label">Adresse</div>
-              <div className="info-value">{place.address}</div>
+              <div className="info-value">{place.location || "Adresse non disponible"}</div>
             </div>
             
             <div className="info-item">

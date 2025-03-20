@@ -169,6 +169,8 @@ export default function AddShop() {
         image_path: imagePath
       };
       
+      console.log('Données du commerce à créer:', shopData);
+      
       // Créer le commerce avec l'API
       await placesAPI.create(shopData);
       

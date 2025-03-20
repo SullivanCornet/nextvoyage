@@ -32,7 +32,7 @@ export async function GET(request, { params }) {
     // Transforme les résultats pour qu'ils correspondent à ce qu'attendait notre interface
     const formattedAccommodations = accommodations.map(item => ({
       ...item,
-      // Dans la base de données, le champ s'appelle "address", mais notre interface utilise "location"
+      // Renommer address en location pour l'interface frontend
       location: item.address || null,
       // Certaines entrées pourraient ne pas avoir de ID, générons-en un basé sur le nom pour notre interface
       slug: item.id.toString()
@@ -90,7 +90,7 @@ export async function POST(request, { params }) {
       cityId,
       data.name,
       data.description || null,
-      data.location || null,     // Utiliser location comme address
+      data.location || null,     // Convertir location (frontend) en address (base de données)
       data.accommodation_type || null,
       data.price_range || null,
       data.contact_info || null, // Utiliser contact_info comme phone

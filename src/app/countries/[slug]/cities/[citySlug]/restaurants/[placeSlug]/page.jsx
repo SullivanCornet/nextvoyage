@@ -32,6 +32,16 @@ export default function RestaurantDetail() {
         const restaurantData = await restaurantResponse.json();
         setRestaurant(restaurantData);
         
+        // Ajouter un log pour déboguer l'adresse
+        console.log('Propriétés du restaurant récupéré:', {
+          id: restaurantData.id,
+          name: restaurantData.name,
+          location: restaurantData.location, // Vérifier si 'location' est présent et a une valeur
+          address: restaurantData.address, // Vérifier si 'address' existe (ne devrait pas être utilisé)
+          hasLocation: typeof restaurantData.location !== 'undefined',
+          locationEmpty: restaurantData.location === null || restaurantData.location === ''
+        });
+        
         setIsLoading(false);
       } catch (error) {
         console.error('Erreur:', error);
@@ -175,7 +185,7 @@ export default function RestaurantDetail() {
             <h2>Informations pratiques</h2>
             <div className="info-item">
               <div className="info-label">Adresse</div>
-              <div className="info-value">{restaurant.address}</div>
+              <div className="info-value">{restaurant.location || "Adresse non disponible"}</div>
             </div>
             
             <div className="info-item">

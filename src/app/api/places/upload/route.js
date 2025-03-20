@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { insert, executeQuery } from '@/lib/db';
+import { insert, executeQuery, update } from '@/lib/db';
 import fs from 'fs';
 import path from 'path';
 import { randomUUID } from 'crypto';
@@ -56,6 +56,115 @@ async function readFormData(request) {
   }
 }
 
+// Fonction pour analyser le formulaire multipart
+async function parseForm(request) {
+  try {
+    console.log('API: Début du parsing du formulaire multipart');
+    
+    // Récupérer les répertoires d'upload
+    const dirResult = ensureUploadDirectories();
+    if (!dirResult.success) {
+      throw new Error(`Problème avec les répertoires d'upload: ${dirResult.error}`);
+    }
+    
+    // Lire les données du formulaire
+    const formData = await request.formData();
+    console.log('API: FormData reçu avec les champs:', Array.from(formData.keys()));
+    
+    // Convertir FormData en objet structuré
+    const fields = {};
+    const files = {};
+    
+    for (const [key, value] of formData.entries()) {
+      if (value instanceof File) {
+        files[key] = value;
+        console.log(`API: Fichier reçu pour le champ '${key}': ${value.name}, ${value.size} octets`);
+      } else {
+        // Pour les champs textuels, les organiser en tableaux (comme le fait formidable)
+        if (!fields[key]) {
+          fields[key] = [];
+        }
+        fields[key].push(value);
+        
+        // Ne pas afficher les valeurs potentiellement sensibles dans les logs
+        console.log(`API: Champ '${key}' reçu`);
+      }
+    }
+    
+    return { fields, files };
+  } catch (error) {
+    console.error('API: Erreur lors du parsing du formulaire multipart:', error);
+    throw error;
+  }
+}
+
+// Fonction pour valider le type de fichier
+function validateFileType(file) {
+  if (!file || !(file instanceof File)) {
+    return false;
+  }
+  
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+  return allowedTypes.includes(file.type);
+}
+
+// Fonction pour déplacer un fichier uploadé
+async function moveUploadedFile(file, prefix, id) {
+  try {
+    if (!file || !(file instanceof File)) {
+      throw new Error('Fichier invalide');
+    }
+    
+    console.log(`API: Traitement du fichier ${file.name} (${file.size} octets)`);
+    
+    // Vérifier que les répertoires existent
+    const dirResult = ensureUploadDirectories();
+    if (!dirResult.success) {
+      throw new Error(`Problème avec les répertoires d'upload: ${dirResult.error}`);
+    }
+    
+    // Générer un nom de fichier unique
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+    const uniqueId = randomUUID();
+    const timestamp = Date.now();
+    const newFilename = `${prefix}_${id}_${timestamp}_${uniqueId.slice(0, 8)}.${fileExtension}`;
+    
+    const placesDir = path.join(process.cwd(), 'public', 'uploads', 'places');
+    const imagePath = path.join(placesDir, newFilename);
+    console.log(`API: Chemin complet du fichier: ${imagePath}`);
+    
+    try {
+      // Convertir le fichier en buffer (opération asynchrone)
+      const arrayBuffer = await file.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      
+      // Vérifier que le répertoire de destination existe
+      if (!fs.existsSync(placesDir)) {
+        console.log(`API: Création du répertoire manquant: ${placesDir}`);
+        fs.mkdirSync(placesDir, { recursive: true });
+      }
+      
+      // Écrire le fichier
+      fs.writeFileSync(imagePath, buffer);
+      console.log(`API: Fichier écrit avec succès: ${newFilename}`);
+      
+      // Vérifier que le fichier a bien été écrit
+      if (!fs.existsSync(imagePath)) {
+        throw new Error('Le fichier n\'a pas été correctement écrit sur le disque');
+      }
+      
+      // Retourner le chemin relatif pour l'URL
+      return `/uploads/places/${newFilename}`;
+    } catch (fileError) {
+      console.error(`API: Erreur lors de l'écriture du fichier:`, fileError);
+      throw new Error(`Erreur lors de l'écriture du fichier: ${fileError.message}`);
+    }
+  } catch (error) {
+    console.error('API: Erreur lors du déplacement du fichier:', error);
+    throw error;
+  }
+}
+
 export async function POST(request) {
   console.log('📥 Requête reçue sur /api/places/upload');
   
@@ -87,8 +196,19 @@ export async function POST(request) {
     const city_id = formData.get('city_id');
     const category_id = formData.get('category_id');
     const description = formData.get('description');
-    const location = formData.get('location') || formData.get('address');
+    const location = formData.get('location');
     const imageFile = formData.get('image');
+    
+    console.log('📝 Champs extraits du formulaire:', { 
+      name, 
+      slug, 
+      city_id, 
+      category_id, 
+      description_length: description?.length,
+      location,
+      has_location_field: formData.has('location'),
+      imageFile_name: imageFile?.name
+    });
     
     // 4. Valider les champs obligatoires
     if (!name || !slug || !city_id || !category_id) {
@@ -234,20 +354,22 @@ export async function PUT(request) {
     
     // Analyser le formulaire multipart
     const { fields, files } = await parseForm(request);
-    console.log('API: Formulaire parsé:', { 
-      fields: Object.keys(fields), 
-      filesReceived: Object.keys(files) 
-    });
+    console.log('API: Formulaire parsé avec champs:', Object.keys(fields));
     
     // Extraire les champs du formulaire
     const id = fields.id?.[0];
     const name = fields.name?.[0] || '';
     const slug = fields.slug?.[0] || '';
     const description = fields.description?.[0] || '';
-    const address = fields.address?.[0] || '';
+    const location = fields.location?.[0] || '';
+    
+    // Conserver les informations de catégorie et ville
+    const category_id = fields.category_id?.[0];
+    const city_id = fields.city_id?.[0];
     
     // Vérifier que l'ID est présent
     if (!id) {
+      console.error('API: ID manquant dans la requête PUT');
       return NextResponse.json(
         { error: 'L\'identifiant du lieu est requis' },
         { status: 400 }
@@ -256,9 +378,11 @@ export async function PUT(request) {
     
     // Vérifier que le lieu existe
     const placeQuery = 'SELECT * FROM places WHERE id = ?';
+    console.log(`API: Recherche du lieu avec l'ID: ${id}`);
     const places = await executeQuery(placeQuery, [id]);
     
     if (places.length === 0) {
+      console.error(`API: Lieu avec ID ${id} non trouvé dans la base de données`);
       return NextResponse.json(
         { error: 'Le lieu spécifié n\'existe pas' },
         { status: 404 }
@@ -266,25 +390,37 @@ export async function PUT(request) {
     }
     
     const existingPlace = places[0];
+    console.log(`API: Lieu trouvé: ${existingPlace.name} (ID: ${existingPlace.id})`);
     
     // Vérifier et traiter l'image
     const imageFile = files.image;
     let imagePath = existingPlace.image_path;
     
     if (imageFile) {
+      console.log(`API: Traitement de l'image: ${imageFile.name}, taille: ${imageFile.size} octets`);
+      
       // Valider le type de fichier
       if (!validateFileType(imageFile)) {
+        console.error(`API: Type de fichier non autorisé: ${imageFile.type}`);
         return NextResponse.json(
           { error: 'Type de fichier non autorisé. Utilisez JPG, JPEG, PNG ou GIF.' },
           { status: 400 }
         );
       }
       
-      console.log('API: Préparation de l\'image pour la mise à jour du lieu', imageFile.originalFilename);
-      
       // Déplacer la nouvelle image
-      imagePath = moveUploadedFile(imageFile, 'place', id);
-      console.log('API: Nouvelle image déplacée vers:', imagePath);
+      try {
+        imagePath = await moveUploadedFile(imageFile, 'place', id);
+        console.log('API: Nouvelle image déplacée vers:', imagePath);
+      } catch (uploadError) {
+        console.error('API: Erreur lors du déplacement de l\'image:', uploadError);
+        return NextResponse.json(
+          { error: `Erreur lors du traitement de l'image: ${uploadError.message}` },
+          { status: 500 }
+        );
+      }
+    } else {
+      console.log('API: Aucune nouvelle image fournie, conservation de l\'image existante');
     }
     
     // Préparer les données pour la mise à jour
@@ -292,25 +428,35 @@ export async function PUT(request) {
       name: name || existingPlace.name,
       slug: slug || existingPlace.slug,
       description: description !== undefined ? description : existingPlace.description,
-      location: address !== undefined ? address : existingPlace.location,
-      image_path: imagePath,
-      updated_at: new Date().toISOString().slice(0, 19).replace('T', ' ')
+      location: location || existingPlace.location,
+      image_path: imagePath
     };
     
-    console.log('API: Données préparées pour mise à jour de lieu:', placeData);
+    // Conserver les champs category_id et city_id s'ils sont présents dans les données existantes
+    if (category_id) {
+      placeData.category_id = category_id;
+    } else if (existingPlace.category_id) {
+      placeData.category_id = existingPlace.category_id;
+    }
+    
+    if (city_id) {
+      placeData.city_id = city_id;
+    } else if (existingPlace.city_id) {
+      placeData.city_id = existingPlace.city_id;
+    }
+    
+    // Ajouter la date de mise à jour
+    placeData.updated_at = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    
+    console.log('API: Données préparées pour mise à jour du lieu:', placeData);
     
     // Mettre à jour le lieu dans la base de données
     try {
-      await update('places', id, placeData);
+      console.log(`API: Tentative de mise à jour du lieu ID ${id} dans la table 'places'`);
+      const updatedPlace = await update('places', id, placeData);
       console.log('API: Lieu mis à jour avec succès, ID:', id);
       
-      // Récupérer le lieu mis à jour avec toutes ses informations
-      const updatedPlace = await executeQuery(
-        'SELECT * FROM places WHERE id = ?',
-        [id]
-      );
-      
-      return NextResponse.json(updatedPlace[0] || {});
+      return NextResponse.json(updatedPlace);
     } catch (updateError) {
       console.error('API: Erreur spécifique de mise à jour de lieu:', updateError);
       return NextResponse.json(

@@ -23,36 +23,51 @@ const pool = mysql.createPool(dbConfig);
  * 2. executeQuery(query, values)
  */
 export async function executeQuery(queryOrConfig, valuesParam) {
-  let query;
-  let values = [];
-  
-  // Déterminer le mode d'appel (objet ou arguments séparés)
-  if (typeof queryOrConfig === 'object' && queryOrConfig !== null && 'query' in queryOrConfig) {
-    // Mode 1: executeQuery({ query, values })
-    query = queryOrConfig.query;
-    values = queryOrConfig.values || [];
-  } else {
-    // Mode 2: executeQuery(query, values)
-    query = queryOrConfig;
-    values = valuesParam || [];
-  }
-  
-  // Vérifier que la requête est une chaîne valide
-  if (typeof query !== 'string' || query.trim() === '') {
-    throw new Error('La requête SQL doit être une chaîne non vide');
-  }
+  let connection;
   
   try {
-    console.log('DB: Exécution de la requête SQL:', query);
-    console.log('DB: Avec les valeurs:', values);
+    // Traiter les différents formats d'arguments
+    let query, values;
     
-    // Utiliser directement pool.execute au lieu d'obtenir une connexion explicitement
-    const [results] = await pool.execute(query, values);
+    if (typeof queryOrConfig === 'string') {
+      // Format: executeQuery(query, values)
+      query = queryOrConfig;
+      values = valuesParam || [];
+    } else if (typeof queryOrConfig === 'object') {
+      // Format: executeQuery({ query, values })
+      query = queryOrConfig.query;
+      values = queryOrConfig.values || [];
+    } else {
+      throw new Error('Format de requête invalide');
+    }
+    
+    // S'assurer que values est toujours un tableau
+    if (!Array.isArray(values)) {
+      values = [values];
+    }
+    
+    console.log(`DB: Exécution de la requête: ${query.substring(0, 200)}${query.length > 200 ? '...' : ''}`);
+    console.log(`DB: Paramètres: ${JSON.stringify(values)}`);
+    
+    // Obtenir une connexion
+    connection = await pool.getConnection();
+    
+    // Exécuter la requête
+    const [results] = await connection.query(query, values);
+    console.log(`DB: Requête exécutée avec succès, ${Array.isArray(results) ? results.length : 1} résultat(s)`);
+    
+    // Libérer la connexion
+    connection.release();
+    
     return results;
   } catch (error) {
-    console.error('Erreur lors de l\'exécution de la requête SQL:', error.message);
-    console.error('Query:', query);
-    console.error('Values:', values);
+    console.error('DB: Erreur lors de l\'exécution de la requête:', error);
+    
+    // Libérer la connexion en cas d'erreur
+    if (connection) {
+      connection.release();
+    }
+    
     throw error;
   }
 }
@@ -131,16 +146,36 @@ export async function insert(table, data) {
 // Fonction pour mettre à jour un élément
 export async function update(table, id, data) {
   try {
+    console.log(`DB: Mise à jour dans '${table}' pour l'ID: ${id}`);
+    console.log(`DB: Données de mise à jour:`, data);
+    
+    if (!id) {
+      throw new Error('ID manquant pour la mise à jour');
+    }
+    
     const keys = Object.keys(data);
+    if (keys.length === 0) {
+      throw new Error('Aucune donnée fournie pour la mise à jour');
+    }
+    
     const values = Object.values(data);
     
     const setClause = keys.map(key => `${key} = ?`).join(', ');
     const query = `UPDATE ${table} SET ${setClause} WHERE id = ?`;
     
-    await executeQuery(query, [...values, id]);
+    console.log(`DB: Requête de mise à jour: ${query}`);
+    console.log(`DB: Valeurs: ${JSON.stringify([...values, id])}`);
+    
+    const result = await executeQuery(query, [...values, id]);
+    console.log(`DB: Mise à jour réussie dans ${table}, lignes affectées: ${result.affectedRows}`);
+    
+    if (result.affectedRows === 0) {
+      console.warn(`DB: Aucune ligne n'a été mise à jour. L'ID ${id} existe-t-il dans la table ${table}?`);
+    }
+    
     return { id, ...data };
   } catch (error) {
-    console.error(`Erreur lors de la mise à jour dans ${table}:`, error);
+    console.error(`DB: Erreur lors de la mise à jour dans ${table}:`, error);
     throw error;
   }
 }

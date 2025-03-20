@@ -146,7 +146,10 @@ export async function POST(request) {
       created_at: new Date().toISOString().slice(0, 19).replace('T', ' ')
     };
     
-    console.log('API: Données préparées pour insertion de lieu:', placeData);
+    console.log('API: Données préparées pour insertion de lieu:', {
+      ...placeData,
+      location_field_used: Boolean(data.location)
+    });
     
     // Insérer le lieu dans la base de données
     try {

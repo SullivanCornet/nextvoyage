@@ -46,7 +46,7 @@ export default function EditRestaurant() {
         // Initialiser les champs du formulaire
         setRestaurantName(restaurantData.name);
         setDescription(restaurantData.description);
-        setAddress(restaurantData.address);
+        setAddress(restaurantData.location || '');
         if (restaurantData.image_path) {
           setImagePreview(restaurantData.image_path);
         }
@@ -160,7 +160,7 @@ export default function EditRestaurant() {
         formData.append('name', restaurantName);
         formData.append('slug', newRestaurantSlug);
         formData.append('description', description);
-        formData.append('address', address);
+        formData.append('location', address);
         formData.append('image', imageFile);
         
         await placesAPI.updateWithImage(formData);
@@ -171,7 +171,7 @@ export default function EditRestaurant() {
           name: restaurantName,
           slug: newRestaurantSlug,
           description: description,
-          address: address
+          location: address
         };
         
         await placesAPI.update(updatedRestaurantData);

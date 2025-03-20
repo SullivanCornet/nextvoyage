@@ -25,18 +25,18 @@ export default function Navbar() {
               Pays
             </Link>
           </li>
-          <li className="nav-item">
+          {/* <li className="nav-item">
             <Link href="/diagnostic" className="nav-links">
               Diagnostic
             </Link>
-          </li>
+          </li> */}
         </ul>
       </div>
       
       <style jsx>{`
         .navbar {
           background-color: #2c3e50;
-          height: 80px;
+          height: 50px;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -51,7 +51,7 @@ export default function Navbar() {
           justify-content: space-between;
           align-items: center;
           width: 100%;
-          height: 80px;
+          height: 50px;
           max-width: 1200px;
           padding: 0 24px;
         }
@@ -76,7 +76,7 @@ export default function Navbar() {
         }
         
         .nav-item {
-          height: 80px;
+          
           border-bottom: 2px solid transparent;
         }
         
@@ -89,7 +89,8 @@ export default function Navbar() {
           display: flex;
           align-items: center;
           text-decoration: none;
-          padding: 0.5rem 1rem;
+          padding-top: 1rem ;
+          
           height: 100%;
         }
         

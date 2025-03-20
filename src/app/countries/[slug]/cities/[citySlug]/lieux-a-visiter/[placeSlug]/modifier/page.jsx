@@ -10,7 +10,7 @@ export default function EditPlace() {
   const { slug, citySlug, placeSlug } = params;
   const router = useRouter();
   
-  // États pour le formulaire
+  // États pour le formulaire - Initialisés avec des chaînes vides pour éviter les problèmes controlled/uncontrolled
   const [placeName, setPlaceName] = useState('');
   const [description, setDescription] = useState('');
   const [address, setAddress] = useState('');
@@ -41,12 +41,33 @@ export default function EditPlace() {
           throw new Error('Erreur lors de la récupération du lieu à visiter');
         }
         const placeData = await placeResponse.json();
+        console.log('Données du lieu récupérées:', placeData);
+        
+        // Vérifier les propriétés d'adresse disponibles
+        console.log('Propriétés d\'adresse dans les données:', {
+          location: placeData.location,
+          address: placeData.address,
+          locationDefined: typeof placeData.location !== 'undefined',
+          addressDefined: typeof placeData.address !== 'undefined'
+        });
+        
         setPlaceData(placeData);
         
-        // Initialiser les champs du formulaire
-        setPlaceName(placeData.name);
-        setDescription(placeData.description);
-        setAddress(placeData.address);
+        // Initialiser les champs du formulaire avec des valeurs par défaut
+        setPlaceName(placeData.name || '');
+        setDescription(placeData.description || '');
+        
+        // IMPORTANT: Dans notre base de données, l'adresse est stockée dans le champ 'location'
+        // Récupérer directement location et être sûr qu'il s'agit d'une chaîne de caractères
+        if (placeData.location) {
+          console.log('Utilisation de placeData.location:', placeData.location);
+          setAddress(placeData.location);
+        } else {
+          console.log('Aucune valeur de location trouvée, initialisation avec chaîne vide');
+          setAddress('');
+        }
+        
+        // Gérer l'image
         if (placeData.image_path) {
           setImagePreview(placeData.image_path);
         }
@@ -61,8 +82,8 @@ export default function EditPlace() {
         
         setIsLoading(false);
       } catch (error) {
-        console.error('Erreur:', error);
-        setErrors(prev => ({ ...prev, load: error.message }));
+        console.error('Erreur lors du chargement des données:', error);
+        setErrors(prev => ({ ...prev, general: 'Erreur lors du chargement des données: ' + error.message }));
         setIsLoading(false);
       }
     };
@@ -109,21 +130,21 @@ export default function EditPlace() {
     }
   };
   
-  // Validation du formulaire
+  // Validation du formulaire - Version simple et robuste
   const validateForm = () => {
     const newErrors = {};
     
-    if (!placeName.trim()) {
+    if (!placeName || placeName.trim() === '') {
       newErrors.placeName = 'Le nom du lieu est requis';
     }
     
-    if (!description.trim()) {
+    if (!description || description.trim() === '') {
       newErrors.description = 'La description est requise';
     } else if (description.length < 10) {
       newErrors.description = 'La description doit contenir au moins 10 caractères';
     }
     
-    if (!address.trim()) {
+    if (!address || address.trim() === '') {
       newErrors.address = 'L\'adresse est requise';
     }
     
@@ -148,10 +169,22 @@ export default function EditPlace() {
       return;
     }
     
+    // Vérifier que placeData existe et a un ID
+    if (!placeData || !placeData.id) {
+      setErrors(prev => ({ 
+        ...prev, 
+        submit: 'Données du lieu incomplètes. Impossible de continuer la modification.' 
+      }));
+      return;
+    }
+    
     setIsSubmitting(true);
+    setErrors({});
     
     try {
+      // Créer un slug à partir du nom
       const newPlaceSlug = createSlug(placeName);
+      console.log('Nouvelle soumission avec le slug:', newPlaceSlug);
       
       if (imageFile) {
         // Si une nouvelle image est téléchargée, utiliser FormData
@@ -160,8 +193,23 @@ export default function EditPlace() {
         formData.append('name', placeName);
         formData.append('slug', newPlaceSlug);
         formData.append('description', description);
-        formData.append('address', address);
+        
+        // IMPORTANT: Toujours envoyer l'adresse sous le nom de champ 'location'
+        // C'est ce qui est utilisé dans la base de données
+        formData.append('location', address); 
         formData.append('image', imageFile);
+        
+        // Ajouter les IDs de ville et catégorie
+        if (placeData.city_id) {
+          formData.append('city_id', placeData.city_id);
+        }
+        
+        if (placeData.category_id) {
+          formData.append('category_id', placeData.category_id);
+        }
+        
+        console.log('Envoi avec image - formData contient les champs:', 
+          Array.from(formData.keys()).join(', '));
         
         await placesAPI.updateWithImage(formData);
       } else {
@@ -171,8 +219,16 @@ export default function EditPlace() {
           name: placeName,
           slug: newPlaceSlug,
           description: description,
-          address: address
+          
+          // IMPORTANT: Toujours envoyer l'adresse sous le nom de champ 'location'
+          // C'est ce qui est utilisé dans la base de données
+          location: address, 
+          
+          category_id: placeData.category_id,
+          city_id: placeData.city_id
         };
+        
+        console.log('Mise à jour sans image:', updatedPlaceData);
         
         await placesAPI.update(updatedPlaceData);
       }
@@ -181,7 +237,7 @@ export default function EditPlace() {
       router.push(`/countries/${slug}/cities/${citySlug}/lieux-a-visiter/${newPlaceSlug}`);
     } catch (error) {
       console.error('Erreur lors de la modification du lieu:', error);
-      setErrors(prev => ({ ...prev, submit: 'Erreur lors de la modification du lieu' }));
+      setErrors(prev => ({ ...prev, submit: 'Erreur lors de la modification du lieu: ' + error.message }));
       setIsSubmitting(false);
     }
   };
@@ -282,7 +338,7 @@ export default function EditPlace() {
               <div className="file-input-button">Choisir une nouvelle image</div>
             </div>
             <div className="file-input-help">
-              {placeData.image_path 
+              {placeData && placeData.image_path 
                 ? 'Une image existe déjà. Sélectionnez une nouvelle image pour la remplacer.' 
                 : 'Format recommandé: 800x600 pixels, JPG ou PNG'}
             </div>

@@ -35,11 +35,15 @@ export default function EditShop() {
         setShopData(shop);
         
         // Pré-remplir le formulaire
-        setShopName(shop.name);
-        setDescription(shop.description);
-        setAddress(shop.address);
+        setShopName(shop.name || '');
+        setDescription(shop.description || '');
         
-        if (shop.image) {
+        // Récupérer l'adresse depuis le champ 'location' dans la base de données
+        setAddress(shop.location || '');
+        
+        if (shop.image_path) {
+          setImagePreview(shop.image_path);
+        } else if (shop.image) {
           setImagePreview(`/uploads/${shop.image}`);
         }
         
@@ -123,9 +127,23 @@ export default function EditShop() {
     }
     
     setIsSubmitting(true);
+    setErrors({});
     
     try {
       const newShopSlug = createSlug(shopName);
+      
+      // S'assurer que nous avons les IDs nécessaires
+      if (!shopData || !shopData.id) {
+        throw new Error('ID du commerce manquant');
+      }
+      
+      if (!shopData.city_id) {
+        console.warn('ID de la ville manquant dans les données du commerce');
+      }
+      
+      if (!shopData.category_id) {
+        console.warn('ID de la catégorie manquant dans les données du commerce');
+      }
       
       if (imageFile) {
         // Si une nouvelle image est téléchargée, utiliser FormData
@@ -134,8 +152,21 @@ export default function EditShop() {
         formData.append('name', shopName);
         formData.append('slug', newShopSlug);
         formData.append('description', description);
-        formData.append('address', address);
+        // Utiliser location au lieu de address pour correspondre à la structure BD
+        formData.append('location', address);
         formData.append('image', imageFile);
+        
+        // Ajouter les IDs de ville et catégorie
+        if (shopData.city_id) {
+          formData.append('city_id', shopData.city_id);
+        }
+        
+        if (shopData.category_id) {
+          formData.append('category_id', shopData.category_id);
+        }
+        
+        console.log('Envoi avec image - formData contient les champs:', 
+          Array.from(formData.keys()).join(', '));
         
         await placesAPI.updateWithImage(formData);
       } else {
@@ -145,9 +176,16 @@ export default function EditShop() {
           name: shopName,
           slug: newShopSlug,
           description: description,
-          address: address
+          // Utiliser location au lieu de address pour correspondre à la structure BD
+          location: address,
+          // Conserver la catégorie et la ville du commerce
+          category_id: shopData.category_id,
+          city_id: shopData.city_id
         };
         
+        console.log('Mise à jour sans image:', updatedShopData);
+        
+        // Pas besoin de passer l'ID séparément, il est déjà dans l'objet
         await placesAPI.update(updatedShopData);
       }
       

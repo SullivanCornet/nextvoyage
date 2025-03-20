@@ -140,7 +140,7 @@ export default function AddRestaurant() {
         formData.append('name', restaurantName);
         formData.append('slug', slug);
         formData.append('description', description);
-        formData.append('address', address);
+        formData.append('location', address);
         formData.append('city_id', cityData.id);
         formData.append('category_id', restaurantCategory.id);
         formData.append('image', imageFile);
@@ -161,7 +161,7 @@ export default function AddRestaurant() {
           name: restaurantName,
           slug,
           description,
-          address,
+          location: address,
           city_id: cityData.id,
           category_id: restaurantCategory.id
         };

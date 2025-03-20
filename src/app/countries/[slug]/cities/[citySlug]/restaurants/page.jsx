@@ -149,7 +149,7 @@ export default function RestaurantsList() {
                 </div>
                 <div className="restaurant-info">
                   <h3 className="restaurant-name">{restaurant.name}</h3>
-                  <p className="restaurant-address">{restaurant.address}</p>
+                  <p className="restaurant-address">{restaurant.location || "Adresse non disponible"}</p>
                   <p className="restaurant-description">{restaurant.description.length > 100 
                     ? `${restaurant.description.substring(0, 100)}...` 
                     : restaurant.description}</p>

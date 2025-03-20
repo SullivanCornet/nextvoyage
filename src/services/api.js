@@ -4,20 +4,35 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
 async function fetchAPI(endpoint, options = {}) {
   const url = `${API_URL}${endpoint}`;
   
-  const response = await fetch(url, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
-  
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Une erreur est survenue');
+  try {
+    console.log(`API CLIENT: Envoi de requête à ${url}`, {
+      method: options.method || 'GET',
+      bodyLength: options.body ? options.body.length : 'no body'
+    });
+    
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+    });
+    
+    if (!response.ok) {
+      try {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Erreur ${response.status}: ${response.statusText}`);
+      } catch (parseError) {
+        // Si le serveur ne renvoie pas un JSON valide
+        throw new Error(`Erreur ${response.status}: ${response.statusText}`);
+      }
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error(`API CLIENT: Erreur lors de la requête à ${url}:`, error);
+    throw error;
   }
-  
-  return await response.json();
 }
 
 // Fonction pour envoyer des données avec FormData (pour les uploads de fichiers)
@@ -208,8 +223,20 @@ export const placesAPI = {
   },
   
   // Mettre à jour un lieu
-  update: async (id, data) => {
-    return await fetchAPI(`/places/${id}`, {
+  update: async (data) => {
+    // S'assurer que l'ID est bien présent
+    if (!data || !data.id) {
+      throw new Error('ID manquant pour la mise à jour du lieu');
+    }
+    
+    console.log('API CLIENT: Mise à jour du lieu:', {
+      id: data.id,
+      slug: data.slug,
+      fields: Object.keys(data).filter(key => key !== 'id')
+    });
+    
+    // Utiliser correctement l'ID depuis l'objet data
+    return await fetchAPI(`/places/${data.id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
@@ -232,28 +259,82 @@ export const placesAPI = {
   
   // Mettre à jour un lieu avec une image
   updateWithImage: async (formData) => {
-    // Changer la méthode à PUT
     const url = `${API_URL}/places/upload`;
     
-    console.log(`Envoi de FormData pour mise à jour vers ${url}`, {
-      formDataEntries: Array.from(formData.entries()).map(([key]) => key)
-    });
-    
-    const response = await fetch(url, {
-      method: 'PUT',
-      body: formData
-    });
-    
-    if (!response.ok) {
-      try {
-        const error = await response.json();
-        throw new Error(error.error || 'Une erreur est survenue lors de la mise à jour');
-      } catch (parseError) {
-        throw new Error('Erreur de réponse du serveur: ' + response.statusText);
-      }
+    // Vérifications et logs détaillés
+    if (!formData.has('id')) {
+      console.error("API CLIENT: Erreur: formData ne contient pas d'ID");
+      throw new Error("L'ID est requis pour la mise à jour");
     }
     
-    return await response.json();
+    console.log(`API CLIENT: Envoi de FormData pour mise à jour vers ${url}`, {
+      formDataEntries: Array.from(formData.entries()).map(([key, value]) => {
+        // Ne pas afficher le contenu binaire des fichiers
+        if (value instanceof File) {
+          return `${key}: [File: ${value.name}, type: ${value.type}, size: ${value.size} bytes]`;
+        }
+        // Ne pas afficher certaines valeurs sensibles en entier
+        if (key === 'description' && typeof value === 'string' && value.length > 50) {
+          return `${key}: ${value.substring(0, 50)}...`;
+        }
+        return `${key}: ${value}`;
+      })
+    });
+    
+    try {
+      // Utiliser un timeout pour éviter les requêtes qui ne se terminent jamais
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 secondes
+      
+      const response = await fetch(url, {
+        method: 'PUT',
+        body: formData,
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+      
+      console.log(`API CLIENT: Réponse reçue avec statut: ${response.status} (${response.statusText})`);
+      
+      if (!response.ok) {
+        // Essayer d'obtenir le message d'erreur JSON
+        try {
+          const errorText = await response.text();
+          let errorData;
+          
+          try {
+            // Essayer de parser comme JSON
+            errorData = JSON.parse(errorText);
+            console.error(`API CLIENT: Détails de l'erreur:`, errorData);
+            throw new Error(errorData.error || `Erreur ${response.status}: ${response.statusText}`);
+          } catch (jsonParseError) {
+            // Si ce n'est pas du JSON, utiliser le texte brut
+            console.error(`API CLIENT: Réponse non-JSON reçue:`, errorText.substring(0, 200));
+            throw new Error(`Erreur ${response.status}: ${response.statusText}. Détails: ${errorText.substring(0, 100)}`);
+          }
+        } catch (fetchError) {
+          if (fetchError.name === 'AbortError') {
+            throw new Error('La requête a pris trop de temps et a été annulée');
+          }
+          // Si on ne peut même pas lire la réponse
+          console.error(`API CLIENT: Impossible de lire la réponse d'erreur:`, fetchError);
+          throw new Error(`Erreur ${response.status}: ${response.statusText}`);
+        }
+      }
+      
+      // Traiter la réponse
+      try {
+        const data = await response.json();
+        console.log(`API CLIENT: Mise à jour réussie`);
+        return data;
+      } catch (jsonError) {
+        console.error(`API CLIENT: Erreur lors du parsing de la réponse:`, jsonError);
+        throw new Error('Erreur lors du traitement de la réponse du serveur');
+      }
+    } catch (error) {
+      console.error(`API CLIENT: Erreur lors de la mise à jour avec image:`, error);
+      throw error;
+    }
   },
 };
 

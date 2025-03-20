@@ -204,7 +204,8 @@ export default function CountriesList() {
         }
         
         .country-info {
-          padding: 20px;
+          padding: 5px;
+        
         }
         
         .country-info h2 {
