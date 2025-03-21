@@ -134,29 +134,23 @@ export default function ShopsList() {
         ) : (
           shops.map((shop) => (
             <div key={shop.id} className="shop-card">
-              <div 
-                className="shop-image" 
-                style={{ 
-                  backgroundImage: shop.image_path 
-                    ? `url(${shop.image_path})` 
-                    : 'url(/images/default-shop.jpg)' 
-                }}
-              ></div>
-              <div className="shop-content">
-                <h2>{shop.name}</h2>
-                <p className="shop-address">{shop.location || 'Adresse non spécifiée'}</p>
-                <p className="shop-description">
-                  {shop.description && shop.description.length > 100 
-                    ? `${shop.description.substring(0, 100)}...` 
-                    : shop.description || 'Aucune description disponible'}
-                </p>
-                <Link 
-                  href={`/countries/${slug}/cities/${citySlug}/commerces/${shop.slug}`} 
-                  className="view-details"
-                >
-                  Voir les détails
-                </Link>
-              </div>
+              <Link 
+                href={`/countries/${slug}/cities/${citySlug}/commerces/${shop.slug}`}
+                className="shop-card-link"
+              >
+                <div 
+                  className="shop-image" 
+                  style={{ 
+                    backgroundImage: shop.image_path 
+                      ? `url(${shop.image_path})` 
+                      : 'url(/images/default-shop.jpg)' 
+                  }}
+                ></div>
+                <div className="shop-content">
+                  <h2>{shop.name}</h2>
+                  <p className="shop-address">{shop.location || 'Adresse non spécifiée'}</p>
+                </div>
+              </Link>
             </div>
           ))
         )}
@@ -252,10 +246,17 @@ export default function ShopsList() {
         
         .shop-card {
           background-color: white;
-          border-radius: 10px;
+          border-radius: 8px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
           overflow: hidden;
-          box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+          margin-bottom: 20px;
           transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .shop-card-link {
+          display: block;
+          text-decoration: none;
+          color: inherit;
         }
         
         .shop-card:hover {
@@ -284,27 +285,6 @@ export default function ShopsList() {
           color: #7f8c8d;
           font-size: 0.9rem;
           margin: 0 0 10px 0;
-        }
-        
-        .shop-description {
-          color: #34495e;
-          margin: 0 0 15px 0;
-          line-height: 1.5;
-        }
-        
-        .view-details {
-          display: inline-block;
-          background-color: #3498db;
-          color: white;
-          padding: 8px 16px;
-          border-radius: 5px;
-          text-decoration: none;
-          font-weight: bold;
-          transition: background-color 0.3s ease;
-        }
-        
-        .view-details:hover {
-          background-color: #2980b9;
         }
         
         @media (max-width: 768px) {

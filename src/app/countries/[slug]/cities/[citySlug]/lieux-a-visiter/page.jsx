@@ -154,9 +154,6 @@ export default function PlacesToVisit() {
                 <div className="place-info">
                   <h3 className="place-name">{place.name}</h3>
                   <p className="place-address">{place.location || "Adresse non disponible"}</p>
-                  <p className="place-description">{place.description.length > 100 
-                    ? `${place.description.substring(0, 100)}...` 
-                    : place.description}</p>
                 </div>
               </Link>
             </div>

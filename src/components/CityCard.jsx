@@ -5,26 +5,30 @@ import Image from 'next/image';
 
 export default function CityCard({ name, slug, countrySlug, imagePath }) {
   return (
-    <div className="city-card">
-      <div className="image-container">
-        {imagePath ? (
-          <div className="city-image">
-            <img src={imagePath} alt={name} className="city-img" />
-          </div>
-        ) : (
-          <div className="placeholder-image">
-            <div className="city-initial">{name.charAt(0)}</div>
-          </div>
-        )}
-      </div>
-      <div className="card-content">
-        <h3>{name}</h3>
-        <Link href={`/countries/${countrySlug}/cities/${slug}`} className="view-button">
-          Découvrir
-        </Link>
+    <Link href={`/countries/${countrySlug}/cities/${slug}`} className="city-card-link">
+      <div className="city-card">
+        <div className="image-container">
+          {imagePath ? (
+            <div className="city-image">
+              <img src={imagePath} alt={name} className="city-img" />
+            </div>
+          ) : (
+            <div className="placeholder-image">
+              <div className="city-initial">{name.charAt(0)}</div>
+            </div>
+          )}
+        </div>
+        <div className="card-content">
+          <h3>{name}</h3>
+        </div>
       </div>
       
       <style jsx>{`
+        .city-card-link {
+          text-decoration: none;
+          display: block;
+        }
+        
         .city-card {
           width: 280px;
           border-radius: 10px;
@@ -74,29 +78,15 @@ export default function CityCard({ name, slug, countrySlug, imagePath }) {
         
         .card-content {
           padding: 15px;
+          text-align: center;
         }
         
         h3 {
           color: #2c3e50;
-          margin: 0 0 15px 0;
+          margin: 0;
           font-size: 1.3rem;
         }
-        
-        .view-button {
-          display: inline-block;
-          background-color: #e74c3c;
-          color: white;
-          padding: 8px 16px;
-          border-radius: 5px;
-          text-decoration: none;
-          font-weight: bold;
-          transition: background-color 0.3s ease;
-        }
-        
-        .view-button:hover {
-          background-color: #c0392b;
-        }
       `}</style>
-    </div>
+    </Link>
   );
 } 
