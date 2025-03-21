@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import CityCard from '@/components/CityCard';
 import { useAuth } from '@/app/contexts/AuthContext';
+import CurrencyConverter from '@/components/CurrencyConverter';
+import { normalizeCurrencyCode, fetchExchangeRates } from '@/lib/api/currencies';
 
 export default function CountryDetails() {
   const params = useParams();
@@ -15,6 +17,9 @@ export default function CountryDetails() {
   const [country, setCountry] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // État pour les taux de change
+  const [exchangeRates, setExchangeRates] = useState(null);
   
   // Récupérer les informations du pays et ses villes
   useEffect(() => {
@@ -30,6 +35,7 @@ export default function CountryDetails() {
         const data = await response.json();
         console.log('Informations du pays récupérées:', data);
         setCountry(data);
+        
         setIsLoading(false);
       } catch (error) {
         console.error('Erreur:', error);
@@ -42,6 +48,56 @@ export default function CountryDetails() {
       fetchCountry();
     }
   }, [slug]);
+  
+  // Récupérer les taux de change
+  useEffect(() => {
+    const getRates = async () => {
+      if (!isLoading && country) {
+        try {
+          const rates = await fetchExchangeRates('EUR');
+          
+          // Si le pays a une devise qui n'est pas déjà dans les taux et que nous avons un code de devise
+          if (country.currency_code && rates && rates.rates) {
+            const currencyCode = normalizeCurrencyCode(country.currency_code, country.name);
+            if (!rates.rates[currencyCode] && currencyCode !== rates.base) {
+              // Ajouter un taux fictif pour cette devise (pourrait être remplacé par une conversion approximative)
+              rates.rates[currencyCode] = 1.2; // Taux fictif
+              rates.error = true; // Marquer comme ayant des erreurs
+            }
+          }
+          
+          setExchangeRates(rates);
+        } catch (error) {
+          console.error('Erreur lors de la récupération des taux de change:', error);
+          // En cas d'erreur, utiliser des taux fictifs
+          const baseCurrency = 'EUR';
+          setExchangeRates({
+            base: baseCurrency,
+            date: new Date().toISOString().split('T')[0],
+            rates: {
+              USD: 1.1,
+              GBP: 0.85,
+              JPY: 130,
+              CHF: 0.95,
+              CAD: 1.4,
+              AUD: 1.5,
+              CNY: 7.1,
+              INR: 82,
+              BRL: 5.5,
+              RUB: 80,
+              MXN: 20,
+              // Ajouter la devise du pays si elle est connue
+              ...(country.currency_code ? 
+                  { [normalizeCurrencyCode(country.currency_code, country.name)]: 1.2 } : {})
+            },
+            error: true // Indiquer que ce sont des taux fictifs
+          });
+        }
+      }
+    };
+    
+    getRates();
+  }, [isLoading, country]);
   
   // Gérer la suppression d'un pays
   const handleDeleteCountry = async () => {
@@ -63,6 +119,13 @@ export default function CountryDetails() {
       }
     }
   };
+  
+  // Propriétés du convertisseur de devise
+  const countryCurrency = country && country.currency ? {
+    code: country.currency_code || (country.currency || '').toUpperCase(),
+    name: country.currency,
+    symbol: country.currency_symbol
+  } : null;
   
   if (isLoading) {
     return (
@@ -211,6 +274,17 @@ export default function CountryDetails() {
           </div>
         </div>
       </div>
+      
+      {/* Ajout du convertisseur de devise */}
+      {country.currency && exchangeRates && (
+        <div className="currency-converter-section">
+          <CurrencyConverter 
+            countryCurrency={countryCurrency}
+            countryName={country.name}
+            rates={exchangeRates}
+          />
+        </div>
+      )}
       
       <div className="cities-section">
         <div className="cities-header">
@@ -371,6 +445,15 @@ export default function CountryDetails() {
         .meta-item strong {
           color: #2c3e50;
           margin-right: 5px;
+        }
+        
+        /* Styles pour la section convertisseur de devise */
+        .currency-converter-section {
+          margin: 40px 0;
+          background-color: white;
+          border-radius: 10px;
+          padding: 25px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
         
         .cities-section {
