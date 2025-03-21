@@ -132,11 +132,6 @@ export default function RestaurantsList() {
           <Link href={`/countries/${slug}/cities/${citySlug}`} className="back-button">
             Retour à la ville
           </Link>
-          {isAuthenticated && (
-            <Link href={`/countries/${slug}/cities/${citySlug}/restaurants/ajouter`} className="add-button">
-              + Ajouter un restaurant
-            </Link>
-          )}
         </div>
       </div>
       
@@ -165,13 +160,14 @@ export default function RestaurantsList() {
             <div className="empty-icon">🍽️</div>
             <h2>Pas de restaurants</h2>
             <p>Aucun restaurant n'a été ajouté pour {cityName} pour le moment.</p>
-            {isAuthenticated && (
-              <Link href={`/countries/${slug}/cities/${citySlug}/restaurants/ajouter`} className="add-restaurant-button">
-                Ajouter un restaurant
-              </Link>
-            )}
           </div>
         </div>
+      )}
+      
+      {isAuthenticated && (
+        <Link href={`/countries/${slug}/cities/${citySlug}/restaurants/ajouter`} className="button-circle" title="Ajouter un restaurant">
+          +
+        </Link>
       )}
       
       <style jsx>{`
@@ -214,15 +210,6 @@ export default function RestaurantsList() {
         
         .back-button {
           background-color: #7f8c8d;
-          color: white;
-          padding: 10px 15px;
-          text-decoration: none;
-          border-radius: 5px;
-          font-weight: bold;
-        }
-        
-        .add-button {
-          background-color: #e67e22;
           color: white;
           padding: 10px 15px;
           text-decoration: none;
@@ -314,13 +301,19 @@ export default function RestaurantsList() {
         }
         
         .add-restaurant-button {
+          display: inline-block;
           background-color: #e67e22;
           color: white;
           padding: 12px 20px;
           border-radius: 5px;
           text-decoration: none;
           font-weight: bold;
-          display: inline-block;
+          margin-top: 20px;
+          transition: background-color 0.3s ease;
+        }
+        
+        .add-restaurant-button:hover {
+          background-color: #d35400;
         }
         
         @media (max-width: 768px) {

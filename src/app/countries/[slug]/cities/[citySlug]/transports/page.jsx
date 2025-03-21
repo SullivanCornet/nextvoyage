@@ -67,12 +67,6 @@ export default function TransportsList() {
     <div className="transports-container">
       <div className="page-header">
         <h1 className="page-title">Transports à {city?.name || citySlug}</h1>
-        {isAuthenticated && (
-          <Link href={`/countries/${slug}/cities/${citySlug}/transports/ajouter`} className="add-button">
-            <FaPlus className="add-icon" />
-            <span>Ajouter un transport</span>
-          </Link>
-        )}
       </div>
 
       {transports.length > 0 ? (
@@ -112,15 +106,21 @@ export default function TransportsList() {
       ) : (
         <NoDataMessage 
           message="Aucun transport n'a été ajouté pour cette ville." 
-          actionLink={isAuthenticated ? `/countries/${slug}/cities/${citySlug}/transports/ajouter` : null}
-          actionText="Ajouter un transport"
+          actionLink={null}
+          actionText=""
         />
+      )}
+
+      {isAuthenticated && (
+        <Link href={`/countries/${slug}/cities/${citySlug}/transports/ajouter`} className="button-circle" title="Ajouter un transport">
+          +
+        </Link>
       )}
 
       <Link href={`/countries/${slug}/cities/${citySlug}`} className="back-link">
         Retour à {city?.name || 'la ville'}
       </Link>
-
+      
       <style jsx>{`
         .transports-container {
           max-width: 1200px;
@@ -141,25 +141,6 @@ export default function TransportsList() {
           font-size: 2rem;
           color: #333;
           margin: 0;
-        }
-
-        .add-button {
-          display: flex;
-          align-items: center;
-          background-color: #4a6fa5;
-          color: white;
-          padding: 10px 20px;
-          border-radius: 8px;
-          text-decoration: none;
-          transition: background-color 0.3s ease;
-        }
-
-        .add-button:hover {
-          background-color: #3a5a80;
-        }
-
-        .add-icon {
-          margin-right: 8px;
         }
 
         .transports-grid {
@@ -253,6 +234,24 @@ export default function TransportsList() {
           color: #e74c3c;
           font-size: 1.2rem;
           margin-bottom: 20px;
+        }
+
+        .button-circle {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: #4a6fa5;
+          color: white;
+          text-decoration: none;
+          transition: background-color 0.3s ease;
+          margin-left: 20px;
+        }
+
+        .button-circle:hover {
+          background-color: #3a5a80;
         }
       `}</style>
     </div>

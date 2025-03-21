@@ -313,17 +313,18 @@ export default function AddShop() {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            font-family: Arial, sans-serif;
+            font-family: 'Montserrat', Arial, sans-serif;
+            color: var(--text);
           }
           
           .page-header {
             margin-bottom: 30px;
             padding-bottom: 15px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
           }
           
           h1 {
-            color: #2c3e50;
+            color: var(--text-dark);
             font-size: 1.8rem;
             margin: 0 0 10px 0;
           }
@@ -331,11 +332,11 @@ export default function AddShop() {
           .breadcrumb {
             font-size: 0.9rem;
             margin-bottom: 15px;
-            color: #7f8c8d;
+            color: var(--text-light);
           }
           
           .breadcrumb a {
-            color: #3498db;
+            color: var(--primary);
             text-decoration: none;
             margin: 0 5px;
           }
@@ -350,22 +351,23 @@ export default function AddShop() {
           
           .back-button {
             display: inline-block;
-            background-color: #7f8c8d;
-            color: white;
+            background-color: var(--primary);
+            color: var(--white);
             padding: 8px 16px;
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
           }
           
           .back-button:hover {
-            background-color: #6c7a7d;
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
           }
           
           .error-banner {
-            background-color: #e74c3c;
-            color: white;
+            background-color: rgba(231, 76, 60, 0.8);
+            color: var(--white);
             padding: 10px;
             border-radius: 5px;
             margin-bottom: 20px;
@@ -373,9 +375,10 @@ export default function AddShop() {
           }
           
           .form-container {
-            background-color: #f9f9f9;
+            background-color: var(--card-bg);
             padding: 30px;
             border-radius: 10px;
+            box-shadow: var(--card-shadow);
           }
           
           .form-group {
@@ -386,22 +389,24 @@ export default function AddShop() {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #2c3e50;
+            color: var(--text-dark);
           }
           
           input[type="text"],
           textarea {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
+            padding: 12px;
+            background-color: var(--dark-light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 5px;
             font-size: 1rem;
+            color: var(--text);
             transition: border-color 0.3s ease;
           }
           
           input[type="text"]:focus,
           textarea:focus {
-            border-color: #3498db;
+            border-color: var(--primary);
             outline: none;
           }
           
@@ -412,100 +417,112 @@ export default function AddShop() {
           
           .error-message {
             color: #e74c3c;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             margin-top: 5px;
           }
           
           .submit-error {
-            margin-bottom: 15px;
-            text-align: center;
+            background-color: rgba(231, 76, 60, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            color: #e74c3c;
+          }
+          
+          .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+          }
+          
+          .submit-button {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
             font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(33, 150, 243, 0.3);
+          }
+          
+          .submit-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(33, 150, 243, 0.4);
+          }
+          
+          .submit-button:disabled {
+            background-color: #566573;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
           }
           
           .file-input-container {
             position: relative;
-            overflow: hidden;
-            display: inline-block;
+            margin-bottom: 5px;
           }
           
-          input[type="file"] {
+          .file-input-container input[type="file"] {
             position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
             width: 100%;
             height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
             cursor: pointer;
+            z-index: 2;
           }
           
           .file-input-button {
-            background-color: #3498db;
-            color: white;
+            display: inline-block;
+            background-color: var(--dark-light);
+            color: var(--text);
             padding: 10px 15px;
             border-radius: 5px;
             cursor: pointer;
-            display: inline-block;
-            transition: background-color 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
           }
           
           .file-input-button:hover {
-            background-color: #2980b9;
+            background-color: var(--primary);
+            color: var(--white);
           }
           
           .file-input-help {
             font-size: 0.8rem;
-            color: #7f8c8d;
+            color: var(--text-light);
             margin-top: 5px;
           }
           
           .image-preview-container {
-            margin-bottom: 20px;
+            margin-top: 20px;
+            margin-bottom: 30px;
           }
           
           .image-preview-container h3 {
             font-size: 1.2rem;
             margin-bottom: 10px;
-            color: #2c3e50;
+            color: var(--text-dark);
           }
           
           .image-preview {
-            width: 100%;
-            height: 200px;
+            max-width: 100%;
+            height: auto;
             border-radius: 5px;
             overflow: hidden;
-            background-color: #eee;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--dark-light);
           }
           
           .image-preview img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-          }
-          
-          .form-actions {
-            margin-top: 30px;
-            text-align: center;
-          }
-          
-          .submit-button {
-            background-color: #2ecc71;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 5px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-          }
-          
-          .submit-button:hover {
-            background-color: #27ae60;
-          }
-          
-          .submit-button:disabled {
-            background-color: #95a5a6;
-            cursor: not-allowed;
+            height: auto;
+            display: block;
           }
         `}</style>
       </div>

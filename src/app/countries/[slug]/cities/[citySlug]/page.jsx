@@ -70,7 +70,10 @@ export default function CityDetail() {
             padding: 20px;
             text-align: center;
             margin-top: 100px;
-            font-family: Arial, sans-serif;
+            font-family: 'Montserrat', Arial, sans-serif;
+            color: var(--text);
+            background-color: var(--bg-color);
+            min-height: 100vh;
           }
         `}</style>
       </div>
@@ -92,19 +95,28 @@ export default function CityDetail() {
             padding: 20px;
             text-align: center;
             margin-top: 100px;
-            font-family: Arial, sans-serif;
+            font-family: 'Montserrat', Arial, sans-serif;
             color: #e74c3c;
+            background-color: var(--bg-color);
+            min-height: 100vh;
           }
           
           .back-button {
             display: inline-block;
-            background-color: #7f8c8d;
-            color: white;
+            background-color: var(--primary);
+            color: var(--white);
             padding: 8px 16px;
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
             margin-top: 20px;
+            transition: all 0.3s;
+          }
+          
+          .back-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
           }
         `}</style>
       </div>
@@ -191,8 +203,10 @@ export default function CityDetail() {
       
       <style jsx>{`
         .city-detail-container {
-          font-family: Arial, sans-serif;
-          color: #333;
+          font-family: 'Montserrat', Arial, sans-serif;
+          color: var(--text);
+          background-color: var(--bg-color);
+          min-height: 100vh;
         }
         
         .city-banner {
@@ -211,7 +225,7 @@ export default function CityDetail() {
           left: 0;
           right: 0;
           bottom: 0;
-          background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7));
+          background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8));
         }
         
         .banner-content {
@@ -220,13 +234,14 @@ export default function CityDetail() {
           width: 100%;
           max-width: 1200px;
           margin: 0 auto;
-          color: white;
+          color: var(--white);
         }
         
         h1 {
           font-size: 2.5rem;
           margin: 0 0 10px 0;
           text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+          color: var(--white);
         }
         
         .breadcrumb {
@@ -235,17 +250,21 @@ export default function CityDetail() {
         }
         
         .breadcrumb a {
-          color: white;
+          color: var(--white);
           text-decoration: none;
           margin: 0 5px;
+          opacity: 0.9;
+          transition: opacity 0.3s;
         }
         
         .breadcrumb a:hover {
           text-decoration: underline;
+          opacity: 1;
         }
         
         .breadcrumb span {
           margin-left: 5px;
+          opacity: 0.8;
         }
         
         .city-content {
@@ -255,17 +274,17 @@ export default function CityDetail() {
         }
         
         .city-description {
-          background-color: white;
+          background-color: var(--card-bg);
           padding: 25px;
-          border-radius: 8px;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          border-radius: 10px;
+          box-shadow: var(--card-shadow);
           margin-bottom: 30px;
         }
         
         .city-description h2 {
-          color: #2c3e50;
+          color: var(--text-dark);
           margin-top: 0;
-          border-bottom: 2px solid #f0f0f0;
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
           padding-bottom: 10px;
           margin-bottom: 15px;
         }
@@ -273,20 +292,21 @@ export default function CityDetail() {
         .city-description p {
           line-height: 1.6;
           margin: 0;
+          color: var(--text);
         }
         
         .quick-links {
-          background-color: white;
+          background-color: var(--card-bg);
           padding: 25px;
-          border-radius: 8px;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          border-radius: 10px;
+          box-shadow: var(--card-shadow);
           margin-bottom: 30px;
         }
         
         .quick-links h2 {
-          color: #2c3e50;
+          color: var(--text-dark);
           margin-top: 0;
-          border-bottom: 2px solid #f0f0f0;
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
           padding-bottom: 10px;
           margin-bottom: 15px;
         }
@@ -302,16 +322,19 @@ export default function CityDetail() {
           flex-direction: column;
           align-items: center;
           padding: 20px;
-          background-color: #f8f9fa;
+          background-color: var(--dark-light);
           border-radius: 8px;
           text-decoration: none;
-          color: #333;
-          transition: transform 0.2s, box-shadow 0.2s;
+          color: var(--text);
+          transition: all 0.3s;
+          border: 1px solid rgba(255, 255, 255, 0.05);
         }
         
         .quick-link:hover {
           transform: translateY(-5px);
-          box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+          background-color: rgba(33, 150, 243, 0.1);
+          border-color: rgba(33, 150, 243, 0.3);
         }
         
         .quick-link-icon {
@@ -324,24 +347,24 @@ export default function CityDetail() {
         }
         
         .transport {
-          background-color: #e8f4fd;
+          background-color: rgba(33, 150, 243, 0.1);
         }
         
         .accommodation {
-          background-color: #e8fdec;
+          background-color: rgba(76, 175, 80, 0.1);
         }
         
         .categories-section {
-          background-color: white;
+          background-color: var(--card-bg);
           padding: 25px;
-          border-radius: 8px;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          border-radius: 10px;
+          box-shadow: var(--card-shadow);
         }
         
         .categories-section h2 {
-          color: #2c3e50;
+          color: var(--text-dark);
           margin-top: 0;
-          border-bottom: 2px solid #f0f0f0;
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
           padding-bottom: 10px;
           margin-bottom: 20px;
         }
@@ -353,21 +376,22 @@ export default function CityDetail() {
         }
         
         .category-card {
-          background-color: #f8f9fa;
+          background-color: var(--dark-light);
           border-radius: 8px;
           padding: 25px;
           text-decoration: none;
-          color: #333;
-          transition: transform 0.2s, box-shadow 0.2s;
+          color: var(--text);
+          transition: all 0.3s;
           display: flex;
           flex-direction: column;
           align-items: center;
           text-align: center;
+          border: 1px solid rgba(255, 255, 255, 0.05);
         }
         
         .category-card:hover {
           transform: translateY(-5px);
-          box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
         .category-icon {
@@ -377,24 +401,24 @@ export default function CityDetail() {
         
         .category-card h3 {
           margin: 0 0 10px 0;
-          color: #2c3e50;
+          color: var(--text-dark);
         }
         
         .category-card p {
           margin: 0;
-          color: #7f8c8d;
+          color: var(--text-light);
         }
         
         .shops {
-          background-color: #fff8e1;
+          background-color: rgba(255, 193, 7, 0.1);
         }
         
         .restaurants {
-          background-color: #ffebee;
+          background-color: rgba(233, 30, 99, 0.1);
         }
         
         .places {
-          background-color: #e8f5e9;
+          background-color: rgba(76, 175, 80, 0.1);
         }
         
         @media (max-width: 768px) {

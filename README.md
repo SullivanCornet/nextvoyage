@@ -9,12 +9,6 @@ Application de voyages pour découvrir et planifier des visites de lieux.
 - Système complet de gestion des images
 - Interface utilisateur intuitive et responsive
 
-
-
-
-
-
-
 ## Installation
 
 ```bash
@@ -23,23 +17,14 @@ npm install
 
 ## Configuration
 
-- Vérifiez que le dossier `public/uploads/places` existe et est accessible en écriture
-- La base de données SQLite est utilisée par défaut
+- Vérifiez que les dossiers d'upload dans `public/uploads/` existent et sont accessibles en écriture
+- Configurez la base de données MySQL dans le fichier `.env.local`
 
 ## Démarrage
 
 ```bash
 npm run dev
 ```
-
-## Tests de diagnostic
-
-Pour vérifier que les uploads fonctionnent correctement :
-
-1. Accédez à `/diagnostic` pour voir l'état général du système
-2. Testez l'upload direct via `/direct-upload`
-3. Testez l'upload avec formidable via `/test-upload`
-4. Essayez d'ajouter un lieu via `/places/add`
 
 ## Contributeurs
 

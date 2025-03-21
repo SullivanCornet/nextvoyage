@@ -1,0 +1,19 @@
+/* Importation de tous les fichiers CSS */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+@import './globals.css';
+@import './navbar.css';
+@import './cards.css';
+@import './pages.css';
+
+/* Styles spécifiques pour le footer */
+.footer {
+  padding: 20px 0;
+  background: var(--dark-light);
+  color: var(--text-light);
+  text-align: center;
+  margin-top: auto;
+}
+
+.footer-bottom {
+  font-size: 14px;
+} 

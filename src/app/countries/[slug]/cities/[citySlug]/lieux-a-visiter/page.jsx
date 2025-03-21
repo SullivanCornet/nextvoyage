@@ -132,11 +132,6 @@ export default function PlacesToVisit() {
           <Link href={`/countries/${slug}/cities/${citySlug}`} className="back-button">
             Retour à la ville
           </Link>
-          {isAuthenticated && (
-            <Link href={`/countries/${slug}/cities/${citySlug}/lieux-a-visiter/ajouter`} className="add-button">
-              + Ajouter un lieu à visiter
-            </Link>
-          )}
         </div>
       </div>
       
@@ -165,13 +160,14 @@ export default function PlacesToVisit() {
             <div className="empty-icon">🔍</div>
             <h2>Pas de lieux à visiter</h2>
             <p>Aucun lieu à visiter n'a été ajouté pour {cityName} pour le moment.</p>
-            {isAuthenticated && (
-              <Link href={`/countries/${slug}/cities/${citySlug}/lieux-a-visiter/ajouter`} className="add-place-button">
-                Ajouter un lieu à visiter
-              </Link>
-            )}
           </div>
         </div>
+      )}
+      
+      {isAuthenticated && (
+        <Link href={`/countries/${slug}/cities/${citySlug}/lieux-a-visiter/ajouter`} className="button-circle" title="Ajouter un lieu à visiter">
+          +
+        </Link>
       )}
       
       <style jsx>{`
@@ -214,15 +210,6 @@ export default function PlacesToVisit() {
         
         .back-button {
           background-color: #7f8c8d;
-          color: white;
-          padding: 10px 15px;
-          text-decoration: none;
-          border-radius: 5px;
-          font-weight: bold;
-        }
-        
-        .add-button {
-          background-color: #2ecc71;
           color: white;
           padding: 10px 15px;
           text-decoration: none;
@@ -313,14 +300,15 @@ export default function PlacesToVisit() {
           margin-bottom: 25px;
         }
         
-        .add-place-button {
-          background-color: #3498db;
+        .button-circle {
+          background-color: #2ecc71;
           color: white;
-          padding: 12px 20px;
-          border-radius: 5px;
+          padding: 10px 15px;
+          border-radius: 50%;
           text-decoration: none;
           font-weight: bold;
           display: inline-block;
+          margin-top: 20px;
         }
         
         @media (max-width: 768px) {
@@ -333,7 +321,7 @@ export default function PlacesToVisit() {
             gap: 10px;
           }
           
-          .back-button, .add-button {
+          .back-button {
             text-align: center;
           }
         }

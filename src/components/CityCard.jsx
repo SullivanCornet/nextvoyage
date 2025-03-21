@@ -1,25 +1,22 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function CityCard({ name, slug, countrySlug, imagePath }) {
   return (
     <Link href={`/countries/${countrySlug}/cities/${slug}`} className="city-card-link">
       <div className="city-card">
-        <div className="image-container">
-          {imagePath ? (
-            <div className="city-image">
-              <img src={imagePath} alt={name} className="city-img" />
-            </div>
-          ) : (
-            <div className="placeholder-image">
-              <div className="city-initial">{name.charAt(0)}</div>
-            </div>
-          )}
+        <div 
+          className="card-image" 
+          style={{ 
+            backgroundImage: imagePath 
+              ? `url(${imagePath})` 
+              : `linear-gradient(45deg, #3498db, #1976D2)` 
+          }}
+        >
         </div>
         <div className="card-content">
-          <h3>{name}</h3>
+          <div className="card-title">{name}</div>
         </div>
       </div>
       
@@ -27,64 +24,52 @@ export default function CityCard({ name, slug, countrySlug, imagePath }) {
         .city-card-link {
           text-decoration: none;
           display: block;
+          width: 100%;
+          height: 100%;
         }
         
         .city-card {
-          width: 280px;
+          width: 100%;
+          height: 220px;
           border-radius: 10px;
           overflow: hidden;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-          margin: 15px;
-          background-color: white;
+          position: relative;
+          box-shadow: var(--card-shadow);
+          transition: all 0.3s ease;
+          cursor: pointer;
+          background-color: var(--card-bg);
         }
         
         .city-card:hover {
           transform: translateY(-5px);
-          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+          box-shadow: var(--hover-shadow);
         }
         
-        .image-container {
-          width: 100%;
-          height: 180px;
-          position: relative;
-        }
-        
-        .placeholder-image {
-          width: 100%;
+        .card-image {
           height: 100%;
-          background-color: #e74c3c;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        
-        .city-image {
           width: 100%;
-          height: 100%;
+          background-size: cover;
+          background-position: center;
+          transition: transform 0.5s ease;
         }
         
-        .city-img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-        
-        .city-initial {
-          font-size: 4rem;
-          font-weight: bold;
-          color: white;
+        .city-card:hover .card-image {
+          transform: scale(1.05);
         }
         
         .card-content {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
           padding: 15px;
-          text-align: center;
+          background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+          color: var(--white);
         }
         
-        h3 {
-          color: #2c3e50;
-          margin: 0;
-          font-size: 1.3rem;
+        .card-title {
+          font-size: 18px;
+          font-weight: 600;
         }
       `}</style>
     </Link>

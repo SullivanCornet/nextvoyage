@@ -223,12 +223,14 @@ export default function CountryDetails() {
       
       <div className="country-header">
         {!country.flag_image && <h1>{country.name}</h1>}
+        
         <div className="header-actions">
-          <Link href="/countries" className="back-button">
+          <Link href="/countries" className="action-button back-button">
             Retour à la liste des pays
           </Link>
+          <div className="spacer"></div>
           {isAuthenticated && (
-            <button onClick={handleDeleteCountry} className="delete-button">
+            <button onClick={handleDeleteCountry} className="action-button delete-button">
               Supprimer de la liste
             </button>
           )}
@@ -278,6 +280,7 @@ export default function CountryDetails() {
       {/* Ajout du convertisseur de devise */}
       {country.currency && exchangeRates && (
         <div className="currency-converter-section">
+          <h2>Convertisseur de devise</h2>
           <CurrencyConverter 
             countryCurrency={countryCurrency}
             countryName={country.name}
@@ -289,33 +292,35 @@ export default function CountryDetails() {
       <div className="cities-section">
         <div className="cities-header">
           <h2>Villes</h2>
-          {isAuthenticated && (
-            <Link href={`/countries/${slug}/add-city`} className="add-city-button">
-              Ajouter une ville
-            </Link>
-          )}
         </div>
         
         <div className="cities-grid">
           {country.cities && country.cities.length > 0 ? (
             country.cities.map((city) => (
-              <CityCard
-                key={city.id}
-                name={city.name}
-                slug={city.slug}
-                countrySlug={slug}
-                imagePath={city.image_path}
-              />
+              <div key={city.id} className="city-card-wrapper">
+                <CityCard
+                  name={city.name}
+                  slug={city.slug}
+                  countrySlug={slug}
+                  imagePath={city.image_path}
+                />
+              </div>
             ))
           ) : (
             <div className="no-cities">
               <p>Aucune ville n'a été ajoutée pour ce pays.</p>
               {isAuthenticated && (
-                <p>Cliquez sur "Ajouter une ville" pour commencer.</p>
+                <p>Cliquez sur le bouton + ci-dessous pour ajouter une ville.</p>
               )}
             </div>
           )}
         </div>
+        
+        {isAuthenticated && (
+          <Link href={`/countries/${slug}/add-city`} className="button-circle" title="Ajouter une ville">
+            +
+          </Link>
+        )}
       </div>
       
       <style jsx>{`
@@ -323,7 +328,9 @@ export default function CountryDetails() {
           max-width: 1200px;
           margin: 0 auto;
           padding: 0 20px 40px;
-          font-family: Arial, sans-serif;
+          font-family: 'Montserrat', Arial, sans-serif;
+          color: var(--text);
+          margin-top: 80px;
         }
         
         .country-banner {
@@ -357,49 +364,90 @@ export default function CountryDetails() {
         
         .country-header {
           display: flex;
-          justify-content: space-between;
-          align-items: center;
+          flex-direction: column;
           margin-bottom: 30px;
           padding-bottom: 15px;
-          border-bottom: 1px solid #e0e0e0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         h1 {
-          color: #2c3e50;
+          color: var(--text-dark);
           font-size: 2.2rem;
-          margin: 0;
+          margin: 0 0 20px 0;
         }
         
         .header-actions {
           display: flex;
-          gap: 15px;
+          width: 100%;
+          justify-content: space-between;
+          align-items: center;
+          gap: 10px;
+          margin: 0;
+          padding: 0;
+          height: 38px;
+          min-height: 38px;
+        }
+        
+        .spacer {
+          flex-grow: 1;
+        }
+        
+        .action-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0 16px;
+          border-radius: 5px;
+          font-weight: bold;
+          transition: background-color 0.3s ease;
+          font-size: 0.9rem;
+          height: 36px;
+          min-height: 36px;
+          max-height: 36px;
+          white-space: nowrap;
+          box-sizing: border-box;
+          margin: 0;
+          line-height: 1;
+          border: none;
+          vertical-align: middle;
+          text-align: center;
+          text-decoration: none;
+          font-family: 'Montserrat', Arial, sans-serif;
+        }
+        
+        button.action-button {
+          cursor: pointer;
+          outline: none;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          padding-top: 0;
+          padding-bottom: 0;
+          height: 38px;
+          min-height: 38px;
+          max-height: 38px;
+          font-size: 1rem;
+        }
+        
+        a.action-button {
+          position: relative;
+          top: 0;
+          padding: 6px 16px;
         }
         
         .back-button {
-          display: inline-block;
-          background-color: #3498db;
+          background-color: var(--primary);
           color: white;
-          padding: 8px 16px;
-          border-radius: 5px;
-          text-decoration: none;
-          font-weight: bold;
-          transition: background-color 0.3s ease;
         }
         
         .back-button:hover {
-          background-color: #2980b9;
+          background-color: var(--primary-dark);
         }
         
         .delete-button {
           background-color: #e74c3c;
           color: white;
-          border: none;
-          padding: 8px 16px;
-          border-radius: 5px;
-          font-weight: bold;
           cursor: pointer;
-          transition: background-color 0.3s ease;
-          margin-left: 250px;
         }
         
         .delete-button:hover {
@@ -407,22 +455,22 @@ export default function CountryDetails() {
         }
         
         .country-info {
-          background-color: #f9f9f9;
+          background-color: var(--card-bg);
           border-radius: 10px;
           padding: 30px;
           margin-bottom: 40px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+          box-shadow: var(--card-shadow);
         }
         
         .country-description h2 {
-          color: #2c3e50;
+          color: var(--text-dark);
           margin-top: 0;
           margin-bottom: 15px;
           font-size: 1.5rem;
         }
         
         .country-description p {
-          color: #34495e;
+          color: var(--text);
           line-height: 1.6;
           margin-bottom: 25px;
         }
@@ -431,29 +479,36 @@ export default function CountryDetails() {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
           gap: 15px;
-          background-color: #fff;
+          background-color: rgba(255, 255, 255, 0.05);
           padding: 20px;
           border-radius: 8px;
-          box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
         }
         
         .meta-item {
           font-size: 1rem;
-          color: #34495e;
+          color: var(--text);
         }
         
         .meta-item strong {
-          color: #2c3e50;
+          color: var(--text-dark);
           margin-right: 5px;
         }
         
         /* Styles pour la section convertisseur de devise */
         .currency-converter-section {
-          margin: 40px 0;
-          background-color: white;
+          margin-bottom: 40px;
+          background-color: var(--card-bg);
           border-radius: 10px;
-          padding: 25px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+          padding: 30px;
+          box-shadow: var(--card-shadow);
+        }
+        
+        .currency-converter-section h2 {
+          color: var(--text-dark);
+          margin-top: 0;
+          margin-bottom: 20px;
+          font-size: 1.5rem;
         }
         
         .cities-section {
@@ -468,37 +523,72 @@ export default function CountryDetails() {
         }
         
         .cities-header h2 {
-          color: #2c3e50;
+          color: var(--text-dark);
           margin: 0;
           font-size: 1.8rem;
-        }
-        
-        .add-city-button {
-          background-color: #2ecc71;
-          color: white;
-          padding: 8px 16px;
-          border-radius: 5px;
-          text-decoration: none;
-          font-weight: bold;
-          transition: background-color 0.3s ease;
-        }
-        
-        .add-city-button:hover {
-          background-color: #27ae60;
         }
         
         .cities-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-          gap: 20px;
+          gap: 30px;
+        }
+        
+        .city-card-wrapper {
+          width: 100%;
         }
         
         .no-cities {
-          background-color: #f9f9f9;
+          background-color: var(--card-bg);
           padding: 30px;
           border-radius: 10px;
           text-align: center;
-          color: #7f8c8d;
+          color: var(--text-light);
+          grid-column: 1 / -1;
+        }
+        
+        .button-circle {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 60px;
+          height: 60px;
+          background: var(--primary);
+          color: var(--white);
+          border-radius: 50%;
+          cursor: pointer;
+          font-size: 24px;
+          font-weight: 500;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 10px rgba(33, 150, 243, 0.4);
+          margin: 30px auto;
+          text-decoration: none;
+        }
+        
+        .button-circle:hover {
+          background: var(--primary-dark);
+          transform: translateY(-3px);
+          box-shadow: 0 6px 14px rgba(33, 150, 243, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+          .cities-grid {
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+          }
+          
+          .header-actions {
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 10px;
+          }
+          
+          .back-button, .delete-button {
+            white-space: nowrap;
+          }
+          
+          .spacer {
+            display: none;
+          }
         }
       `}</style>
     </div>

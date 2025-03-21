@@ -327,7 +327,9 @@ export default function AddCountry() {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            font-family: Arial, sans-serif;
+            font-family: 'Montserrat', Arial, sans-serif;
+            color: var(--text);
+            margin-top: 80px;
           }
           
           .page-header {
@@ -336,45 +338,48 @@ export default function AddCountry() {
             align-items: center;
             margin-bottom: 30px;
             padding-bottom: 15px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
           }
           
           h1 {
-            color: #2c3e50;
+            color: var(--text-dark);
             font-size: 1.8rem;
             margin: 0;
           }
           
           .back-button {
             display: inline-block;
-            background-color: #7f8c8d;
+            background-color: var(--primary);
             color: white;
-            padding: 8px 16px;
+            padding: 6px 16px;
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
           }
           
           .back-button:hover {
-            background-color: #6c7a7d;
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
           }
           
           .success-message {
-            background-color: #2ecc71;
-            color: white;
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 8px;
             margin-bottom: 20px;
             text-align: center;
             font-weight: bold;
+            border: 1px solid rgba(46, 204, 113, 0.4);
           }
           
           .form-container {
-            background-color: #f9f9f9;
+            background-color: var(--card-bg);
             padding: 30px;
             border-radius: 10px;
             margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
           }
           
           .form-group {
@@ -385,21 +390,56 @@ export default function AddCountry() {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #2c3e50;
+            color: var(--text-dark);
           }
           
           select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px;
+            background-color: var(--input-bg, rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
             font-size: 1rem;
-            transition: border-color 0.3s ease;
+            color: var(--text);
+            transition: all 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='6' fill='rgba(255,255,255,0.5)' viewBox='0 0 12 6'%3E%3Cpath d='M0 0l6 6 6-6z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 12px;
+            padding-right: 30px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+          }
+          
+          select option {
+            background-color: var(--card-bg, #1e1e2e);
+            color: var(--text);
+            padding: 10px;
+          }
+          
+          select::-ms-expand {
+            display: none;
+          }
+          
+          /* Styles pour Firefox */
+          select:-moz-focusring { 
+            color: transparent;
+            text-shadow: 0 0 0 var(--text);
+          }
+          
+          /* Styles pour assurer que l'option sélectionnée est bien visible dans le thème sombre */
+          select option:checked,
+          select option:hover,
+          select option:focus {
+            background-color: var(--primary);
+            color: white;
           }
           
           select:focus {
-            border-color: #3498db;
+            border-color: var(--primary);
             outline: none;
+            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.3);
           }
           
           select.error {
@@ -413,70 +453,83 @@ export default function AddCountry() {
           }
           
           .submit-error {
-            background-color: #fce4e4;
-            border: 1px solid #e74c3c;
+            background-color: rgba(231, 76, 60, 0.2);
+            border: 1px solid rgba(231, 76, 60, 0.4);
+            color: #e74c3c;
             padding: 10px;
-            border-radius: 5px;
+            border-radius: 8px;
             margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
           }
           
           .form-actions {
             display: flex;
             justify-content: space-between;
             gap: 15px;
+            margin-top: 30px;
           }
           
           .preview-button {
             flex: 1;
-            padding: 10px;
-            background-color: #95a5a6;
+            padding: 12px;
+            background-color: rgba(149, 165, 166, 0.8);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
           }
           
           .preview-button:hover:not(:disabled) {
-            background-color: #7f8c8d;
+            background-color: rgba(127, 140, 141, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
           }
           
           .submit-button {
             flex: 2;
-            padding: 10px;
-            background-color: #3498db;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
             color: white;
             border: none;
-            border-radius: 5px;
+            padding: 14px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(33, 150, 243, 0.3);
           }
           
           .submit-button:hover:not(:disabled) {
-            background-color: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(33, 150, 243, 0.4);
           }
           
           .preview-button:disabled,
           .submit-button:disabled {
-            background-color: #bdc3c7;
+            background: linear-gradient(to right, #95a5a6, #7f8c8d);
+            opacity: 0.7;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
           }
           
           .country-preview {
-            background-color: #fff;
+            background-color: var(--card-bg);
             border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            box-shadow: var(--card-shadow);
           }
           
           .country-preview h2 {
-            color: #2c3e50;
+            color: var(--text-dark);
             margin-top: 0;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
           }
           
           .preview-content {
@@ -501,29 +554,53 @@ export default function AddCountry() {
           
           .preview-flag img {
             width: 100%;
-            border: 1px solid #eee;
-            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
           }
           
           .preview-info h3 {
-            color: #2c3e50;
+            color: var(--text-dark);
             margin-top: 0;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-size: 1.5rem;
           }
           
           .preview-meta {
             display: grid;
-            gap: 10px;
+            gap: 15px;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 8px;
           }
           
           .meta-item {
             font-size: 1rem;
-            color: #34495e;
+            color: var(--text);
           }
           
           .meta-item strong {
-            color: #2c3e50;
+            color: var(--text-dark);
+            margin-right: 5px;
+          }
+          
+          @media (max-width: 768px) {
+            .page-header {
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 15px;
+            }
+            
+            .form-container, .country-preview {
+              padding: 20px;
+            }
+            
+            .form-actions {
+              flex-direction: column;
+            }
+            
+            .preview-button, .submit-button {
+              width: 100%;
+            }
           }
         `}</style>
       </div>

@@ -4,34 +4,68 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="w-full max-w-5xl">
-        <h1 className="text-4xl font-bold mb-8 text-center">App Voyage</h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          <Link href="/places" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg text-center transition">
-            Voir les lieux
-          </Link>
-          <Link href="/places/add" className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg text-center transition">
-            Ajouter un lieu
+    <>
+      <div className="full-image" style={{ backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/hero7.jpg')" }}>
+        <div className="container" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <h1 style={{ color: 'white', fontSize: '48px', marginBottom: '30px', textAlign: 'center', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>
+            Découvrez le monde avec Cornet de Voyage
+          </h1>
+          
+          <p style={{ color: 'white', fontSize: '20px', maxWidth: '700px', textAlign: 'center', marginBottom: '40px', textShadow: '1px 1px 3px rgba(0, 0, 0, 0.5)' }}>
+            Explorez des destinations fascinantes, partagez vos expériences et planifiez votre prochain voyage.
+          </p>
+          
+          <Link href="/countries" className="button">
+            Explorer les guides
           </Link>
         </div>
-        
-        <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <h2 className="text-xl font-semibold mb-2 text-blue-800">Outils de développement</h2>
-          <div className="space-y-2">
-            <Link href="/diagnostic" className="inline-block px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-800 font-medium transition">
-              Centre de diagnostic 🔧
-            </Link>
-            <Link href="/init-db" className="inline-block ml-2 px-4 py-2 bg-blue-200 hover:bg-blue-300 rounded text-blue-800 font-medium transition">
-              Initialiser la BD 🗃️
-            </Link>
-            <Link href="/upload-test" className="inline-block ml-2 px-4 py-2 bg-green-200 hover:bg-green-300 rounded text-green-800 font-medium transition">
-              Test Upload Unifié 📤
+      </div>
+      
+      <div style={{ backgroundColor: 'var(--dark)', paddingTop: '60px', paddingBottom: '60px' }}>
+        <div className="container">
+          <h2 className="section-title">Destinations populaires</h2>
+          
+          <div className="grid">
+            <div className="card">
+              <div className="card-image" style={{ backgroundImage: "url('/images/hero3.jpg')" }}></div>
+              <div className="card-content">
+                <div className="card-title">Égypte</div>
+                <div>8 villes • 75 lieux</div>
+              </div>
+            </div>
+            
+            <div className="card">
+              <div className="card-image" style={{ backgroundImage: "url('/images/hero4.jpg')" }}></div>
+              <div className="card-content">
+                <div className="card-title">Italie</div>
+                <div>11 villes • 96 lieux</div>
+              </div>
+            </div>
+            
+            <div className="card">
+              <div className="card-image" style={{ backgroundImage: "url('/images/hero5.jpg')" }}></div>
+              <div className="card-content">
+                <div className="card-title">Japon</div>
+                <div>7 villes • 62 lieux</div>
+              </div>
+            </div>
+            
+            <div className="card">
+              <div className="card-image" style={{ backgroundImage: "url('/images/hero6.jpg')" }}></div>
+              <div className="card-content">
+                <div className="card-title">France</div>
+                <div>9 villes • 84 lieux</div>
+              </div>
+            </div>
+          </div>
+          
+          <div style={{ textAlign: 'center', marginTop: '30px' }}>
+            <Link href="/countries" className="button">
+              Voir tous les guides
             </Link>
           </div>
         </div>
       </div>
-    </main>
+    </>
   );
 } 

@@ -1,0 +1,245 @@
+/* Styles pour la barre de navigation inspirés du design travel-guide */
+.navbar {
+  background-color: var(--dark-light);
+  padding: 15px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+.navbar-logo {
+  font-weight: 800;
+  font-size: 26px;
+  background: linear-gradient(to right, var(--primary), #36a6ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-decoration: none;
+  position: relative;
+  padding: 0;
+  margin: 0;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2),
+               1px 2px 3px rgba(0, 0, 0, 0.3),
+               0 0 10px rgba(255, 255, 255, 0.15),
+               0 0 5px rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.navbar-logo:hover {
+  background: linear-gradient(to right, var(--primary-dark), var(--primary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transform: scale(1.05);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3),
+               2px 3px 5px rgba(0, 0, 0, 0.5),
+               0 0 15px rgba(255, 255, 255, 0.2),
+               0 0 8px rgba(255, 255, 255, 0.15);
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-item {
+  position: relative;
+  padding: 5px 0;
+}
+
+.nav-links {
+  font-weight: 500;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 5px 10px;
+  transition: all 0.3s ease;
+}
+
+.nav-links::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  bottom: 0;
+  left: 0;
+  transition: width 0.3s ease;
+}
+
+.nav-links:hover {
+  color: var(--primary);
+}
+
+.nav-links:hover::after {
+  width: 100%;
+}
+
+/* Section d'authentification */
+.auth-section {
+  margin-left: auto;
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-name {
+  font-weight: bold;
+  color: var(--primary);
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #e74c3c;
+  font-weight: bold;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: rgba(231, 76, 60, 0.2);
+}
+
+.login-btn {
+  font-weight: 500;
+  color: var(--text);
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  color: var(--primary);
+}
+
+.register-link {
+  background-color: var(--primary);
+  border-radius: 30px;
+  padding: 10px 24px;
+  transition: background-color 0.3s ease;
+  color: var(--white);
+  text-decoration: none;
+  box-shadow: 0 3px 8px rgba(33, 150, 243, 0.3);
+}
+
+.register-link:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(33, 150, 243, 0.4);
+}
+
+.menu-icon {
+  display: none;
+  color: var(--text);
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media screen and (max-width: 960px) {
+  .navbar {
+    padding: 0;
+  }
+  
+  .navbar-container {
+    padding: 15px 30px;
+  }
+  
+  .nav-menu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: absolute;
+    top: 60px;
+    left: -100%;
+    opacity: 0;
+    transition: all 0.5s ease;
+    padding: 0;
+    background: var(--dark-light);
+  }
+  
+  .nav-menu.active {
+    left: 0;
+    opacity: 1;
+    transition: all 0.5s ease;
+    z-index: 1;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .nav-item {
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .nav-links {
+    text-align: center;
+    padding: 1.5rem;
+    width: 100%;
+    display: block;
+  }
+  
+  .auth-section {
+    width: 100%;
+    margin-left: 0;
+  }
+  
+  .auth-buttons {
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+  }
+  
+  .user-name, 
+  .logout-btn,
+  .login-btn,
+  .register-link {
+    width: 100%;
+    text-align: center;
+    padding: 1.5rem;
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  .menu-icon {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(-25%, 50%);
+    cursor: pointer;
+  }
+} 

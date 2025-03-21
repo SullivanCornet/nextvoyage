@@ -1,0 +1,104 @@
+:root {
+  --background: #121212;
+  --foreground: #E0E0E0;
+  
+  /* Nouvelles variables de couleurs inspirées du design travel-guide */
+  --primary: #2196F3;
+  --primary-dark: #1976D2;
+  --secondary: #FF9800;
+  --dark: #121212;
+  --dark-light: #1E1E1E;
+  --card-bg: #2D2D2D;
+  --text: #E0E0E0;
+  --text-light: #9E9E9E;
+  --text-dark: #FFFFFF;
+  --white: #FFFFFF;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  --hover-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  color: var(--text);
+  background: var(--dark);
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Nouvelles classes génériques inspirées du design travel-guide */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.page-content {
+  padding-top: 80px;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--text-dark);
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--text-dark);
+}
+
+.section-title {
+  margin-top: 50px;
+  padding-bottom: 15px;
+  position: relative;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.section-title:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: var(--primary);
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+} 

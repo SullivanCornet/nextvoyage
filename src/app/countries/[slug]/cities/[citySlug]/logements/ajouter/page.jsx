@@ -299,23 +299,27 @@ export default function AjoutLogement() {
             max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
+            font-family: 'Montserrat', Arial, sans-serif;
+            color: var(--text);
           }
           
           .page-header {
             margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
           }
           
           .back-link {
             display: inline-flex;
             align-items: center;
-            color: #4a6fa5;
+            color: var(--primary);
             text-decoration: none;
             margin-bottom: 10px;
             transition: color 0.3s ease;
           }
           
           .back-link:hover {
-            color: #3a5a80;
+            color: var(--primary-dark);
             text-decoration: underline;
           }
           
@@ -325,7 +329,7 @@ export default function AjoutLogement() {
           
           .page-title {
             font-size: 2rem;
-            color: #333;
+            color: var(--text-dark);
             margin: 0;
             display: flex;
             align-items: center;
@@ -333,14 +337,14 @@ export default function AjoutLogement() {
           
           .header-icon {
             margin-right: 10px;
-            color: #4a6fa5;
+            color: var(--primary);
           }
           
           .accommodation-form {
-            background-color: white;
+            background-color: var(--card-bg);
             border-radius: 12px;
             padding: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--card-shadow);
           }
           
           .form-grid {
@@ -363,20 +367,22 @@ export default function AjoutLogement() {
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: #333;
+            color: var(--text-dark);
           }
           
           input, select, textarea {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 6px;
             font-size: 1rem;
+            background-color: var(--dark-light);
+            color: var(--text);
             transition: border-color 0.3s ease;
           }
           
           input:focus, select:focus, textarea:focus {
-            border-color: #4a6fa5;
+            border-color: var(--primary);
             outline: none;
           }
           
@@ -396,17 +402,18 @@ export default function AjoutLogement() {
           }
           
           .image-preview-container {
-            border: 2px dashed #ddd;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
             border-radius: 6px;
             height: 200px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            background-color: var(--dark-light);
           }
           
           .image-placeholder {
-            color: #888;
+            color: var(--text-light);
             text-align: center;
           }
           
@@ -425,37 +432,44 @@ export default function AjoutLogement() {
           
           .cancel-button {
             padding: 12px 24px;
-            background-color: #f1f1f1;
-            color: #333;
+            background-color: var(--dark-light);
+            color: var(--text);
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-size: 1rem;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
           }
           
           .cancel-button:hover {
-            background-color: #e3e3e3;
+            background-color: var(--dark);
+            transform: translateY(-2px);
           }
           
           .submit-button {
             padding: 12px 24px;
-            background-color: #4a6fa5;
-            color: white;
+            background-color: var(--primary);
+            color: var(--white);
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-size: 1rem;
-            transition: background-color 0.3s ease;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(33, 150, 243, 0.3);
           }
           
           .submit-button:hover:not(:disabled) {
-            background-color: #3a5a80;
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(33, 150, 243, 0.4);
           }
           
           .submit-button:disabled {
-            background-color: #a0aec0;
+            background-color: #566573;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
           }
           
           .error-message {

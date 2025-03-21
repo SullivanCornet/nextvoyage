@@ -311,7 +311,8 @@ export default function AddRestaurant() {
           max-width: 800px;
           margin: 0 auto;
           padding: 20px;
-          font-family: Arial, sans-serif;
+          font-family: 'Montserrat', Arial, sans-serif;
+          color: var(--text);
         }
         
         .page-header {
@@ -320,17 +321,17 @@ export default function AddRestaurant() {
         
         h1 {
           font-size: 2rem;
-          color: #2c3e50;
+          color: var(--text-dark);
           margin-bottom: 10px;
         }
         
         .breadcrumb {
-          color: #7f8c8d;
+          color: var(--text-light);
           margin-bottom: 20px;
         }
         
         .breadcrumb a {
-          color: #3498db;
+          color: var(--primary);
           text-decoration: none;
         }
         
@@ -340,34 +341,39 @@ export default function AddRestaurant() {
         
         .back-button {
           display: inline-block;
-          background-color: #7f8c8d;
-          color: white;
+          background-color: var(--primary);
+          color: var(--white);
           padding: 10px 15px;
           border-radius: 5px;
           text-decoration: none;
           font-weight: bold;
           margin-bottom: 20px;
+          transition: background-color 0.3s;
+        }
+        
+        .back-button:hover {
+          background-color: var(--primary-dark);
         }
         
         .error-banner {
-          background-color: #e74c3c;
-          color: white;
+          background-color: rgba(231, 76, 60, 0.8);
+          color: var(--white);
           padding: 15px;
           border-radius: 5px;
           margin-bottom: 20px;
         }
         
         .error-banner a {
-          color: white;
+          color: var(--white);
           text-decoration: underline;
           font-weight: bold;
         }
         
         .form-container {
-          background-color: #f9f9f9;
+          background-color: var(--card-bg);
           padding: 30px;
           border-radius: 10px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          box-shadow: var(--card-shadow);
         }
         
         .form-group {
@@ -378,16 +384,24 @@ export default function AddRestaurant() {
           display: block;
           margin-bottom: 8px;
           font-weight: bold;
-          color: #2c3e50;
+          color: var(--text-dark);
         }
         
         input, textarea {
           width: 100%;
-          padding: 10px;
-          border: 1px solid #ddd;
+          padding: 12px;
+          background-color: var(--dark-light);
+          border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 5px;
           font-size: 16px;
           font-family: inherit;
+          color: var(--text);
+          transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus {
+          border-color: var(--primary);
+          outline: none;
         }
         
         input.error, textarea.error {
@@ -403,7 +417,7 @@ export default function AddRestaurant() {
         .submit-error {
           margin-bottom: 20px;
           padding: 10px;
-          background-color: #fde2e2;
+          background-color: rgba(231, 76, 60, 0.2);
           border-radius: 5px;
         }
         
@@ -412,24 +426,29 @@ export default function AddRestaurant() {
         }
         
         .submit-button {
-          background-color: #e67e22;
-          color: white;
+          background-color: var(--primary);
+          color: var(--white);
           border: none;
           padding: 12px 25px;
           border-radius: 5px;
           font-size: 16px;
           cursor: pointer;
           font-weight: bold;
-          transition: background-color 0.3s;
+          transition: all 0.3s;
+          box-shadow: 0 4px 6px rgba(33, 150, 243, 0.3);
         }
         
         .submit-button:hover {
-          background-color: #d35400;
+          background-color: var(--primary-dark);
+          transform: translateY(-2px);
+          box-shadow: 0 6px 8px rgba(33, 150, 243, 0.4);
         }
         
         .submit-button:disabled {
-          background-color: #95a5a6;
+          background-color: #566573;
           cursor: not-allowed;
+          transform: none;
+          box-shadow: none;
         }
         
         .file-input-container {
@@ -449,28 +468,36 @@ export default function AddRestaurant() {
         }
         
         .file-input-button {
-          background-color: #ecf0f1;
-          padding: 10px;
-          border: 1px solid #ddd;
+          display: inline-block;
+          background-color: var(--dark-light);
+          color: var(--text);
+          padding: 10px 15px;
           border-radius: 5px;
-          text-align: center;
-          font-size: 14px;
-          color: #7f8c8d;
+          cursor: pointer;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          transition: all 0.3s;
+        }
+        
+        .file-input-button:hover {
+          background-color: var(--primary);
+          color: var(--white);
         }
         
         .file-input-help {
-          font-size: 12px;
-          color: #7f8c8d;
+          font-size: 0.8rem;
+          color: var(--text-light);
           margin-top: 5px;
         }
         
         .image-preview-container {
-          margin-bottom: 20px;
+          margin-top: 20px;
+          margin-bottom: 30px;
         }
         
         .image-preview-container h3 {
-          font-size: 18px;
+          font-size: 1.2rem;
           margin-bottom: 10px;
+          color: var(--text-dark);
         }
         
         .image-preview {
@@ -478,12 +505,13 @@ export default function AddRestaurant() {
           height: auto;
           border-radius: 5px;
           overflow: hidden;
-          border: 1px solid #ddd;
-          background-color: #f5f5f5;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          background-color: var(--dark-light);
         }
         
         .image-preview img {
-          max-width: 100%;
+          width: 100%;
+          height: auto;
           display: block;
         }
       `}</style>

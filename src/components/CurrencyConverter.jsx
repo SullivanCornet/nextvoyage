@@ -136,8 +136,6 @@ export default function CurrencyConverter({
   
   return (
     <div className="currency-converter-container">
-      <h3 className="converter-title">Convertisseur de devises</h3>
-      
       {/* Afficher un message si les taux sont fictifs (en cas d'erreur API) */}
       {rates && rates.error && (
         <div className="converter-warning">
@@ -239,24 +237,26 @@ export default function CurrencyConverter({
 
       <style jsx>{`
         .currency-converter-container {
-          background-color: #f8f9fa;
+          background-color: var(--card-bg);
           border-radius: 10px;
           padding: 20px;
           margin: 20px 0;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+          box-shadow: var(--card-shadow);
+          color: var(--text);
+          font-family: 'Montserrat', Arial, sans-serif;
         }
         
         .converter-title {
           font-size: 1.25rem;
-          color: #2c3e50;
+          color: var(--text-dark);
           margin-top: 0;
           margin-bottom: 15px;
           text-align: center;
         }
         
         .converter-warning {
-          background-color: #fff3cd;
-          color: #856404;
+          background-color: rgba(255, 243, 205, 0.2);
+          color: #ffd54f;
           padding: 10px;
           border-radius: 5px;
           margin-bottom: 15px;
@@ -275,7 +275,7 @@ export default function CurrencyConverter({
         }
         
         .converter-card {
-          background-color: white;
+          background-color: rgba(255, 255, 255, 0.05);
           border-radius: 8px;
           padding: 15px;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -284,7 +284,7 @@ export default function CurrencyConverter({
         .converter-card h4 {
           margin-top: 0;
           margin-bottom: 15px;
-          color: #2c3e50;
+          color: var(--text-dark);
           font-size: 1rem;
           text-align: center;
           white-space: nowrap;
@@ -300,17 +300,19 @@ export default function CurrencyConverter({
         .converter-amount {
           flex: 1;
           padding: 10px;
-          border: 1px solid #ddd;
+          border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 5px 0 0 5px;
           font-size: 1rem;
           text-align: right;
           min-width: 0;
+          background-color: rgba(0, 0, 0, 0.2);
+          color: var(--text);
         }
         
         .currency-select, .country-currency {
           padding: 10px;
-          background-color: #f0f0f0;
-          border: 1px solid #ddd;
+          background-color: rgba(0, 0, 0, 0.3);
+          border: 1px solid rgba(255, 255, 255, 0.1);
           border-left: none;
           border-radius: 0 5px 5px 0;
           font-weight: bold;
@@ -319,12 +321,13 @@ export default function CurrencyConverter({
           display: flex;
           align-items: center;
           justify-content: center;
+          color: var(--text);
         }
         
         .currency-select {
           appearance: none;
           padding-right: 25px;
-          background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23333' viewBox='0 0 12 12'%3E%3Cpath d='M3 5l3 3 3-3'/%3E%3C/svg%3E");
+          background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23ddd' viewBox='0 0 12 12'%3E%3Cpath d='M3 5l3 3 3-3'/%3E%3C/svg%3E");
           background-repeat: no-repeat;
           background-position: right 10px center;
           cursor: pointer;
@@ -338,13 +341,13 @@ export default function CurrencyConverter({
         }
         
         .result-equals {
-          color: #7f8c8d;
+          color: var(--text-light);
           font-size: 1.2rem;
         }
         
         .result-amount {
           font-weight: bold;
-          color: #2c3e50;
+          color: var(--text-dark);
           font-size: 1.2rem;
           text-align: center;
           margin-right: 5px;
@@ -360,13 +363,14 @@ export default function CurrencyConverter({
         
         .result-currency-select {
           padding: 5px;
-          border: 1px solid #ddd;
+          border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 4px;
           font-size: 0.9rem;
-          background-color: #f8f9fa;
+          background-color: rgba(0, 0, 0, 0.2);
+          color: var(--text);
           appearance: none;
           padding-right: 20px;
-          background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23333' viewBox='0 0 12 12'%3E%3Cpath d='M3 5l3 3 3-3'/%3E%3C/svg%3E");
+          background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23ddd' viewBox='0 0 12 12'%3E%3Cpath d='M3 5l3 3 3-3'/%3E%3C/svg%3E");
           background-repeat: no-repeat;
           background-position: right 5px center;
           cursor: pointer;
@@ -374,7 +378,7 @@ export default function CurrencyConverter({
         
         .converter-date {
           text-align: center;
-          color: #7f8c8d;
+          color: var(--text-light);
           font-size: 0.8rem;
           margin-top: 10px;
         }
@@ -382,8 +386,8 @@ export default function CurrencyConverter({
         .loading-spinner {
           width: 20px;
           height: 20px;
-          border: 2px solid #f3f3f3;
-          border-top: 2px solid #3498db;
+          border: 2px solid rgba(255, 255, 255, 0.1);
+          border-top: 2px solid var(--primary);
           border-radius: 50%;
           animation: spin 1s linear infinite;
           margin: 0 auto;

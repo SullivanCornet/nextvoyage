@@ -67,12 +67,6 @@ export default function LogementsList() {
     <div className="logements-container">
       <div className="page-header">
         <h1 className="page-title">Logements à {city?.name || citySlug}</h1>
-        {isAuthenticated && (
-          <Link href={`/countries/${slug}/cities/${citySlug}/logements/ajouter`} className="add-button">
-            <FaPlus className="add-icon" />
-            <span>Ajouter un logement</span>
-          </Link>
-        )}
       </div>
 
       {logements.length > 0 ? (
@@ -112,9 +106,15 @@ export default function LogementsList() {
       ) : (
         <NoDataMessage 
           message="Aucun logement n'a été ajouté pour cette ville." 
-          actionLink={isAuthenticated ? `/countries/${slug}/cities/${citySlug}/logements/ajouter` : null}
-          actionText="Ajouter un logement"
+          actionLink={null}
+          actionText=""
         />
+      )}
+
+      {isAuthenticated && (
+        <Link href={`/countries/${slug}/cities/${citySlug}/logements/ajouter`} className="button-circle" title="Ajouter un logement">
+          +
+        </Link>
       )}
 
       <Link href={`/countries/${slug}/cities/${citySlug}`} className="back-link">

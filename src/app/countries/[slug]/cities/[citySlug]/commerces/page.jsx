@@ -117,11 +117,6 @@ export default function ShopsList() {
           <Link href={`/countries/${slug}/cities/${citySlug}`} className="back-button">
             Retour à la ville
           </Link>
-          {isAuthenticated && (
-            <Link href={`/countries/${slug}/cities/${citySlug}/commerces/ajouter`} className="add-button">
-              + Ajouter un commerce
-            </Link>
-          )}
         </div>
       </div>
       
@@ -155,6 +150,12 @@ export default function ShopsList() {
           ))
         )}
       </div>
+      
+      {isAuthenticated && (
+        <Link href={`/countries/${slug}/cities/${citySlug}/commerces/ajouter`} className="button-circle" title="Ajouter un commerce">
+          +
+        </Link>
+      )}
       
       <style jsx>{`
         .shops-list-container {

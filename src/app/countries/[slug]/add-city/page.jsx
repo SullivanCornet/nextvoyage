@@ -305,7 +305,9 @@ export default function AddCity() {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            font-family: Arial, sans-serif;
+            font-family: 'Montserrat', Arial, sans-serif;
+            color: var(--text);
+            margin-top: 80px;
           }
           
           .page-header {
@@ -314,54 +316,58 @@ export default function AddCity() {
             align-items: center;
             margin-bottom: 30px;
             padding-bottom: 15px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
           }
           
           h1 {
-            color: #2c3e50;
+            color: var(--text-dark);
             font-size: 1.8rem;
             margin: 0;
           }
           
           .back-button {
             display: inline-block;
-            background-color: #7f8c8d;
+            background-color: var(--primary);
             color: white;
-            padding: 8px 16px;
+            padding: 6px 16px;
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
           }
           
           .back-button:hover {
-            background-color: #6c7a7d;
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
           }
           
           .success-message {
-            background-color: #2ecc71;
-            color: white;
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 8px;
             margin-bottom: 20px;
             text-align: center;
             font-weight: bold;
+            border: 1px solid rgba(46, 204, 113, 0.4);
           }
           
           .global-error {
-            background-color: #e74c3c;
-            color: white;
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 8px;
             margin-bottom: 20px;
             text-align: center;
             font-weight: bold;
+            border: 1px solid rgba(231, 76, 60, 0.4);
           }
           
           .form-container {
-            background-color: #f9f9f9;
+            background-color: var(--card-bg);
             padding: 30px;
             border-radius: 10px;
+            box-shadow: var(--card-shadow);
           }
           
           .form-group {
@@ -372,23 +378,31 @@ export default function AddCity() {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #2c3e50;
+            color: var(--text-dark);
           }
           
           input[type="text"],
           textarea {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px;
+            background-color: var(--input-bg, rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
             font-size: 1rem;
-            transition: border-color 0.3s ease;
+            color: var(--text);
+            transition: all 0.3s ease;
           }
           
           input[type="text"]:focus,
           textarea:focus {
-            border-color: #3498db;
+            border-color: var(--primary);
             outline: none;
+            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.3);
+          }
+          
+          input[type="text"]::placeholder,
+          textarea::placeholder {
+            color: var(--text-light, rgba(255, 255, 255, 0.5));
           }
           
           input[type="text"].error,
@@ -425,41 +439,50 @@ export default function AddCity() {
           }
           
           .file-input-button {
-            background-color: #3498db;
+            background-color: var(--primary);
             color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
+            padding: 12px 18px;
+            border-radius: 8px;
             cursor: pointer;
             display: inline-block;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
           }
           
           .file-input-button:hover {
-            background-color: #2980b9;
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
           }
           
           .file-input-help {
-            font-size: 0.8rem;
-            color: #7f8c8d;
-            margin-top: 5px;
+            font-size: 0.85rem;
+            color: var(--text-light, rgba(255, 255, 255, 0.5));
+            margin-top: 8px;
           }
           
           .image-preview-container {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
           }
           
           .image-preview-container h3 {
             font-size: 1.2rem;
-            margin-bottom: 10px;
-            color: #2c3e50;
+            margin-bottom: 12px;
+            color: var(--text-dark);
           }
           
           .image-preview {
             width: 100%;
             height: 200px;
-            border-radius: 5px;
+            border-radius: 8px;
             overflow: hidden;
-            background-color: #eee;
+            background-color: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
           }
           
           .image-preview img {
@@ -474,24 +497,44 @@ export default function AddCity() {
           }
           
           .submit-button {
-            background-color: #2ecc71;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 5px;
+            padding: 14px 28px;
+            border-radius: 30px;
             font-size: 1.1rem;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(33, 150, 243, 0.3);
           }
           
           .submit-button:hover {
-            background-color: #27ae60;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(33, 150, 243, 0.4);
           }
           
           .submit-button:disabled {
-            background-color: #95a5a6;
+            background: linear-gradient(to right, #95a5a6, #7f8c8d);
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+          }
+          
+          @media (max-width: 768px) {
+            .page-header {
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 15px;
+            }
+            
+            .form-container {
+              padding: 20px;
+            }
+            
+            .submit-button {
+              width: 100%;
+            }
           }
         `}</style>
       </div>
