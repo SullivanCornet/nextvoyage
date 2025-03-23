@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/contexts/AuthContext';
+import { FaPlus } from 'react-icons/fa';
 
 export default function PlacesToVisit() {
   const params = useParams();
@@ -166,7 +167,7 @@ export default function PlacesToVisit() {
       
       {isAuthenticated && (
         <Link href={`/countries/${slug}/cities/${citySlug}/lieux-a-visiter/ajouter`} className="button-circle" title="Ajouter un lieu à visiter">
-          +
+          <FaPlus />
         </Link>
       )}
       
@@ -301,14 +302,25 @@ export default function PlacesToVisit() {
         }
         
         .button-circle {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 60px;
+          height: 60px;
           background-color: #2ecc71;
           color: white;
-          padding: 10px 15px;
           border-radius: 50%;
           text-decoration: none;
           font-weight: bold;
-          display: inline-block;
-          margin-top: 20px;
+          margin: 30px auto;
+          box-shadow: 0 4px 10px rgba(46, 204, 113, 0.4);
+          transition: all 0.3s ease;
+        }
+        
+        .button-circle:hover {
+          background-color: #27ae60;
+          transform: translateY(-3px);
+          box-shadow: 0 6px 14px rgba(46, 204, 113, 0.5);
         }
         
         @media (max-width: 768px) {

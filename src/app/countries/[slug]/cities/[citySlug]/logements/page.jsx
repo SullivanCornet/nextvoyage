@@ -113,7 +113,7 @@ export default function LogementsList() {
 
       {isAuthenticated && (
         <Link href={`/countries/${slug}/cities/${citySlug}/logements/ajouter`} className="button-circle" title="Ajouter un logement">
-          +
+          <FaPlus />
         </Link>
       )}
 

@@ -9,8 +9,8 @@ import { randomUUID } from 'crypto';
 export const uploadConfig = {
   basePath: path.join(process.cwd(), 'public', 'uploads'),
   maxFileSize: 5 * 1024 * 1024, // 5MB
-  allowedTypes: ['image/jpeg', 'image/png', 'image/gif'],
-  allowedExtensions: ['.jpg', '.jpeg', '.png', '.gif'],
+  allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+  allowedExtensions: ['.jpg', '.jpeg', '.png', '.gif', '.webp'],
 };
 
 /**

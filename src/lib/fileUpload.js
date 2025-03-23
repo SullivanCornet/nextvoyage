@@ -7,7 +7,7 @@ export const fileUploadConfig = {
   uploadDir: path.join(process.cwd(), 'public/uploads/images'),
   keepExtensions: true,
   maxFileSize: 5 * 1024 * 1024, // 5MB
-  allowedExtensions: ['.jpg', '.jpeg', '.png', '.gif'],
+  allowedExtensions: ['.jpg', '.jpeg', '.png', '.gif', '.webp'],
 };
 
 // Fonction pour s'assurer que le répertoire d'upload existe

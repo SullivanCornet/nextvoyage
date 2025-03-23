@@ -3,17 +3,23 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function CountryCard({ name, slug }) {
+export default function CountryCard({ name, slug, placesCount }) {
+  const placesText = placesCount === 1 ? '1 lieu à visiter' : `${placesCount || 0} lieux à visiter`;
+  
   return (
     <div className="country-card">
       <div className="image-container">
-        <div className="placeholder-image">
+        <div className="placeholder-image" aria-label={`Représentation visuelle de ${name}`}>
           <div className="country-initial">{name.charAt(0)}</div>
         </div>
       </div>
       <div className="card-content">
         <h2>{name}</h2>
-        <Link href={`/countries/${slug}`} className="view-button">
+        <Link 
+          href={`/countries/${slug}`} 
+          className="view-button" 
+          aria-label={`Découvrir ${name}, ${placesText}`}
+        >
           Découvrir
         </Link>
       </div>

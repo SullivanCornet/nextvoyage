@@ -1,12 +1,38 @@
-import { getAll, insert } from '@/lib/db';
+import { executeQuery, insert } from '@/lib/db';
 import { NextResponse } from 'next/server';
 
 // GET /api/countries
 export async function GET() {
   try {
     console.log('API: Récupération de tous les pays');
-    const countries = await getAll('countries');
-    console.log('API: Pays récupérés avec succès', countries);
+    
+    // Requête SQL pour récupérer les pays avec le nombre de villes
+    const query = `
+      SELECT 
+        c.*,
+        COUNT(ct.id) as cities_count,
+        COALESCE(SUM(ct_places.places_count), 0) as places_count
+      FROM 
+        countries c
+      LEFT JOIN 
+        cities ct ON c.id = ct.country_id
+      LEFT JOIN (
+        SELECT 
+          city_id, 
+          COUNT(id) as places_count 
+        FROM 
+          places 
+        GROUP BY 
+          city_id
+      ) ct_places ON ct.id = ct_places.city_id
+      GROUP BY 
+        c.id
+      ORDER BY 
+        c.name ASC
+    `;
+    
+    const countries = await executeQuery(query);
+    console.log('API: Pays récupérés avec succès');
     return NextResponse.json(countries);
   } catch (error) {
     console.error('API: Erreur lors de la récupération des pays:', error);

@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/contexts/AuthContext';
+import { FaPlus } from 'react-icons/fa';
 
 export default function RestaurantsList() {
   const params = useParams();
@@ -166,7 +167,7 @@ export default function RestaurantsList() {
       
       {isAuthenticated && (
         <Link href={`/countries/${slug}/cities/${citySlug}/restaurants/ajouter`} className="button-circle" title="Ajouter un restaurant">
-          +
+          <FaPlus />
         </Link>
       )}
       

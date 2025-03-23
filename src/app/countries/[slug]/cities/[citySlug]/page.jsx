@@ -1,18 +1,23 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/contexts/AuthContext';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import '@/styles/button-styles.css';
 
 export default function CityDetail() {
   const params = useParams();
+  const router = useRouter();
   const { slug, citySlug } = params;
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isModerator } = useAuth();
   
   const [isLoading, setIsLoading] = useState(true);
   const [city, setCity] = useState(null);
   const [error, setError] = useState(null);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState('');
   
   // Récupérer les données de la ville depuis l'API
   useEffect(() => {
@@ -56,6 +61,41 @@ export default function CityDetail() {
       .split('-')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
+  };
+  
+  // Fonction pour supprimer la ville
+  const handleDeleteCity = async () => {
+    try {
+      // Effectuer la requête de suppression
+      const response = await fetch(`/api/cities/${citySlug}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erreur lors de la suppression de la ville');
+      }
+      
+      // Rediriger vers la page du pays après suppression
+      setConfirmMessage('Ville supprimée avec succès. Redirection...');
+      setTimeout(() => {
+        router.push(`/countries/${slug}`);
+      }, 2000);
+    } catch (error) {
+      console.error('Erreur lors de la suppression:', error);
+      setError(error.message);
+      setShowConfirmDialog(false);
+    }
+  };
+  
+  // Fonction pour ouvrir la boîte de dialogue de confirmation
+  const openConfirmDialog = () => {
+    setShowConfirmDialog(true);
+  };
+  
+  // Fonction pour fermer la boîte de dialogue de confirmation
+  const closeConfirmDialog = () => {
+    setShowConfirmDialog(false);
   };
   
   if (isLoading) {
@@ -145,19 +185,85 @@ export default function CityDetail() {
   
   return (
     <div className="city-detail-container">
-      <div className="city-banner" style={bannerStyle}>
-        <div className="banner-content">
-          <h1>{cityName}</h1>
-          <div className="breadcrumb">
-            <Link href="/">Accueil</Link> &gt; 
-            <Link href="/countries">Pays</Link> &gt; 
-            <Link href={`/countries/${slug}`}>{countryName}</Link> &gt; 
-            <span>{cityName}</span>
+      <div className="city-header">
+        <div 
+          className="city-banner" 
+          style={{ 
+            backgroundImage: city.image_path 
+              ? `url(${city.image_path})` 
+              : 'linear-gradient(45deg, #3498db, #1976D2)'
+          }}
+        >
+          <div className="banner-overlay">
+            <h1>{cityName}</h1>
+            
+            {/* Afficher les boutons de modification et suppression pour les modérateurs */}
+            {isAuthenticated && isModerator && (
+              <div className="admin-actions">
+                <Link href={`/countries/${slug}/cities/${citySlug}/edit`} className="edit-button">
+                  <FaEdit className="edit-icon" /> Modifier
+                </Link>
+                <button onClick={openConfirmDialog} className="delete-button">
+                  <FaTrash className="delete-icon" /> Supprimer
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
       
-      <div className="city-content">
+      <div className="content-container">
+        <div className="city-nav">
+          <Link href={`/countries/${slug}`} className="back-to-country">
+            &larr; Retour à {countryName}
+          </Link>
+          
+          <div className="section-links">
+            <Link href={`/countries/${slug}/cities/${citySlug}/lieux-a-visiter`} className="section-link">
+              Lieux à visiter
+            </Link>
+            <Link href={`/countries/${slug}/cities/${citySlug}/restaurants`} className="section-link">
+              Restaurants
+            </Link>
+            <Link href={`/countries/${slug}/cities/${citySlug}/logements`} className="section-link">
+              Logements
+            </Link>
+            <Link href={`/countries/${slug}/cities/${citySlug}/transports`} className="section-link">
+              Transports
+            </Link>
+            <Link href={`/countries/${slug}/cities/${citySlug}/commerces`} className="section-link">
+              Commerces
+            </Link>
+          </div>
+        </div>
+        
+        {/* Boîte de dialogue de confirmation de suppression */}
+        {showConfirmDialog && (
+          <div className="confirm-dialog-overlay">
+            <div className="confirm-dialog">
+              <h3>Confirmation de suppression</h3>
+              <p>Êtes-vous sûr de vouloir supprimer la ville "{cityName}" ?</p>
+              <p className="warning">Cette action est irréversible et supprimera toutes les données associées.</p>
+              
+              <div className="confirm-actions">
+                <button onClick={handleDeleteCity} className="confirm-delete">
+                  Confirmer la suppression
+                </button>
+                <button onClick={closeConfirmDialog} className="cancel-delete">
+                  Annuler
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Message de confirmation de suppression */}
+        {confirmMessage && (
+          <div className="confirm-message">
+            {confirmMessage}
+          </div>
+        )}
+        
         <div className="city-description">
           <h2>À propos de {cityName}</h2>
           <p>{description}</p>
@@ -203,96 +309,258 @@ export default function CityDetail() {
       
       <style jsx>{`
         .city-detail-container {
-          font-family: 'Montserrat', Arial, sans-serif;
-          color: var(--text);
           background-color: var(--bg-color);
+          color: var(--text);
           min-height: 100vh;
+          font-family: 'Montserrat', Arial, sans-serif;
+        }
+        
+        .city-header {
+          width: 100%;
+          position: relative;
         }
         
         .city-banner {
-          height: 300px;
+          height: 400px;
+          width: 100%;
           background-size: cover;
           background-position: center;
           position: relative;
-          display: flex;
-          align-items: flex-end;
         }
         
-        .city-banner::before {
-          content: '';
+        .banner-overlay {
           position: absolute;
           top: 0;
           left: 0;
           right: 0;
           bottom: 0;
-          background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8));
+          background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          padding: 40px;
         }
         
-        .banner-content {
-          position: relative;
-          padding: 20px;
-          width: 100%;
+        .city-banner h1 {
+          color: white;
+          font-size: 48px;
+          margin-bottom: 20px;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .content-container {
           max-width: 1200px;
           margin: 0 auto;
-          color: var(--white);
+          padding: 30px 20px;
         }
         
-        h1 {
-          font-size: 2.5rem;
-          margin: 0 0 10px 0;
-          text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-          color: var(--white);
+        .city-nav {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 30px;
+          flex-wrap: wrap;
+          gap: 20px;
         }
         
-        .breadcrumb {
-          font-size: 0.9rem;
-          margin-bottom: 10px;
-        }
-        
-        .breadcrumb a {
-          color: var(--white);
+        .back-to-country {
+          color: var(--primary);
           text-decoration: none;
-          margin: 0 5px;
-          opacity: 0.9;
-          transition: opacity 0.3s;
+          font-weight: 600;
+          transition: all 0.3s;
         }
         
-        .breadcrumb a:hover {
-          text-decoration: underline;
-          opacity: 1;
+        .back-to-country:hover {
+          color: var(--primary-dark);
+          transform: translateX(-5px);
         }
         
-        .breadcrumb span {
-          margin-left: 5px;
-          opacity: 0.8;
+        .section-links {
+          display: flex;
+          gap: 15px;
+          flex-wrap: wrap;
         }
         
-        .city-content {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 20px;
+        .section-link {
+          background-color: var(--primary);
+          color: white;
+          padding: 8px 16px;
+          border-radius: 5px;
+          text-decoration: none;
+          font-weight: 500;
+          transition: all 0.3s;
+        }
+        
+        .section-link:hover {
+          background-color: var(--primary-dark);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         
         .city-description {
           background-color: var(--card-bg);
-          padding: 25px;
+          padding: 30px;
           border-radius: 10px;
           box-shadow: var(--card-shadow);
-          margin-bottom: 30px;
+          margin-bottom: 40px;
         }
         
         .city-description h2 {
-          color: var(--text-dark);
-          margin-top: 0;
-          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-          padding-bottom: 10px;
-          margin-bottom: 15px;
+          color: var(--primary);
+          margin-bottom: 20px;
+          font-size: 28px;
         }
         
         .city-description p {
           line-height: 1.6;
-          margin: 0;
           color: var(--text);
+        }
+        
+        /* Styles pour les boutons d'administration */
+        .admin-actions {
+          display: flex;
+          gap: 15px;
+          margin-top: 15px;
+        }
+        
+        .edit-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 8px 16px;
+          background-color: #4a6da7;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          font-weight: 500;
+          cursor: pointer;
+          text-decoration: none;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .edit-button:hover {
+          background-color: #3a5a8f;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .edit-icon {
+          margin-right: 6px;
+        }
+        
+        .delete-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 8px 16px;
+          background-color: #e74c3c;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .delete-button:hover {
+          background-color: #c0392b;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .delete-icon {
+          margin-right: 6px;
+        }
+        
+        /* Styles pour la boîte de dialogue de confirmation */
+        .confirm-dialog-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.7);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 1000;
+        }
+        
+        .confirm-dialog {
+          background-color: var(--card-bg);
+          border-radius: 10px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+          padding: 30px;
+          width: 90%;
+          max-width: 500px;
+        }
+        
+        .confirm-dialog h3 {
+          color: var(--primary);
+          margin-bottom: 20px;
+          font-size: 22px;
+        }
+        
+        .confirm-dialog .warning {
+          color: #e74c3c;
+          font-weight: 600;
+          margin: 15px 0;
+        }
+        
+        .confirm-actions {
+          display: flex;
+          gap: 15px;
+          margin-top: 25px;
+        }
+        
+        .confirm-delete, .cancel-delete {
+          padding: 12px;
+          border-radius: 5px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border: none;
+          flex: 1;
+          font-size: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .confirm-delete {
+          background-color: #e74c3c;
+          color: white;
+        }
+        
+        .confirm-delete:hover {
+          background-color: #c0392b;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .cancel-delete {
+          background-color: var(--bg-light);
+          color: var(--text);
+        }
+        
+        .cancel-delete:hover {
+          background-color: var(--bg-dark);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .confirm-message {
+          background-color: rgba(46, 204, 113, 0.1);
+          color: #2ecc71;
+          padding: 15px;
+          border-radius: 5px;
+          border: 1px solid #2ecc71;
+          margin-bottom: 20px;
+          text-align: center;
+          font-weight: 600;
         }
         
         .quick-links {
@@ -423,11 +691,16 @@ export default function CityDetail() {
         
         @media (max-width: 768px) {
           .city-banner {
-            height: 200px;
+            height: 300px;
           }
           
-          h1 {
-            font-size: 1.8rem;
+          .city-banner h1 {
+            font-size: 36px;
+          }
+          
+          .city-nav {
+            flex-direction: column;
+            align-items: flex-start;
           }
           
           .categories-grid {

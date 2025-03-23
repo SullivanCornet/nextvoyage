@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FaBed, FaArrowLeft, FaMapMarkerAlt, FaStar, FaPhone, FaGlobe, FaEuroSign, FaTrash, FaEdit } from 'react-icons/fa';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import '@/styles/button-styles.css';
 
 export default function LogementDetail() {
   const router = useRouter();
@@ -248,104 +249,134 @@ export default function LogementDetail() {
         .logement-detail-container {
           max-width: 1000px;
           margin: 0 auto;
-          padding: 20px;
+          padding: 2rem 1rem;
         }
-
+        
+        .error-container {
+          text-align: center;
+          padding: 3rem 1rem;
+        }
+        
+        .error-message {
+          color: red;
+          font-size: 1.2rem;
+          margin-bottom: 1rem;
+        }
+        
+        .error-message-banner {
+          background-color: #ffebee;
+          color: #d32f2f;
+          padding: 0.8rem;
+          border-radius: 4px;
+          margin-bottom: 1rem;
+          text-align: center;
+        }
+        
         .page-header {
           display: flex;
-          flex-direction: column;
-          margin-bottom: 25px;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 2rem;
+          flex-wrap: wrap;
+          gap: 1rem;
         }
-
+        
         .back-link {
           display: flex;
           align-items: center;
-          color: #4a6fa5;
+          color: #666;
           text-decoration: none;
-          margin-bottom: 15px;
-          transition: color 0.3s ease;
+          transition: color 0.2s;
+          font-weight: 500;
         }
-
+        
         .back-link:hover {
-          color: #3a5a80;
-          text-decoration: underline;
+          color: #333;
         }
-
+        
         .back-icon {
-          margin-right: 8px;
+          margin-right: 0.5rem;
         }
-
+        
         .title-actions {
+          flex-grow: 1;
           display: flex;
+          flex-wrap: wrap;
           justify-content: space-between;
           align-items: center;
-          flex-wrap: wrap;
-          gap: 15px;
+          gap: 1rem;
         }
-
-        .action-buttons {
-          display: flex;
-          gap: 10px;
-        }
-
+        
         .page-title {
-          font-size: 2rem;
-          color: #2c3e50;
-          margin: 0;
           display: flex;
           align-items: center;
+          font-size: 1.8rem;
+          margin: 0;
+          color: #333;
         }
-
+        
         .header-icon {
-          margin-right: 10px;
-          color: #4a6fa5;
+          margin-right: 0.5rem;
+          color: #4a6da7;
         }
-
+        
+        .action-buttons {
+          display: flex;
+          gap: 15px;
+        }
+        
         .edit-button {
           display: flex;
           align-items: center;
-          background-color: #3498db;
+          padding: 8px 16px;
+          background-color: #4a6da7;
           color: white;
           border: none;
-          padding: 8px 15px;
-          border-radius: 4px;
+          border-radius: 6px;
+          font-weight: 500;
           cursor: pointer;
           text-decoration: none;
-          transition: background-color 0.3s;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
+        
         .edit-button:hover {
-          background-color: #2980b9;
+          background-color: #3a5a8f;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
-
+        
         .edit-icon {
-          margin-right: 8px;
+          margin-right: 6px;
         }
-
+        
         .delete-button {
+          display: flex;
+          align-items: center;
+          padding: 8px 16px;
           background-color: #e74c3c;
           color: white;
           border: none;
-          padding: 8px 15px;
-          border-radius: 4px;
+          border-radius: 6px;
+          font-weight: 500;
           cursor: pointer;
-          display: flex;
-          align-items: center;
-          transition: background-color 0.3s;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
+        
         .delete-button:hover {
           background-color: #c0392b;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
-
+        
         .delete-button:disabled {
-          background-color: #e74c3c;
-          opacity: 0.5;
+          background-color: #e57373;
           cursor: not-allowed;
         }
-
+        
         .delete-icon {
-          margin-right: 8px;
+          margin-right: 6px;
         }
 
         .delete-confirmation {
@@ -395,15 +426,6 @@ export default function LogementDetail() {
         .confirm-delete-button:disabled, .cancel-button:disabled {
           opacity: 0.5;
           cursor: not-allowed;
-        }
-
-        .error-message-banner {
-          background-color: #f8d7da;
-          color: #721c24;
-          padding: 10px 15px;
-          border-radius: 4px;
-          margin-bottom: 20px;
-          border: 1px solid #f5c6cb;
         }
 
         .logement-detail-content {
@@ -513,17 +535,6 @@ export default function LogementDetail() {
         .logement-description p {
           line-height: 1.6;
           color: #555;
-        }
-
-        .error-container {
-          text-align: center;
-          padding: 40px 20px;
-        }
-
-        .error-message {
-          color: #e74c3c;
-          font-size: 1.2rem;
-          margin-bottom: 20px;
         }
       `}</style>
     </div>

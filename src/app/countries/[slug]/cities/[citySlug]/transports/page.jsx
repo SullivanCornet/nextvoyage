@@ -113,7 +113,7 @@ export default function TransportsList() {
 
       {isAuthenticated && (
         <Link href={`/countries/${slug}/cities/${citySlug}/transports/ajouter`} className="button-circle" title="Ajouter un transport">
-          +
+          <FaPlus />
         </Link>
       )}
 

@@ -8,7 +8,7 @@ export async function GET() {
     // Vérifier si la table existe déjà
     try {
       const tableCheck = await executeQuery(`
-        SELECT name FROM sqlite_master WHERE type='table' AND name='cities'
+        SHOW TABLES LIKE 'cities'
       `);
       
       if (tableCheck.length > 0) {
@@ -27,14 +27,14 @@ export async function GET() {
         // Créer la table si elle n'existe pas
         await executeQuery(`
           CREATE TABLE cities (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            slug TEXT NOT NULL UNIQUE,
-            country_id INTEGER,
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            slug VARCHAR(255) NOT NULL UNIQUE,
+            country_id INT,
             description TEXT,
-            image_path TEXT,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            image_path VARCHAR(255),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             FOREIGN KEY (country_id) REFERENCES countries(id)
           )
         `);
@@ -43,20 +43,20 @@ export async function GET() {
       
       // Vérifier si la table countries existe, sinon la créer aussi
       const countriesCheck = await executeQuery(`
-        SELECT name FROM sqlite_master WHERE type='table' AND name='countries'
+        SHOW TABLES LIKE 'countries'
       `);
       
       if (countriesCheck.length === 0) {
         await executeQuery(`
           CREATE TABLE countries (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            slug TEXT NOT NULL UNIQUE,
-            code TEXT,
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            slug VARCHAR(255) NOT NULL UNIQUE,
+            code VARCHAR(2),
             description TEXT,
-            image_path TEXT,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            image_path VARCHAR(255),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )
         `);
         console.log('Table countries créée avec succès');
@@ -73,7 +73,7 @@ export async function GET() {
         for (const country of defaultCountries) {
           try {
             await executeQuery(
-              'INSERT OR IGNORE INTO countries (name, slug, code) VALUES (?, ?, ?)',
+              'INSERT IGNORE INTO countries (name, slug, code) VALUES (?, ?, ?)',
               [country.name, country.slug, country.code]
             );
           } catch (insertError) {
@@ -107,7 +107,7 @@ export async function GET() {
         if (countryId) {
           try {
             await executeQuery(
-              'INSERT OR IGNORE INTO cities (name, slug, country_id, description) VALUES (?, ?, ?, ?)',
+              'INSERT IGNORE INTO cities (name, slug, country_id, description) VALUES (?, ?, ?, ?)',
               [city.name, city.slug, countryId, city.description]
             );
           } catch (insertError) {

@@ -4,6 +4,8 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/contexts/AuthContext';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import '@/styles/button-styles.css';
 
 export default function PlaceDetail() {
   const params = useParams();
@@ -163,11 +165,17 @@ export default function PlaceDetail() {
           </Link>
           {isAuthenticated && (
             <div className="action-buttons">
-              <Link href={`/countries/${slug}/cities/${citySlug}/lieux-a-visiter/${placeSlug}/modifier`} className="edit-button">
-                Modifier
+              <Link 
+                href={`/countries/${slug}/cities/${citySlug}/lieux-a-visiter/${placeSlug}/modifier`}
+                className="edit-button"
+              >
+                <FaEdit className="edit-icon" /> Modifier
               </Link>
-              <button onClick={handleDelete} className="delete-button">
-                Supprimer
+              <button 
+                className="delete-button" 
+                onClick={handleDelete}
+              >
+                <FaTrash className="delete-icon" /> Supprimer
               </button>
             </div>
           )}
@@ -262,27 +270,61 @@ export default function PlaceDetail() {
         
         .action-buttons {
           display: flex;
-          gap: 10px;
+          gap: 15px;
         }
         
         .edit-button {
-          background-color: #3498db;
+          display: flex;
+          align-items: center;
+          padding: 8px 16px;
+          background-color: #4a6da7;
           color: white;
-          padding: 10px 15px;
-          border-radius: 5px;
+          border: none;
+          border-radius: 6px;
+          font-weight: 500;
+          cursor: pointer;
           text-decoration: none;
-          font-weight: bold;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .edit-button:hover {
+          background-color: #3a5a8f;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .edit-icon {
+          margin-right: 6px;
         }
         
         .delete-button {
+          display: flex;
+          align-items: center;
+          padding: 8px 16px;
           background-color: #e74c3c;
           color: white;
-          padding: 10px 15px;
-          border-radius: 5px;
           border: none;
+          border-radius: 6px;
+          font-weight: 500;
           cursor: pointer;
-          font-weight: bold;
-          font-size: 1rem;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .delete-button:hover {
+          background-color: #c0392b;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .delete-button:disabled {
+          background-color: #e57373;
+          cursor: not-allowed;
+        }
+        
+        .delete-icon {
+          margin-right: 6px;
         }
         
         .place-content {

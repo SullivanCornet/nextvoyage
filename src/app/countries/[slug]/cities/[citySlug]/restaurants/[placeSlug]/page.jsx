@@ -4,6 +4,8 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/app/contexts/AuthContext';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import '@/styles/button-styles.css';
 
 export default function RestaurantDetail() {
   const params = useParams();
@@ -164,10 +166,10 @@ export default function RestaurantDetail() {
           {isAuthenticated && (
             <div className="action-buttons">
               <Link href={`/countries/${slug}/cities/${citySlug}/restaurants/${placeSlug}/modifier`} className="edit-button">
-                Modifier
+                <FaEdit className="edit-icon" /> Modifier
               </Link>
               <button onClick={handleDelete} className="delete-button">
-                Supprimer
+                <FaTrash className="delete-icon" /> Supprimer
               </button>
             </div>
           )}
@@ -207,37 +209,38 @@ export default function RestaurantDetail() {
       
       <style jsx>{`
         .restaurant-detail-container {
-          max-width: 1000px;
+          max-width: 1200px;
           margin: 0 auto;
-          padding: 20px;
+          padding: 2rem 1rem;
           font-family: Arial, sans-serif;
         }
         
         .page-header {
-          margin-bottom: 30px;
+          margin-bottom: 2rem;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid #e0e0e0;
         }
         
         h1 {
-          font-size: 2.5rem;
           color: #2c3e50;
-          margin-bottom: 10px;
-        }
-        
-        h2 {
-          font-size: 1.8rem;
-          color: #e67e22;
-          margin-bottom: 15px;
-          margin-top: 0;
+          font-size: 2rem;
+          margin: 0 0 1rem 0;
         }
         
         .breadcrumb {
+          font-size: 0.9rem;
+          margin-bottom: 1rem;
           color: #7f8c8d;
-          margin-bottom: 20px;
         }
         
         .breadcrumb a {
           color: #3498db;
           text-decoration: none;
+          margin: 0 5px;
+        }
+        
+        .breadcrumb a:first-child {
+          margin-left: 0;
         }
         
         .breadcrumb a:hover {
@@ -248,41 +251,81 @@ export default function RestaurantDetail() {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 30px;
+          margin-top: 1rem;
+          flex-wrap: wrap;
+          gap: 1rem;
         }
         
         .back-button {
+          display: inline-block;
           background-color: #7f8c8d;
           color: white;
-          padding: 10px 15px;
+          padding: 8px 16px;
           border-radius: 5px;
           text-decoration: none;
           font-weight: bold;
+          transition: all 0.2s ease;
+        }
+        
+        .back-button:hover {
+          background-color: #6c7a7d;
+          transform: translateY(-2px);
         }
         
         .action-buttons {
           display: flex;
-          gap: 10px;
+          gap: 15px;
         }
         
         .edit-button {
-          background-color: #3498db;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 8px 16px;
+          background-color: #4a6da7;
           color: white;
-          padding: 10px 15px;
-          border-radius: 5px;
+          border: none;
+          border-radius: 6px;
+          font-weight: 500;
+          cursor: pointer;
           text-decoration: none;
-          font-weight: bold;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .edit-button:hover {
+          background-color: #3a5a8f;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .edit-icon {
+          margin-right: 6px;
         }
         
         .delete-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 8px 16px;
           background-color: #e74c3c;
           color: white;
-          padding: 10px 15px;
-          border-radius: 5px;
           border: none;
+          border-radius: 6px;
+          font-weight: 500;
           cursor: pointer;
-          font-weight: bold;
-          font-size: 1rem;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .delete-button:hover {
+          background-color: #c0392b;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .delete-icon {
+          margin-right: 6px;
         }
         
         .restaurant-content {

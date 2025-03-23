@@ -241,15 +241,12 @@ export default function AjoutTransport() {
                       className="image-input"
                     />
                     
-                    <div className="image-preview-container">
-                      {imagePreview ? (
-                        <img src={imagePreview} alt="Aperçu" className="image-preview" />
-                      ) : (
-                        <div className="image-placeholder">
-                          <span>Sélectionner une image</span>
-                        </div>
-                      )}
-                    </div>
+                    {imagePreview && (
+                      <div className="image-preview-container">
+                        <h3>Aperçu</h3>
+                        <img src={imagePreview} alt={`Aperçu de l'image pour le transport ${formData.name || ''}`} className="image-preview" />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

@@ -7,6 +7,7 @@ import CityCard from '@/components/CityCard';
 import { useAuth } from '@/app/contexts/AuthContext';
 import CurrencyConverter from '@/components/CurrencyConverter';
 import { normalizeCurrencyCode, fetchExchangeRates } from '@/lib/api/currencies';
+import { FaPlus } from 'react-icons/fa';
 
 export default function CountryDetails() {
   const params = useParams();
@@ -289,36 +290,34 @@ export default function CountryDetails() {
         </div>
       )}
       
-      <div className="cities-section">
-        <div className="cities-header">
-          <h2>Villes</h2>
+      <div className="section">
+        <div className="section-header">
+          <h2>Villes à visiter</h2>
         </div>
         
-        <div className="cities-grid">
-          {country.cities && country.cities.length > 0 ? (
-            country.cities.map((city) => (
-              <div key={city.id} className="city-card-wrapper">
-                <CityCard
-                  name={city.name}
-                  slug={city.slug}
-                  countrySlug={slug}
-                  imagePath={city.image_path}
-                />
-              </div>
-            ))
-          ) : (
-            <div className="no-cities">
-              <p>Aucune ville n'a été ajoutée pour ce pays.</p>
-              {isAuthenticated && (
-                <p>Cliquez sur le bouton + ci-dessous pour ajouter une ville.</p>
-              )}
-            </div>
-          )}
-        </div>
+        {country.cities && country.cities.length > 0 ? (
+          <div className="city-grid">
+            {country.cities.map(city => (
+              <CityCard 
+                key={city.id} 
+                name={city.name} 
+                slug={city.slug} 
+                countrySlug={slug} 
+                imagePath={city.image_path}
+                id={city.id}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="empty-message">
+            Aucune ville n'est encore disponible pour ce pays.
+            {isAuthenticated ? ' Ajoutez la première !' : ''}
+          </p>
+        )}
         
         {isAuthenticated && (
-          <Link href={`/countries/${slug}/add-city`} className="button-circle" title="Ajouter une ville">
-            +
+          <Link href={`/countries/${slug}/add-city`} className="button-circle">
+            <FaPlus />
           </Link>
         )}
       </div>
@@ -511,40 +510,21 @@ export default function CountryDetails() {
           font-size: 1.5rem;
         }
         
-        .cities-section {
+        .section {
           margin-top: 40px;
         }
         
-        .cities-header {
+        .section-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 20px;
         }
         
-        .cities-header h2 {
+        .section-header h2 {
           color: var(--text-dark);
           margin: 0;
           font-size: 1.8rem;
-        }
-        
-        .cities-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-          gap: 30px;
-        }
-        
-        .city-card-wrapper {
-          width: 100%;
-        }
-        
-        .no-cities {
-          background-color: var(--card-bg);
-          padding: 30px;
-          border-radius: 10px;
-          text-align: center;
-          color: var(--text-light);
-          grid-column: 1 / -1;
         }
         
         .button-circle {
@@ -553,26 +533,39 @@ export default function CountryDetails() {
           justify-content: center;
           width: 60px;
           height: 60px;
-          background: var(--primary);
-          color: var(--white);
+          background-color: var(--primary);
+          color: white;
           border-radius: 50%;
-          cursor: pointer;
-          font-size: 24px;
-          font-weight: 500;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 10px rgba(33, 150, 243, 0.4);
-          margin: 30px auto;
           text-decoration: none;
+          font-weight: bold;
+          margin: 30px auto;
+          box-shadow: 0 4px 10px rgba(33, 150, 243, 0.4);
+          transition: all 0.3s ease;
         }
         
         .button-circle:hover {
-          background: var(--primary-dark);
+          background-color: var(--primary-dark);
           transform: translateY(-3px);
           box-shadow: 0 6px 14px rgba(33, 150, 243, 0.5);
         }
         
+        .city-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          gap: 30px;
+        }
+        
+        .empty-message {
+          background-color: var(--card-bg);
+          padding: 30px;
+          border-radius: 10px;
+          text-align: center;
+          color: var(--text-light);
+          grid-column: 1 / -1;
+        }
+        
         @media (max-width: 768px) {
-          .cities-grid {
+          .city-grid {
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
           }
           
@@ -588,6 +581,18 @@ export default function CountryDetails() {
           
           .spacer {
             display: none;
+          }
+          
+          .add-text {
+            display: none;
+          }
+          
+          .add-button {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border-radius: 50%;
+            justify-content: center;
           }
         }
       `}</style>

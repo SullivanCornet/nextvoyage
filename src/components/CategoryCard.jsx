@@ -4,9 +4,13 @@ import Link from 'next/link';
 
 export default function CategoryCard({ title, icon, color, link }) {
   return (
-    <Link href={link} className="category-card-link">
+    <Link 
+      href={link} 
+      className="category-card-link"
+      aria-label={`Catégorie ${title}`}
+    >
       <div className="category-card" style={{ backgroundColor: color }}>
-        <div className="category-icon">{icon}</div>
+        <div className="category-icon" aria-hidden="true">{icon}</div>
         <h3 className="category-title">{title}</h3>
       </div>
       

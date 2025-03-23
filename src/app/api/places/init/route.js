@@ -8,7 +8,7 @@ export async function GET() {
     // Vérifier si la table existe déjà
     try {
       const tableCheck = await executeQuery(`
-        SELECT name FROM sqlite_master WHERE type='table' AND name='places'
+        SHOW TABLES LIKE 'places'
       `);
       
       if (tableCheck.length > 0) {
@@ -27,17 +27,17 @@ export async function GET() {
         // Créer la table si elle n'existe pas
         await executeQuery(`
           CREATE TABLE places (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            slug TEXT NOT NULL,
-            city_id INTEGER,
-            category_id INTEGER,
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            slug VARCHAR(255) NOT NULL,
+            city_id INT,
+            category_id INT,
             description TEXT,
-            location TEXT,
-            image_path TEXT,
-            status TEXT DEFAULT 'published',
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            location VARCHAR(255),
+            image_path VARCHAR(255),
+            status VARCHAR(50) DEFAULT 'published',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             FOREIGN KEY (city_id) REFERENCES cities(id),
             FOREIGN KEY (category_id) REFERENCES categories(id),
             UNIQUE(slug, city_id)
@@ -48,7 +48,7 @@ export async function GET() {
       
       // Vérifier si les tables de référence existent
       await executeQuery(`
-        SELECT name FROM sqlite_master WHERE type='table' AND name='categories'
+        SHOW TABLES LIKE 'categories'
       `).then(async (results) => {
         if (results.length === 0) {
           console.log('La table categories n\'existe pas, redirection vers son initialisation...');
@@ -60,7 +60,7 @@ export async function GET() {
       });
       
       await executeQuery(`
-        SELECT name FROM sqlite_master WHERE type='table' AND name='cities'
+        SHOW TABLES LIKE 'cities'
       `).then(async (results) => {
         if (results.length === 0) {
           console.log('La table cities n\'existe pas, redirection vers son initialisation...');
@@ -110,7 +110,7 @@ export async function GET() {
           for (const place of examplePlaces) {
             try {
               await executeQuery(
-                'INSERT OR IGNORE INTO places (name, slug, city_id, category_id, description, location) VALUES (?, ?, ?, ?, ?, ?)',
+                'INSERT IGNORE INTO places (name, slug, city_id, category_id, description, location) VALUES (?, ?, ?, ?, ?, ?)',
                 [place.name, place.slug, place.city_id, place.category_id, place.description, place.location]
               );
             } catch (insertError) {

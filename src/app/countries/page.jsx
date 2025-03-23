@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/app/contexts/AuthContext';
+import { FaPlus } from 'react-icons/fa';
 
 export default function CountriesList() {
   const [countries, setCountries] = useState([]);
@@ -86,9 +87,9 @@ export default function CountriesList() {
                   <div className="card-content">
                     <div className="card-title">{country.name}</div>
                     <div>
-                      {country.cities_count 
-                        ? `${country.cities_count} villes • ${country.places_count || 0} lieux` 
-                        : ""}
+                      {Number(country.cities_count) > 0 
+                        ? `${country.cities_count} ${Number(country.cities_count) === 1 ? 'ville' : 'villes'} • ${country.places_count || 0} ${Number(country.places_count) === 1 ? 'lieu' : 'lieux'}` 
+                        : "0 ville • 0 lieu"}
                     </div>
                   </div>
                 </Link>
@@ -97,7 +98,7 @@ export default function CountriesList() {
             
             {isAuthenticated && (
               <Link href="/countries/add" className="button-circle">
-                +
+                <FaPlus />
               </Link>
             )}
           </>

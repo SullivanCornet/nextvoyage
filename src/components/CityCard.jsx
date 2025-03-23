@@ -4,7 +4,11 @@ import Link from 'next/link';
 
 export default function CityCard({ name, slug, countrySlug, imagePath }) {
   return (
-    <Link href={`/countries/${countrySlug}/cities/${slug}`} className="city-card-link">
+    <Link 
+      href={`/countries/${countrySlug}/cities/${slug}`} 
+      className="city-card-link"
+      aria-label={`Visiter ${name}`}
+    >
       <div className="city-card">
         <div 
           className="card-image" 
@@ -13,6 +17,8 @@ export default function CityCard({ name, slug, countrySlug, imagePath }) {
               ? `url(${imagePath})` 
               : `linear-gradient(45deg, #3498db, #1976D2)` 
           }}
+          role="img"
+          aria-label={imagePath ? `Photo de ${name}` : `Représentation visuelle de ${name}`}
         >
         </div>
         <div className="card-content">
@@ -26,6 +32,7 @@ export default function CityCard({ name, slug, countrySlug, imagePath }) {
           display: block;
           width: 100%;
           height: 100%;
+          position: relative;
         }
         
         .city-card {

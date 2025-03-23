@@ -4,6 +4,8 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { citiesAPI, placesAPI } from '@/services/api';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import '@/styles/button-styles.css';
 
 export default function ShopDetail() {
   const params = useParams();
@@ -165,10 +167,10 @@ export default function ShopDetail() {
               href={`/countries/${slug}/cities/${citySlug}/commerces/${shopSlug}/modifier`} 
               className="edit-button"
             >
-              Modifier
+              <FaEdit className="edit-icon" /> Modifier
             </Link>
             <button onClick={handleDelete} className="delete-button">
-              Supprimer
+              <FaTrash className="delete-icon" /> Supprimer
             </button>
           </div>
         </div>
@@ -320,38 +322,58 @@ export default function ShopDetail() {
         .admin-actions {
           display: flex;
           gap: 15px;
-          margin-top: auto;
-        }
-        
-        .edit-button, .delete-button {
-          flex: 1;
-          padding: 10px;
-          border-radius: 5px;
-          font-weight: bold;
-          text-align: center;
-          cursor: pointer;
-          transition: background-color 0.3s ease;
+          margin-top: 25px;
         }
         
         .edit-button {
-          background-color: #3498db;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 10px 18px;
+          background-color: #4a6da7;
           color: white;
+          border: none;
+          border-radius: 6px;
+          font-weight: 500;
+          cursor: pointer;
           text-decoration: none;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .edit-button:hover {
-          background-color: #2980b9;
+          background-color: #3a5a8f;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .edit-icon {
+          margin-right: 6px;
         }
         
         .delete-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 10px 18px;
           background-color: #e74c3c;
           color: white;
           border: none;
-          font-size: 1rem;
+          border-radius: 6px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .delete-button:hover {
           background-color: #c0392b;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .delete-icon {
+          margin-right: 6px;
         }
         
         @media (max-width: 768px) {

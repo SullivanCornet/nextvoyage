@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { citiesAPI, placesAPI } from '@/services/api';
 import { useAuth } from '@/app/contexts/AuthContext';
+import { FaPlus } from 'react-icons/fa';
 
 export default function ShopsList() {
   const params = useParams();
@@ -153,7 +154,7 @@ export default function ShopsList() {
       
       {isAuthenticated && (
         <Link href={`/countries/${slug}/cities/${citySlug}/commerces/ajouter`} className="button-circle" title="Ajouter un commerce">
-          +
+          <FaPlus />
         </Link>
       )}
       

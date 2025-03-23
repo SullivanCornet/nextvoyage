@@ -285,7 +285,7 @@ export default function AddShop() {
               <div className="image-preview-container">
                 <h3>Aperçu de l'image</h3>
                 <div className="image-preview">
-                  <img src={imagePreview} alt="Aperçu" />
+                  <img src={imagePreview} alt={`Aperçu de l'image pour le commerce ${shopName || ''}`} />
                 </div>
               </div>
             )}

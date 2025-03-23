@@ -9,7 +9,7 @@ export async function GET() {
     // Vérifier si la table existe déjà
     try {
       const tableCheck = await executeQuery(`
-        SELECT name FROM sqlite_master WHERE type='table' AND name='categories'
+        SHOW TABLES LIKE 'categories'
       `);
       
       if (tableCheck.length > 0) {
@@ -28,13 +28,13 @@ export async function GET() {
         // Créer la table si elle n'existe pas
         await executeQuery(`
           CREATE TABLE categories (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            slug TEXT NOT NULL UNIQUE,
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            slug VARCHAR(255) NOT NULL UNIQUE,
             description TEXT,
-            icon TEXT,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            icon VARCHAR(50),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           )
         `);
         console.log('Table categories créée avec succès');
@@ -55,7 +55,7 @@ export async function GET() {
       for (const category of defaultCategories) {
         try {
           await executeQuery(
-            'INSERT OR IGNORE INTO categories (name, slug, description, icon) VALUES (?, ?, ?, ?)',
+            'INSERT IGNORE INTO categories (name, slug, description, icon) VALUES (?, ?, ?, ?)',
             [category.name, category.slug, category.description, category.icon]
           );
         } catch (insertError) {
